@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
+
+	background-color: #000000;
+	color: #fff;
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	min-height: 100vh;
+}
+
+
+
+
+@font-face {
+    font-family: 'Kaleko105';
+    src: url('./assets/kaleko-105/Kaleko105Book.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kaleko105';
+    src: url('./assets/kaleko-105/Kaleko105Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kaleko105';
+    src: url('./assets/kaleko-105/Kaleko105BoldOblique.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Kaleko105';
+    src: url('./assets/kaleko-105/Kaleko105BookOblique.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Kaleko105';
+    src: url('./assets/kaleko-105/Kaleko105Heavy.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kaleko105';
+    src: url('./assets/kaleko-105/Kaleko105HeavyOblique.ttf') format('truetype');
+    font-weight: 900;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Kaleko105';
+    src: url('./assets/kaleko-105/Kaleko105Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kaleko105';
+    src: url('./assets/kaleko-105/Kaleko105LightOblique.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Kaleko105';
+    src: url('./assets/kaleko-105/Kaleko105Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kaleko105';
+    src: url('./assets/kaleko-105/Kaleko105ThinOblique.ttf') format('truetype');
+    font-weight: 100;
+    font-style: italic;
+}
+
+
+/* Hide scrollbars but keep content accessible */
+.no-scrollbar {
+	scrollbar-width: none; /* Firefox */
+	-ms-overflow-style: none; /* Internet Explorer & Edge */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+	display: none; /* Chrome, Safari, Opera */
+}
+
+/* Allow invisible scrolling */
+.scrollable-x {
+	overflow-x: none; /* Enable horizontal scrolling */
+	-webkit-overflow-scrolling: touch; /* Smooth scrolling for iOS */
+}
+
