@@ -41,3 +41,14 @@ export interface OrderCardProps {
   profitOrInterestValueUSD?: string;
   duration?: string;
 }
+
+export interface PeerData {
+  asset: string;
+  icon: string;
+  duration: string;
+  interest: string;
+  volume: string;
+  volumeUSD: string;
+  address: string;
+  type: "lend" | "borrow";
+}
