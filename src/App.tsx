@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/dashboard";
 import Markets from "./pages/markets";
+import CreateOrder from "./pages/createOrder";
 
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/markets" element={<Markets />} />
+        <Route path="/create-order/:id" element={<CreateOrder />} />
         <Route
           path="*"
           element={
