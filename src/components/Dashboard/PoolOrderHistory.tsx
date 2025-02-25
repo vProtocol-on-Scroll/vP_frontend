@@ -97,7 +97,12 @@ const PoolOrderHistory = () => {
         :
         (
           <>
-            <Empty />
+            <Empty text1={"Let's get things rolling—supply liquidity"} text2={"and take loans from the"} text3={"vProtocol Pools"}
+                btn1={"Supply"}
+                btn2={"Borrow"}
+                link1={"/"}
+                link2={"/"} 
+            />
           </>
         )}
        

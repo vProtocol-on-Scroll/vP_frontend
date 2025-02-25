@@ -74,14 +74,14 @@ const CreateOrder = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center font-kaleko p-2 lg:p-0 h-screen">
+    <div className="flex flex-col justify-center items-center font-kaleko p-2 lg:p-0 h-screen 2xl:-mt-24 -mt-12">
       <div>
         <p className="text-base text-white px-2">Create Order</p>
 
         <div>
           <div className="my-4 px-4 sm:px-8">
             <div className="flex gap-12 w-5/6 m-auto">
-                <div className={`relative w-1/2 rounded-md px-6 py-2 text-center cursor-pointer ${id === "lend" ? "bg-[#01D396]" : "bg-white/60"}`}
+                <div className={`font-semibold relative w-1/2 rounded-md px-6 py-2 text-center cursor-pointer ${id === "lend" ? "bg-[#01D396]" : "bg-white/60"}`}
                     onMouseEnter={() => setShowLendTooltip(true)}
                     onMouseLeave={() => setShowLendTooltip(false)}
                    onClick={() => navigate("/create-order/lend")}
@@ -94,7 +94,7 @@ const CreateOrder = () => {
                     )}
               </div>
 
-              <div className={`relative w-1/2 rounded-md px-6 py-2 text-center cursor-pointer ${id === "borrow" ? "bg-[#01D396]" : "bg-white/60"}`}
+              <div className={`font-semibold relative w-1/2 rounded-md px-6 py-2 text-center cursor-pointer ${id === "borrow" ? "bg-[#01D396]" : "bg-white/60"}`}
                     onMouseEnter={() => setShowBorrowTooltip(true)}
                     onMouseLeave={() => setShowBorrowTooltip(false)}
                     onClick={() => navigate("/create-order/borrow")}
@@ -257,7 +257,7 @@ const CreateOrder = () => {
                 <DateInputField dateValue={dateValue} setDateValue={setDateValue} />
             </div>
             
-            <div className={`w-full rounded-md px-6 py-2 text-center cursor-pointer bg-[#01D396] mt-4`}>
+            <div className={`w-full rounded-md px-6 py-2 text-center cursor-pointer bg-[#01D396] mt-4 font-bold`}>
                 Create Order
             </div>
            </div>

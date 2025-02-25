@@ -1,6 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import { PeerData } from "../../constants/types";
 
 const PeerTable = ({ peerData }: { peerData: PeerData[] }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="overflow-x-auto">
       <table className="w-full border-separate border-spacing-y-4">
@@ -31,8 +34,13 @@ const PeerTable = ({ peerData }: { peerData: PeerData[] }) => {
                 </p>
               </td>
               <td className="text-center p-4">
-                <div className="bg-[#01D396] rounded-lg py-2 px-4">{peer.type == "lend" ? "Lend" :  "Borrow" }</div>
-              </td>
+                <div 
+                    className="bg-[#01D396] rounded-lg py-2 px-4 cursor-pointer"
+                    onClick={() => navigate(`/create-order/${peer.type === "lend" ? "lend" : "borrow"}`)}
+                >
+                    {peer.type === "lend" ? "Lend" : "Borrow"}
+                </div>
+            </td>
             </tr>
           ))}
         </tbody>

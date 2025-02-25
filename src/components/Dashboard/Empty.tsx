@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 
-const Empty = () => {
+const Empty = ({text1, text2, text3, btn1, btn2, link1, link2}:any) => {
     return (
         <div className="w-full m-auto mt-6">
             <div className="flex flex-col items-center gap-6 text-white/50 font-kaleko font-bold">
@@ -13,15 +13,12 @@ const Empty = () => {
                 </div>
 
                 <div className="text-center text-3xl mt-4">
-                    <p>Let's get things rolling—create your <br />
-                        first order now and start your<br />
-                        lending adventure!
-                    </p>
+                    <p>{text1}<br />{text2}<br />{text3}</p>
                 </div>
 
-                <div className="flex gap-4 items-center text-black mt-6">
-                    <Link to={"/create-order"} className="w-fit p-2 rounded-lg cursor-pointer bg-[#01D396] text-lg flex items-center gap-3">
-                        Create Borrow Order
+                <div className="flex gap-8 items-center text-black mt-6">
+                    <Link to={link1} className="w-fit py-2 px-4 rounded-lg cursor-pointer bg-[#01D396] text-lg flex items-center gap-3">
+                        {btn1}
                         <img
                             src={"/icons/plusBtn.svg"}
                             alt="btn"
@@ -30,8 +27,8 @@ const Empty = () => {
                         />
                     </Link>
 
-                    <Link to={"/create-order"} className="w-fit p-2 rounded-lg cursor-pointer bg-[#01D396] text-lg flex items-center gap-3">
-                        Create Lend Order
+                    <Link to={link2} className="w-fit py-2 px-4 rounded-lg cursor-pointer bg-[#01D396] text-lg flex items-center gap-3">
+                        {btn2}
                         <img
                             src={"/icons/plusBtn.svg"}
                             alt="btn"
