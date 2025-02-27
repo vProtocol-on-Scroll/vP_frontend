@@ -1,5 +1,5 @@
 import { createWeb3Modal, defaultConfig } from '@web3modal/ethers/react'
-import { envVars } from '../utils/envVars';
+import { envVars } from '../constants/config/envVars';
 
 
 export const SUPPORTED_CHAIN_ID = 534351;

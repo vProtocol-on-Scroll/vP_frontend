@@ -1,4 +1,4 @@
-import { SUPPORTED_CHAIN_ID } from "../config/connection";
+import { SUPPORTED_CHAIN_ID } from "../../api/connection";
 
 
 export const isSupportedChain = (

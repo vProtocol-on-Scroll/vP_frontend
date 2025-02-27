@@ -24,7 +24,7 @@ export const tokenData = [
 		token: "USDC",
 		icon: "/coins/usdc.svg",
 		tokenPrice: 1,
-    address: "0xE4aB69C077896252FAFBD49EFD26B5D171A32411",
+    address: "0x191825122Cb4150cf91Eb64cFE38025c27547eB6",
     name: "USDC",
 	},
 	{

@@ -1,4 +1,4 @@
-import { Web3Modal } from "../../constants/config/connection";
+import { Web3Modal } from "../../api/connection";
 import Header from "./Header";
 
 const AppLayout = ({ children }: any) => {
