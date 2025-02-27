@@ -5,7 +5,7 @@ import erc20 from "../abi/erc20.json"
 
 
 
-export const getLendbitContract = (providerOrSigner: ethers.Provider | ethers.Signer, PoolorPerrAbi : any) =>
+export const getVProtocolContract = (providerOrSigner: ethers.Provider | ethers.Signer, PoolorPerrAbi : any) =>
     new ethers.Contract(
         envVars.vProtocolContractAddress || "",
         PoolorPerrAbi,
