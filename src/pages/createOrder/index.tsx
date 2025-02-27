@@ -50,7 +50,7 @@ const CreateOrder = () => {
         setIsDropdownOpen(false);
         updateFiatEquivalent(Number(assetValue), selected.tokenPrice);
     }
-    };
+  };
 
   // Handle asset input value change
   const handleAssetValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -258,7 +258,7 @@ const CreateOrder = () => {
             </div>
             
             <div className={`w-full rounded-md px-6 py-2 text-center cursor-pointer bg-[#01D396] mt-4 font-bold`}>
-                Create Order
+              Create Order
             </div>
            </div>
         </div>
