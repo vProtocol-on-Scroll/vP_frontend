@@ -305,7 +305,7 @@ const CreateOrder = () => {
 										type="text"
 										value={percentage}
 										onChange={handleInputChange}
-										className="bg-[#7b55b9]/80 rounded-2xl p-2 sm:p-4 text-[20px] sm:text-[27.5px] font-medium text-black w-[120px] sm:w-[150px] text-center focus:border-[#01D396]/80 border focus:outline-none"
+										className="bg-[#01D396]/80 rounded-2xl p-2 sm:p-4 text-[20px] sm:text-[27.5px] font-medium text-black w-[120px] sm:w-[150px] text-center focus:border-[#01D396]/80 border focus:outline-none"
 										min={0}
 										max={100}
 										step={0.001}
