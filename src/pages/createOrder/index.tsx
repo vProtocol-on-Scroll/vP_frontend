@@ -1,20 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { tokenData as defaultTokenData } from "../../constants/config/tokenData";
 import { useNavigate, useParams } from "react-router-dom";
 import { DateInputField } from "../../components/CreateOrder/DateInputField";
+import { isSupportedChain } from "../../constants/utils/chains";
+import { getTokenBalance } from "../../constants/utils/getBalances";
+import { useWeb3ModalAccount } from "@web3modal/ethers/react";
+import useGetUtilitiesPeer from "../../hook/read/useGetUtilitiesPeer";
 
 const CreateOrder = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const { isConnected, chainId, address } = useWeb3ModalAccount();
+
+	const { data } = useGetUtilitiesPeer();
   
   const [showLendTooltip, setShowLendTooltip] = useState(false);
   const [showBorrowTooltip, setShowBorrowTooltip] = useState(false);
 
-  const [selectedToken, setSelectedToken] = useState(defaultTokenData[0]);
+  const [selectedToken, setSelectedToken] = useState(defaultTokenData[1]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [assetValue, setAssetValue] = useState<string | number>(""); // Track input value
-  const [walletBalance] = useState(1000); // Example balance, replace with real data
-  const [availableBal] = useState(800); // Example available balance
+  const [walletBalance, setWalletBalance] = useState(0);
+	const [availableBal, setAvailableBal] = useState(0);
   const [fiatEquivalent, setFiatEquivalent] = useState<number >(0);
   
   const [percentage, setPercentage] = useState<number>(0);
@@ -72,6 +80,39 @@ const CreateOrder = () => {
   const updateFiatEquivalent = (amount: number, price: number) => {
     setFiatEquivalent(Number((amount * price).toFixed(2)));
   };
+
+  useEffect(() => {
+      const fetchBalance = async () => {
+        if (isConnected && address && isSupportedChain(chainId)) {
+          try {
+            const bal = await getTokenBalance(
+              address,
+              selectedToken.address,
+              selectedToken.decimal
+            );
+            setWalletBalance(Number(bal));
+          } catch (error) {
+            console.error("Error fetching balance:", error);
+          }
+        }
+      };
+      fetchBalance();
+  
+      if (data?.availableBalances) {
+        const totalBalance = data.availableBalances.reduce(
+          (acc, curr) => acc + curr,
+          0
+        );
+        setAvailableBal(totalBalance);
+      }
+    }, [
+      isConnected,
+      address,
+      chainId,
+      selectedToken.address,
+      selectedToken.decimal,
+      data,
+    ]);
 
   return (
     <div className="flex flex-col justify-center items-center font-kaleko p-2 lg:p-0 h-screen 2xl:-mt-24 -mt-12">
@@ -136,7 +177,7 @@ const CreateOrder = () => {
 
                 {isDropdownOpen && (
                   <div className="absolute top-full left-0 mt-2 w-[100px] bg-black rounded-md z-20">
-                    {defaultTokenData.map((token) => (
+                    {defaultTokenData.slice(1).map((token) => (
                       <div
                         key={token.token}
                         onClick={() => handleTokenSelect(token.token)}
