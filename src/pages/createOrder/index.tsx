@@ -18,7 +18,9 @@ const CreateOrder = () => {
 	const [showLendTooltip, setShowLendTooltip] = useState(false);
 	const [showBorrowTooltip, setShowBorrowTooltip] = useState(false);
 
-	const [selectedToken, setSelectedToken] = useState(defaultTokenData[1]);
+  const [selectedToken, setSelectedToken] = useState(defaultTokenData[1]);
+  const [updatedTokenData, setUpdatedTokenData] = useState(defaultTokenData);
+
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [assetValue, setAssetValue] = useState<string | number>(""); // Track input value
 	const [walletBalance, setWalletBalance] = useState(0);
@@ -52,7 +54,7 @@ const CreateOrder = () => {
 	};
 
 	const handleTokenSelect = (token: string) => {
-		const selected = defaultTokenData.find((t) => t.token === token);
+		const selected = updatedTokenData.find((t) => t.token === token);
 		if (selected) {
 			setSelectedToken(selected);
 			setIsDropdownOpen(false);
@@ -104,6 +106,15 @@ const CreateOrder = () => {
 				0
 			);
 			setAvailableBal(totalBalance);
+    }
+    
+    if (data?.tokenPrices) {
+			setUpdatedTokenData((prev) =>
+				prev.map((token, index) => ({
+					...token,
+					tokenPrice: data.tokenPrices[index] ?? token.tokenPrice,
+				}))
+			);
 		}
 	}, [
 		isConnected,

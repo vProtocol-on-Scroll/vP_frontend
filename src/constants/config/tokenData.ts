@@ -34,7 +34,4 @@ export const tokenData = [
 ];
 
 
-// const updatedTokenData = tokenData.map((token, index) => ({
-// 	...token,
-// 	tokenPrice: data?.tokenPrices?.[index] ?? token.tokenPrice, // Update if available
-// }));
+
