@@ -78,7 +78,7 @@ const useGetUtilitiesPeer = () => {
         refetchOnWindowFocus: false,
     });
 
-    console.log("availableBalances", data?.availableBalances);
+    // console.log("availableBalances", data?.availableBalances);
 
     return { data, isLoading, error };
 };
