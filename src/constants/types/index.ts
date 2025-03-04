@@ -4,6 +4,7 @@ export interface VariantProps {
   buttonText: string;
   stats?: { label: string; value: string }[];
   healthFactor?: number | null;
+  typeAssets?: string;
   bgColor: string;
 }
 
