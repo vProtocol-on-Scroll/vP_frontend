@@ -6,6 +6,7 @@ import SupplyBorrow from "./pages/supplyBorrow";
 import Rewards from "./pages/rewards";
 import Profile from "./pages/profile";
 import Leaderboard from "./pages/leaderboard";
+import Allocation from "./pages/allocation";
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/rewards" element={<Rewards />} />
+          <Route path="/allocation" element={<Allocation />} />
 
         <Route
           path="*"

@@ -112,3 +112,62 @@ body {
 	-webkit-overflow-scrolling: touch; /* Smooth scrolling for iOS */
 }
 
+
+/*NOISE*/
+
+
+.noise{
+    position: relative;
+    overflow: hidden;
+}
+
+.noise:after{
+    content: "";
+    background: url(/noise.png)  repeat;
+    mix-blend-mode: overlay;
+    position: absolute;
+    inset: 0;
+    opacity: .7;
+    z-index: 1;
+    background-size: 128px;
+    border-radius: inherit;
+    pointer-events: none;
+}
+
+
+.noise-2{
+    position: relative;
+}
+
+.noise-2:after{
+    content: "";
+    background: url(/noise.png) repeat;
+    mix-blend-mode: overlay;
+    position: absolute;
+    inset: 0;
+    opacity: .5;
+    z-index: 1;
+    background-size: 128px;
+    border-radius: inherit;
+    pointer-events: none;
+
+}
+
+.noise-3{
+    position: relative;
+}
+
+.noise-3:after{
+    content: "";
+    background: url(/noise.png) repeat;
+    mix-blend-mode: overlay;
+    position: absolute;
+    inset: 0;
+    opacity: .9;
+    z-index: 1;
+    background-size: 128px;
+    border-radius: inherit;
+    pointer-events: none;
+
+}
+
