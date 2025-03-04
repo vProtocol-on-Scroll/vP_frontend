@@ -6,7 +6,8 @@ const Variant: React.FC<VariantProps> = ({
   amount, 
   buttonText, 
   stats = [], 
-  healthFactor = null, 
+  healthFactor = null,
+  typeAssets,
   bgColor 
 }) => {
   return (
@@ -32,12 +33,34 @@ const Variant: React.FC<VariantProps> = ({
           </div>
         </div>
 
-        {/* Stats Section */}
+        {/* assets Section */}
+        {typeAssets && (
+          <div className="flex flex-col items-center justify-between mt-8">
+            <div className="flex items-center justify-between w-full">
+              <p className="text-[16px] font-kaleko font-bold flex items-center">
+                {"Assets"}
+                <span className="ml-2 bg-[#DFDFDF] text-black rounded-full w-5 h-5 flex items-center justify-center text-sm font-bold">
+                  ?
+                </span>
+              </p>
+              <div className="text-[16px] font-kaleko font-normal flex items-center">
+                <img src="/coins/svg/ETH.svg" alt="asset" className="w-6 aspect-square rounded-full border border-gray-300 object-cover"/>
+                <img src="/coins/svg/USDC.svg" alt="asset" className="w-6 aspect-square rounded-full border border-gray-300 object-cover -ml-2"/>
+                <img src="/coins/svg/WBTC.svg" alt="asset" className="w-6 aspect-square rounded-full border border-gray-300 object-cover -ml-2"/>
+              </div>
+            </div>
+          </div>
+        )}
+
         {stats.length > 0 && (
-          <div className="flex flex-col items-center justify-between mt-6">
+          <div className="flex flex-col items-center justify-between mt-8">
             {stats.map(({ label, value }, index) => (
               <div key={index} className="flex items-center justify-between w-full">
-                <p className="text-[16px] font-kaleko font-bold">{label}</p>
+                <p className="text-[16px] font-kaleko font-bold flex items-center">{label}
+                  <span className="ml-2 bg-[#DFDFDF] text-black rounded-full w-5 h-5 flex items-center justify-center text-sm font-bold">
+                  ?
+                </span>
+                </p>
                 <p className="text-[16px] font-kaleko font-normal">{value}</p>
               </div>
             ))}
