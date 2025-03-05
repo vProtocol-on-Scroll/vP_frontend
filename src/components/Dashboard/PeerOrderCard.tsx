@@ -1,5 +1,8 @@
 import { OrderCardProps } from "../../constants/types";
 import { useEffect, useRef, useState } from "react";
+import useCloseListingAd from "../../hook/write/useCloseListingAds";
+
+
 
 const PeerOrderCard: React.FC<OrderCardProps> = ({
 	type,
@@ -13,7 +16,10 @@ const PeerOrderCard: React.FC<OrderCardProps> = ({
 	duration,
 }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
-  
+
+  const [isClosing, setIsClosing] = useState(false);
+  const closeListing = useCloseListingAd(BigInt(1)); // abitrary listingId to be remove and dynamic id to be added through props
+
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {
@@ -26,6 +32,18 @@ const PeerOrderCard: React.FC<OrderCardProps> = ({
 		return () => document.removeEventListener("mousedown", handleClickOutside);
 	}, []);
 
+
+	const handleClosePosition = async () => {
+		setIsClosing(true);
+		try {
+		  await closeListing();
+		  // Optional: Trigger data refresh in parent
+		} finally {
+		  setIsClosing(false);
+		}
+	  };
+
+	  
 	return (
 		<div className="max-w-[386px] w-full rounded-xl text-[#0D0D0D] bg-[#FFFFFF] p-3 mt-2 relative">
 			<div className="flex justify-between items-start">
@@ -58,8 +76,12 @@ const PeerOrderCard: React.FC<OrderCardProps> = ({
 										Repay
 									</button>
 								) : (
-									<button className="w-full px-4 py-2 text-sm text-left bg-gray-100 hover:bg-gray-300 rounded-md whitespace-nowrap">
+									<button 
+									onClick={handleClosePosition}
+									disabled={isClosing}
+									className="w-full px-4 py-2 text-sm text-left bg-gray-100 hover:bg-gray-300 rounded-md whitespace-nowrap">
 										Close Position
+										{isClosing ? "Closing..." : "Close Position"}
 									</button>
 								)}
 							</div>
