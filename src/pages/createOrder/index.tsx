@@ -7,6 +7,8 @@ import { getTokenBalance } from "../../constants/utils/getBalances";
 import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 import useGetUtilitiesPeer from "../../hook/read/useGetUtilitiesPeer";
 
+import useCreateBorrowOrder from "../../hook/write/useCreateBorrowOrder";
+
 const CreateOrder = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
@@ -18,8 +20,8 @@ const CreateOrder = () => {
 	const [showLendTooltip, setShowLendTooltip] = useState(false);
 	const [showBorrowTooltip, setShowBorrowTooltip] = useState(false);
 
-  const [selectedToken, setSelectedToken] = useState(defaultTokenData[1]);
-  const [updatedTokenData, setUpdatedTokenData] = useState(defaultTokenData);
+	const [selectedToken, setSelectedToken] = useState(defaultTokenData[1]);
+	const [updatedTokenData, setUpdatedTokenData] = useState(defaultTokenData);
 
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [assetValue, setAssetValue] = useState<string | number>(""); // Track input value
@@ -29,6 +31,11 @@ const CreateOrder = () => {
 
 	const [percentage, setPercentage] = useState<number>(0);
 	const [dateValue, setDateValue] = useState<string>("");
+
+	const borrowOrder = useCreateBorrowOrder(
+		assetValue as string, percentage, dateValue,
+		selectedToken.address, selectedToken.decimal
+	)
 
 	const handleDecrement = () => {
 		setPercentage((prev) => Number(Math.max(prev - 0.001, 0).toFixed(3)));
@@ -106,9 +113,9 @@ const CreateOrder = () => {
 				0
 			);
 			setAvailableBal(totalBalance);
-    }
-    
-    if (data?.tokenPrices) {
+		}
+
+		if (data?.tokenPrices) {
 			setUpdatedTokenData((prev) =>
 				prev.map((token, index) => ({
 					...token,
@@ -134,9 +141,8 @@ const CreateOrder = () => {
 					<div className="my-4 px-4 sm:px-8">
 						<div className="flex gap-12 w-5/6 m-auto">
 							<div
-								className={`font-semibold relative w-1/2 rounded-md px-6 py-2 text-center cursor-pointer ${
-									id === "lend" ? "bg-[#01D396]" : "bg-white/60"
-								}`}
+								className={`font-semibold relative w-1/2 rounded-md px-6 py-2 text-center cursor-pointer ${id === "lend" ? "bg-[#01D396]" : "bg-white/60"
+									}`}
 								onMouseEnter={() => setShowLendTooltip(true)}
 								onMouseLeave={() => setShowLendTooltip(false)}
 								onClick={() => navigate("/create-order/lend")}
@@ -150,9 +156,8 @@ const CreateOrder = () => {
 							</div>
 
 							<div
-								className={`font-semibold relative w-1/2 rounded-md px-6 py-2 text-center cursor-pointer ${
-									id === "borrow" ? "bg-[#01D396]" : "bg-white/60"
-								}`}
+								className={`font-semibold relative w-1/2 rounded-md px-6 py-2 text-center cursor-pointer ${id === "borrow" ? "bg-[#01D396]" : "bg-white/60"
+									}`}
 								onMouseEnter={() => setShowBorrowTooltip(true)}
 								onMouseLeave={() => setShowBorrowTooltip(false)}
 								onClick={() => navigate("/create-order/borrow")}
@@ -333,6 +338,7 @@ const CreateOrder = () => {
 						</div>
 
 						<div
+							onClick={() => showLendTooltip ? null : borrowOrder()}
 							className={`w-full rounded-md px-6 py-2 text-center cursor-pointer bg-[#01D396] mt-4 font-bold`}
 						>
 							Create Order
@@ -340,7 +346,7 @@ const CreateOrder = () => {
 					</div>
 				</div>
 			</div>
-		</div>
+		</div >
 	);
 };
 

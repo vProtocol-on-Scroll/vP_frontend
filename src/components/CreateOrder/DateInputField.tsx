@@ -7,7 +7,7 @@ interface DateInputFieldProps {
 export const DateInputField = ({ dateValue, setDateValue }: DateInputFieldProps) => {
 
     const handleClear = () => {
-        setDateValue(""); 
+        setDateValue("");
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +29,7 @@ export const DateInputField = ({ dateValue, setDateValue }: DateInputFieldProps)
                     className="w-full outline-none border-none rounded-lg p-2 text-black cursor-pointer"
                     style={{ color: dateValue ? 'black' : 'transparent' }}
                 />
-    
+
                 <button
                     type="button"
                     onClick={handleClear}
