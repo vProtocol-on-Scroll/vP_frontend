@@ -17,7 +17,6 @@ const useCloseListingAd = (listingId: bigint) => {
 
     const { chainId } = useWeb3ModalAccount();
     const { walletProvider } = useWeb3ModalProvider();
-
     const errorDecoder = ErrorDecoder.create([peer]);
 
     return useCallback(async () => {
