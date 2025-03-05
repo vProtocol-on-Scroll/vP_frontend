@@ -338,7 +338,7 @@ const CreateOrder = () => {
 						</div>
 
 						<div
-							onClick={() => showLendTooltip ? null : borrowOrder()}
+							onClick={() => id === "borrow" ? borrowOrder() : null}
 							className={`w-full rounded-md px-6 py-2 text-center cursor-pointer bg-[#01D396] mt-4 font-bold`}
 						>
 							Create Order

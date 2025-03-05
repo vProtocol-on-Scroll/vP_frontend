@@ -29,8 +29,8 @@ const useCreateBorrowOrder = (
 	const errorDecoder = ErrorDecoder.create([peer, erc20]);
 
 	return useCallback(async () => {
-		if (!isSupportedChain(chainId)) return toast.warning("SWITCH NETWORK");
 		if (!address) return toast.warning("CONNECT WALLET");
+		if (!isSupportedChain(chainId)) return toast.warning("SWITCH NETWORK");
 
 		const readWriteProvider = getProvider(walletProvider);
 		const signer = await readWriteProvider.getSigner();
