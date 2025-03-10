@@ -25,13 +25,6 @@ const Header = () => {
 	const walletDropdownRef = useRef<HTMLDivElement>(null);
 
 	const currentPath = pathname;
-	console.log(currentPath);
-
-	useEffect(() => {
-	 console.log(currentPath);
-	}, [currentPath])
-	
-	
 
 	const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 

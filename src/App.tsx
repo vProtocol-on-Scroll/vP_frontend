@@ -2,11 +2,11 @@ import {Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/dashboard";
 import Markets from "./pages/markets";
 import CreateOrder from "./pages/createOrder";
-import SupplyBorrow from "./pages/supplyBorrow";
 import Rewards from "./pages/rewards";
 import Profile from "./pages/profile";
 import Leaderboard from "./pages/leaderboard";
 import Allocation from "./pages/allocation";
+import Transact from "./pages/transact";
 
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/markets" element={<Markets />} />
         <Route path="/create-order/:id" element={<CreateOrder />} />
-        <Route path="/transact/:id" element={<SupplyBorrow />} />
+        <Route path="/transact/:id" element={<Transact />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/rewards" element={<Rewards />} />

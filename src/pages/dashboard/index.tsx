@@ -22,7 +22,7 @@ const Dashboard = () => {
           buttonText="Deposit"
           bgColor="#01F5FF"
           typeAssets="Assets"
-          link ="/"
+         link="/transact/deposit-collateral"
         />
 
         <Variant

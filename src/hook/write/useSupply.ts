@@ -23,7 +23,7 @@ const useSupply = (
 	const { chainId } = useWeb3ModalAccount();
 	const { walletProvider } = useWeb3ModalProvider();
 
-    const errorDecoder = ErrorDecoder.create([pool, erc20]);;
+    const errorDecoder = ErrorDecoder.create([pool, erc20]);
     const { data: allowanceVal = 0, isLoading } = useCheckAllowances(tokenTypeAddress); 
 
    
@@ -44,7 +44,7 @@ const useSupply = (
 
 		try {
             toastId = toast.loading(`Processing supply...`);
-            console.log("AMOUNT OF SUPPLY IN WEI", _weiAmount);
+            // console.log("AMOUNT OF SUPPLY IN WEI", _weiAmount);
 
             if (allowanceVal === 0 || allowanceVal < Number(_weiAmount)) {
                 toast.loading(`Approving tokens...`, { id: toastId });
@@ -66,7 +66,7 @@ const useSupply = (
 			const receipt = await transaction.wait();
 
 			if (receipt.status) {
-				toast.success(`${_amount} ${tokenName} successfully supplied for earning!`, {
+				toast.success(`${_amount}${tokenName} successfully supplied, happy earning!`, {
 					id: toastId,
 				});
 			}

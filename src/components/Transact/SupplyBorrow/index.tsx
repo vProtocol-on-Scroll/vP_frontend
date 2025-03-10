@@ -1,12 +1,12 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { tokenData as defaultTokenData } from "../../constants/config/tokenData";
-import { percentages } from "../../constants/config/percentage";
-import { isSupportedChain } from "../../constants/utils/chains";
+import { tokenData as defaultTokenData } from "../../../constants/config/tokenData";
+import { percentages } from "../../../constants/config/percentage";
+import { isSupportedChain } from "../../../constants/utils/chains";
 import { useWeb3ModalAccount } from "@web3modal/ethers/react";
-import { getTokenBalance } from "../../constants/utils/getBalances";
-import useGetUtilitiesPeer from "../../hook/read/useGetUtilitiesPeer";
-import useSupply from "../../hook/write/useSupply";
+import { getTokenBalance } from "../../../constants/utils/getBalances";
+import useGetUtilitiesPeer from "../../../hook/read/useGetUtilitiesPeer";
+import useSupply from "../../../hook/write/useSupply";
 
 const SupplyBorrow = () => {
 	const { id } = useParams();
@@ -27,8 +27,6 @@ const SupplyBorrow = () => {
 	);
 	const [walletBalance, setWalletBalance] = useState(0);
 	const [availableBal, setAvailableBal] = useState(0);
-
-	const supply = useSupply(String(assetValue), selectedToken.address, selectedToken.decimal, selectedToken.name)
 
 
 	useEffect(() => {
@@ -110,6 +108,8 @@ const SupplyBorrow = () => {
 	const toggleDropdown = () => {
 		setIsDropdownOpen(!isDropdownOpen);
 	};
+
+	const supply = useSupply(String(assetValue), selectedToken.address, selectedToken.decimal, selectedToken.name)
 
 	return (
 		<div className="flex flex-col justify-center items-center font-kaleko p-2 lg:p-0 h-screen -mt-36 w-full max-w-[1152px]">
