@@ -1,5 +1,6 @@
 import React from "react";
 import { VariantProps } from "../../constants/types";
+import { useNavigate } from "react-router-dom";
 
 const Variant: React.FC<VariantProps> = ({ 
   title, 
@@ -8,8 +9,10 @@ const Variant: React.FC<VariantProps> = ({
   stats = [], 
   healthFactor = null,
   typeAssets,
-  bgColor 
+  bgColor,
+  link,
 }) => {
+  const navigate = useNavigate();
   return (
     <div 
       className="max-w-[430px] w-full rounded-2xl bg-noise-texture" 
@@ -27,7 +30,8 @@ const Variant: React.FC<VariantProps> = ({
             <p className="text-[12px] font-kaleko font-normal">{title}</p>
             <p className="text-[24px] font-kaleko font-extrabold">{amount}</p>
           </div>
-          <div className="bg-[#F4F4F5] px-4 py-2 flex items-center gap-4 rounded-lg cursor-pointer">
+          <div onClick={() => navigate(link)}
+            className="bg-[#F4F4F5] px-4 py-2 flex items-center gap-4 rounded-lg cursor-pointer">
             <img src={"/icons/arrowUp.svg"} alt={buttonText} width="20" />
             <p className="text-[#18181B] text-[17px] font-extrabold">{buttonText}</p>
           </div>

@@ -224,6 +224,30 @@
     },
     {
         "type": "function",
+        "name": "getUserTokenCollateral",
+        "inputs": [
+            {
+                "name": "user",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "token",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
         "name": "getUtilizationRate",
         "inputs": [
             {
@@ -375,6 +399,40 @@
     },
     {
         "type": "function",
+        "name": "notifyVaultTransfer",
+        "inputs": [
+            {
+                "name": "asset",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "amount",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "sender",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "receiver",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool",
+                "internalType": "bool"
+            }
+        ],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
         "name": "notifyVaultWithdrawal",
         "inputs": [
             {
@@ -480,11 +538,6 @@
                 "name": "amount",
                 "type": "uint256",
                 "internalType": "uint256"
-            },
-            {
-                "name": "isCollateral",
-                "type": "bool",
-                "internalType": "bool"
             },
             {
                 "name": "fromVault",

@@ -5,16 +5,18 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "./index.css";
 import App from "./App.tsx";
 import AppLayout from "./components/shared/AppLayout.tsx";
-// import { StrictMode } from "react";
+import { BrowserRouter as Router } from "react-router-dom";
 
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
   // <StrictMode>
   <QueryClientProvider client={queryClient}>
-    <AppLayout>
-      <App />
-    </AppLayout>
+    <Router>
+      <AppLayout>
+        <App />
+      </AppLayout>
+    </Router>
     <ReactQueryDevtools initialIsOpen={false} />
   </QueryClientProvider>
   // </StrictMode>

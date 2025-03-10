@@ -10,8 +10,10 @@ import { isSupportedChain } from "../../constants/utils/chains";
 import { formatAddress } from "../../constants/utils/formatAddress";
 import { getEthBalance } from "../../constants/utils/getBalances";
 import { SUPPORTED_CHAIN_ID } from "../../api/connection";
+import { Link, useLocation } from "react-router-dom";
 
 const Header = () => {
+	const { pathname } = useLocation();
 	const { open } = useWeb3Modal();
 	const { isConnected, chainId, address } = useWeb3ModalAccount();
 	const { walletInfo } = useWalletInfo();
@@ -22,7 +24,14 @@ const Header = () => {
 	const [balance, setBalance] = useState<string | null>(null);
 	const walletDropdownRef = useRef<HTMLDivElement>(null);
 
-	const currentPath = window.location.pathname;
+	const currentPath = pathname;
+	console.log(currentPath);
+
+	useEffect(() => {
+	 console.log(currentPath);
+	}, [currentPath])
+	
+	
 
 	const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
@@ -102,20 +111,20 @@ const Header = () => {
 
 			<nav className="hidden lg:flex items-center gap-3">
 				{headerNav.map((item, index) => (
-					<a
+					<Link
 						key={index}
-						href={item.link}
+						to={item.link}
 						className={`text-xl flex items-center gap-2 font-medium px-3 py-[2px] transition duration-300
-              ${
+              				${
 								currentPath === item.link
 									? "bg-[#D7D7D733] rounded-3xl"
 									: "hover:opacity-70"
 							}
-            `}
+            			`}
 					>
 						<img src={item.icon} width={item.width} height={24} alt={item.name} />
 						{item.name}
-					</a>
+					</Link>
 				))}
 			</nav>
 
@@ -138,21 +147,21 @@ const Header = () => {
 
 						<nav className="flex flex-col items-center gap-6 md:gap-12">
 							{headerNav.map((item, index) => (
-								<a
+								<Link
 									key={index}
-									href={item.link}
+									to={item.link}
 									className={`text-base flex items-center gap-2 font-medium px-2 py-2 rounded-lg w-full text-center
-                    ${
+                    						${
 											currentPath === item.link
 												? "bg-[#D7D7D733] text-white"
 												: "hover:opacity-70"
-										}
-                `}
-									onClick={toggleMenu}
-								>
+											}
+                						`}
+										onClick={toggleMenu}
+									>
 									<img src={item.icon} width={item.width} height={24} alt={item.name} />
 									{item.name}
-								</a>
+								</Link>
 							))}
 						</nav>
 					</div>

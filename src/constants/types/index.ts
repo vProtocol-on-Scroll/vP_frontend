@@ -6,6 +6,7 @@ export interface VariantProps {
   healthFactor?: number | null;
   typeAssets?: string;
   bgColor: string;
+  link: string;
 }
 
 export interface OrderCardProps {

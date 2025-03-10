@@ -21,7 +21,8 @@ const Dashboard = () => {
           amount="$0.00"
           buttonText="Deposit"
           bgColor="#01F5FF"
-          typeAssets = "Assets"
+          typeAssets="Assets"
+          link ="/"
         />
 
         <Variant
@@ -32,6 +33,7 @@ const Dashboard = () => {
             { label: "Net APY", value: "$0.00" },
           ]}
           bgColor="#A66CFF"
+          link="/transact/supply"
         />
         <Variant
           title="Available to Borrow"
@@ -39,6 +41,7 @@ const Dashboard = () => {
           buttonText="Borrow"
           healthFactor={1}
           bgColor="#01D396"
+          link="/markets"
         />
       </div>
 

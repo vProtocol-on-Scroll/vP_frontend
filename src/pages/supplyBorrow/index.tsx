@@ -6,10 +6,12 @@ import { isSupportedChain } from "../../constants/utils/chains";
 import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 import { getTokenBalance } from "../../constants/utils/getBalances";
 import useGetUtilitiesPeer from "../../hook/read/useGetUtilitiesPeer";
+import useSupply from "../../hook/write/useSupply";
 
 const SupplyBorrow = () => {
 	const { id } = useParams();
 	const { isConnected, chainId, address } = useWeb3ModalAccount();
+
 
 	const { data } = useGetUtilitiesPeer();
 
@@ -25,6 +27,9 @@ const SupplyBorrow = () => {
 	);
 	const [walletBalance, setWalletBalance] = useState(0);
 	const [availableBal, setAvailableBal] = useState(0);
+
+	const supply = useSupply(String(assetValue), selectedToken.address, selectedToken.decimal, selectedToken.name)
+
 
 	useEffect(() => {
 		const fetchBalance = async () => {
@@ -262,11 +267,24 @@ const SupplyBorrow = () => {
 							</div>
 						</div>
 
-						<div
-							className={`w-full rounded-md px-6 py-2 text-center cursor-pointer bg-[#01D396] mt-4 font-bold`}
-						>
-							{id === "borrow" ? "Borrow Now" : "Start earning"}
-						</div>
+						{id === "borrow" &&
+							<div
+								className={`w-full rounded-md px-6 py-2 text-center cursor-pointer bg-[#01D396] mt-4 font-bold`}
+							>
+								Borrow Now
+							</div>
+						}
+						{id !== "borrow" &&
+							<div
+								onClick={() => {
+									// console.log("SUPPLY DETAILS", assetValue, selectedToken.address, selectedToken.decimal);
+									supply()
+								}}
+								className={`w-full rounded-md px-6 py-2 text-center cursor-pointer bg-[#01D396] mt-4 font-bold`}
+							>
+								Start Earning
+							</div>
+						}
 					</div>
 				</div>
 			</div>
