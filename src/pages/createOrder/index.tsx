@@ -6,6 +6,7 @@ import { isSupportedChain } from "../../constants/utils/chains";
 import { getTokenBalance } from "../../constants/utils/getBalances";
 import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 import useGetUtilitiesPeer from "../../hook/read/useGetUtilitiesPeer";
+import { toast } from "sonner";
 
 const CreateOrder = () => {
 	const { id } = useParams();
@@ -124,6 +125,38 @@ const CreateOrder = () => {
 		selectedToken.decimal,
 		data,
 	]);
+
+	const handleNavigation = () => {
+		const missingFields = [];
+		
+
+		if (!assetValue) missingFields.push("Amount");
+		// if (!percentage) missingFields.push("Interest");
+		if (!dateValue) missingFields.push("Return Date");
+		if (!selectedToken?.address) missingFields.push("Token Address");
+		if (!selectedToken?.decimal) missingFields.push("Token Decimal");
+		if (!selectedToken?.name) missingFields.push("Token Name");
+
+		if (missingFields.length > 0) {
+			toast.error(`Missing: ${missingFields.join(", ")}`);
+			return;
+		}
+
+		const unixReturnDate = Math.floor(new Date(dateValue).getTime() / 1000);
+
+		navigate("/allocation", {
+			state: {
+			_amount: assetValue,
+			_interest: percentage || 0,
+			_returnDate: unixReturnDate,
+			tokenTypeAddress: selectedToken.address,
+			tokenDecimal: selectedToken.decimal,
+			tokenName: selectedToken.name,
+			type: id,
+			},
+		});
+	};
+
 
 	return (
 		<div className="flex flex-col justify-center items-center font-kaleko p-2 lg:p-0 h-screen 2xl:-mt-24 -mt-12">
@@ -332,11 +365,22 @@ const CreateOrder = () => {
 							/>
 						</div>
 
-						<div
-							className={`w-full rounded-md px-6 py-2 text-center cursor-pointer bg-[#01D396] mt-4 font-bold`}
-						>
-							Create Order
-						</div>
+						{id === "borrow" &&
+							<div
+								className={`w-full rounded-md px-6 py-2 text-center cursor-pointer bg-[#01D396] mt-4 font-bold`}
+							>
+								Create Order
+							</div>
+						}
+
+						{id === "lend" &&
+							<div
+								className={`w-full rounded-md px-6 py-2 text-center cursor-pointer bg-[#01D396] mt-4 font-bold`}
+								onClick={handleNavigation}
+							>
+								Next
+							</div>
+						}
 					</div>
 				</div>
 			</div>

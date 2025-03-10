@@ -3,17 +3,19 @@ import { useQuery } from "@tanstack/react-query";
 import { ethers } from "ethers";
 import { readOnlyProvider } from "../../api/provider";
 import { getVProtocolContract } from "../../api/contractsInstance";
-import peer from "../../abi/peer.json";
+import getters from "../../abi/getters.json";
 import { tokenData } from "../../constants/config/tokenData";
 
 const fetchUserUtilities = async (address: string) => {
     if (!address) return null;
 
-    const contract = getVProtocolContract(readOnlyProvider, peer);
+    // getUserTokenCollateral
+
+    const contract = getVProtocolContract(readOnlyProvider, getters);
 
     try {
         const collateralValue = await contract.getAccountCollateralValue(address);
-        const healthFactor = await contract.getHealthFactor(address);
+        // const healthFactor = await contract.getHealthFactor(address);
         
         // Fetch collateral deposits for different tokens
         const collateralDeposits = await Promise.all(
@@ -53,7 +55,7 @@ const fetchUserUtilities = async (address: string) => {
         
         return {
             collateralValue,
-            healthFactor,
+            // healthFactor,
             collateralDeposits: formattedDeposits,
             tokenPrices: formattedPrices,
             availableBalances: formattedAvailableBalances,
