@@ -371,6 +371,30 @@
     },
     {
         "type": "function",
+        "name": "requestLoanFromListing",
+        "inputs": [
+            {
+                "name": "listingId",
+                "type": "uint96",
+                "internalType": "uint96"
+            },
+            {
+                "name": "amount",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool",
+                "internalType": "bool"
+            }
+        ],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
         "name": "serviceRequest",
         "inputs": [
             {

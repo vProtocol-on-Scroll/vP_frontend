@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { getProvider } from "../../api/provider";
 import { getVProtocolContract } from "../../api/contractsInstance";
 import peer from "../../abi/peer.json";
+import erc20 from "../../abi/erc20.json";
 import { ethers } from "ethers";
 import { ErrorDecoder } from "ethers-decode-error";
 
@@ -19,7 +20,7 @@ const useRequestLoanFromListing = (
 	const { chainId } = useWeb3ModalAccount();
 	const { walletProvider } = useWeb3ModalProvider();
 
-	const errorDecoder = ErrorDecoder.create([peer]);
+	const errorDecoder = ErrorDecoder.create([peer, erc20]);
 
 	return useCallback(async () => {
 		if (!isSupportedChain(chainId)) return toast.warning("SWITCH NETWORK");
@@ -46,8 +47,8 @@ const useRequestLoanFromListing = (
 		} catch (error: unknown) {
 			try {
 				const decodedError = await errorDecoder.decode(error);
-				console.error("Transaction failed:", decodedError);
-				toast.error(`Transaction failed: ${decodedError}`, { id: toastId });
+				console.error("Transaction failed:", decodedError.reason);
+				toast.error(`Transaction failed: ${decodedError.reason}`, { id: toastId });
 			} catch (decodeError) {
 				console.error("Error decoding failed:", decodeError);
 				toast.error("Transaction failed: Unknown error", { id: toastId });

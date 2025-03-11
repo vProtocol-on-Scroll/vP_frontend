@@ -133,6 +133,25 @@
     },
     {
         "type": "function",
+        "name": "getBorrowApr",
+        "inputs": [
+            {
+                "name": "token",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
         "name": "getConvertValue",
         "inputs": [
             {
@@ -281,6 +300,63 @@
     },
     {
         "type": "function",
+        "name": "getSupplyApy",
+        "inputs": [
+            {
+                "name": "token",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getTotalBorrows",
+        "inputs": [
+            {
+                "name": "token",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getTotalDeposits",
+        "inputs": [
+            {
+                "name": "token",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
         "name": "getTotalUserDebtInUSD",
         "inputs": [
             {
@@ -419,6 +495,60 @@
     },
     {
         "type": "function",
+        "name": "getUserPosition",
+        "inputs": [
+            {
+                "name": "user",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "token",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "_poolDeposits",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "_poolBorrows",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "_p2pLentAmount",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "_p2pBorrowedAmount",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "_collateral",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "_totalLoanCollectedUSD",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "_lastUpdate",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
         "name": "getUserRequest",
         "inputs": [
             {
@@ -494,6 +624,25 @@
                         "internalType": "enum Status"
                     }
                 ]
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getUtilizationRate",
+        "inputs": [
+            {
+                "name": "token",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
             }
         ],
         "stateMutability": "view"

@@ -16,7 +16,8 @@ export interface Request {
 	tokenAddress: string;
 	status: string;
 	tokenName?: string,
-    tokenIcon?: any,
+	tokenIcon?: any,
+	tokenDecimal: number,
 }
 
 const fetchUserActiveRequestsPeer = async (address: string | undefined): Promise<Request[]> => {

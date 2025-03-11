@@ -32,6 +32,9 @@ export interface PeerData {
   volume: string;
   volumeUSD: string;
   address: string;
+  id: any;
+  tokenAddress: any;
+  tokenDecimal: number;
   type: "lend" | "borrow";
 }
 
@@ -49,4 +52,5 @@ export interface LoanListing {
   status: string;
   tokenName: string,
   tokenIcon: any,
+  tokenDecimal: number,
 }

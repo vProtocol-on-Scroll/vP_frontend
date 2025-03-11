@@ -42,7 +42,8 @@ const fetchAllBorrowRequests = async (): Promise<Request[]> => {
                 tokenAddress: _request[8],
                 status: _request[9] === 0 ? 'OPEN' : _request[9] === 1 ? 'SERVICED' : 'CLOSED',
                 tokenName: tokenInfo.name, 
-                tokenIcon: tokenInfo.icon, 
+                tokenIcon: tokenInfo.icon,
+                tokenDecimal: tokenInfo.decimal,
             };
 
             fetchedRequests.push(structuredRequest);

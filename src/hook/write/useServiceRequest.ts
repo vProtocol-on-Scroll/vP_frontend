@@ -11,6 +11,7 @@ import {
 	getVProtocolContract,
 } from "../../api/contractsInstance";
 import peer from "../../abi/peer.json";
+import erc20 from "../../abi/erc20.json";
 import { MaxUint256 } from "ethers";
 import { ErrorDecoder } from "ethers-decode-error";
 import { envVars } from "../../constants/config/envVars";
@@ -25,7 +26,10 @@ const useServiceRequest = (
 	const { walletProvider } = useWeb3ModalProvider();
 	const { data: allowanceVal = 0, isLoading } = useCheckAllowances(tokenTypeAddress);
 
-	const errorDecoder = ErrorDecoder.create([peer]);
+	const errorDecoder = ErrorDecoder.create([peer, erc20]);
+
+	console.log("_amount", _amount, "_requestId,", _requestId, "tokenTypeAddress", tokenTypeAddress);
+	
 
 	return useCallback(async () => {
         if (!isSupportedChain(chainId)) return toast.warning("SWITCH NETWORK");
@@ -67,8 +71,8 @@ const useServiceRequest = (
 		} catch (error: unknown) {
 			try {
 				const decodedError = await errorDecoder.decode(error);
-				console.error("Transaction failed:", decodedError);
-				toast.error(`Transaction failed: ${decodedError}`, { id: toastId });
+				console.error("Transaction failed:", decodedError.reason);
+				toast.error(`Transaction failed: ${decodedError.reason}`, { id: toastId });
 			} catch (decodeError) {
 				console.error("Error decoding failed:", decodeError);
 				toast.error("Transaction failed: Unknown error", { id: toastId });

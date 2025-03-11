@@ -76,18 +76,24 @@ const Markets = () => {
     volume: request.amount,
     volumeUSD: `$${request.totalRepayment}`,
     address: formatAddress(request.author),
+    tokenAddress: request.tokenAddress,
+    id: request.requestId,
+    tokenDecimal: request.tokenDecimal,
     type: "borrow",
   })) || [];
 
-  const lendPeerData: PeerData[] = listings?.map((request) => ({
-    asset: request.tokenName,
-    icon: request.tokenIcon,
+  const lendPeerData: PeerData[] = listings?.map((listing) => ({
+    asset: listing.tokenName,
+    icon: listing.tokenIcon,
     // duration: formatUnixTimestamp(request.returnDate),
-    duration: `${Math.round((request.returnDate - Date.now() / 1000) / (24 * 3600))} D`,
-    interest: `${request.interest/100}%`,
-    volume: request.amount,
-    volumeUSD: `$${request.amount}`,
-    address: formatAddress(request.author),
+    duration: `${Math.floor(listing.returnDate / (24 * 3600))} D`,
+    interest: `${listing.interest/100}%`,
+    volume: listing.amount,
+    volumeUSD: `$${listing.amount}`,
+    address: formatAddress(listing.author),
+    tokenAddress: listing.tokenAddress,
+    id: listing.listingId,
+    tokenDecimal: listing.tokenDecimal,
     type: "lend",
   })) || [];
 

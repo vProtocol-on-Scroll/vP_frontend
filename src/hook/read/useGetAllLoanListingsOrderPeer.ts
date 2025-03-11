@@ -37,6 +37,7 @@ const fetchAllLoanListingsPeer = async (): Promise<LoanListing[]> => {
                 tokenAddress: _listing[2],
                 tokenName: tokenInfo.name, 
                 tokenIcon: tokenInfo.icon, 
+                tokenDecimal: tokenInfo.decimal,
                 amount: String(ethers.formatUnits(_listing[3], tokenInfo.decimal)),
                 min_amount: String(ethers.formatUnits(_listing[4], tokenInfo.decimal)),
                 max_amount: String(ethers.formatUnits(_listing[5], tokenInfo.decimal)),
