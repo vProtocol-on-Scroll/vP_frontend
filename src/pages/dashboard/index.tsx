@@ -1,7 +1,10 @@
 import { useState } from "react";
 import PeerOrderHistory from "../../components/Dashboard/PeerOrderHistory";
 import PoolOrderHistory from "../../components/Dashboard/PoolOrderHistory";
-import Variant from "../../components/Dashboard/Variant";
+// import Variant from "../../components/Dashboard/Variant";
+
+import VariantCarousel from "../../components/Dashboard/VariantCarousel.tsx";
+
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState<"vPool" | "vPeer">("vPool");
@@ -15,34 +18,8 @@ const Dashboard = () => {
 
       {/* max-w-[868px] */}
       {/* Stats */}
-      <div className="mt-4 flex items-center gap-3 max-w-[1300px] m-auto">
-        <Variant
-          title="Total Collateral"
-          amount="$0.00"
-          buttonText="Deposit"
-          bgColor="#01F5FF"
-          typeAssets="Assets"
-         link="/transact/deposit-collateral"
-        />
-
-        <Variant
-          title="Total Supplied"
-          amount="$0.00"
-          buttonText="Supply"
-          stats={[
-            { label: "Net APY", value: "$0.00" },
-          ]}
-          bgColor="#A66CFF"
-          link="/transact/supply"
-        />
-        <Variant
-          title="Available to Borrow"
-          amount="$0.00"
-          buttonText="Borrow"
-          healthFactor={1}
-          bgColor="#01D396"
-          link="/markets"
-        />
+      <div className="mt-10 flex items-center gap-3 max-w-[1300px] m-auto">
+        <VariantCarousel />
       </div>
 
       {/* Tabs */}
