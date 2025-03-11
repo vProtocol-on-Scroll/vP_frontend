@@ -25,12 +25,28 @@ export interface OrderCardProps {
 }
 
 export interface PeerData {
-  asset: string;
+  asset?: string;
   icon: string;
-  duration: string;
+  duration: string | number;
   interest: string;
   volume: string;
   volumeUSD: string;
   address: string;
   type: "lend" | "borrow";
+}
+
+
+export interface LoanListing {
+	listingId: number;
+	author: string;
+	tokenAddress: string;
+	amount: string;
+	min_amount: string;
+	max_amount: string;
+	returnDate: number;
+	expirationDate: number;
+	interest: number;
+  status: string;
+  tokenName: string,
+  tokenIcon: any,
 }

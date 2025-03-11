@@ -15,6 +15,8 @@ export interface Request {
 	lender: string;
 	tokenAddress: string;
 	status: string;
+	tokenName?: string,
+    tokenIcon?: any,
 }
 
 const fetchUserActiveRequestsPeer = async (address: string | undefined): Promise<Request[]> => {

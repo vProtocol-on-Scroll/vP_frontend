@@ -5,18 +5,29 @@ import { getVProtocolContract } from '../../api/contractsInstance';
 import { readOnlyProvider } from '../../api/provider';
 import peer from "../../abi/peer.json";
 import { Request } from './useGetUserActiveRequestPeer';
-
+import { tokenData } from '../../constants/config/tokenData';
 
 const fetchAllBorrowRequests = async (): Promise<Request[]> => {
     const contract = getVProtocolContract(readOnlyProvider, peer);
     let _index = 1;
     const fetchedRequests: Request[] = [];
-
+    
     while (true) {
         try {
             const _request = await contract.getRequest(_index);
+            console.log(`Fetched Request at ${_index}:`, JSON.stringify(_request, (key, value) => 
+                typeof value === 'bigint' ? value.toString() : value, 2));
 
-            if (_request[0] === 0) break;
+            // 🛑 Stop fetching if author is the zero address
+            if (!_request || _request[1] === "0x0000000000000000000000000000000000000000") {
+                console.log(`Breaking at index ${_index} as author is zero.`);
+                break;
+            }
+
+             const tokenInfo = tokenData.find(token => token.address.toLowerCase() === _request[8].toLowerCase()) || {
+                name: "Unknown",
+                icon: "/coins/unknown.svg",
+            };
 
             const structuredRequest: Request = {
                 requestId: Number(_request[0]),
@@ -29,32 +40,36 @@ const fetchAllBorrowRequests = async (): Promise<Request[]> => {
                 lender: _request[7],
                 tokenAddress: _request[8],
                 status: _request[9] === 0 ? 'OPEN' : _request[9] === 1 ? 'SERVICED' : 'CLOSED',
+                tokenName: tokenInfo.name, 
+                tokenIcon: tokenInfo.icon, 
             };
 
             fetchedRequests.push(structuredRequest);
             _index += 1;
+
         } catch (error) {
-            console.error("Error fetching borrow requests:", error);
+            console.error(`Error fetching request at index ${_index}:`, error);
             break;
         }
     }
 
     return fetchedRequests;
 };
-
 const useGetAllBorrowRequestsPeer = () => {
     const { address } = useWeb3ModalAccount();
 
-    // Fetch all borrow requests using TanStack Query
-    const { data: requests, isLoading, error } = useQuery({
+      const { data: requests, isLoading, error } = useQuery({
         queryKey: ['allBorrowRequests'],
-        queryFn: fetchAllBorrowRequests,
-        staleTime: 1000 * 60 * 5, // Cache for 5 minutes
-        refetchOnWindowFocus: false, // Prevent refetch on window focus
+        queryFn: async () => {
+            console.log("Fetching borrow requests...");
+            return fetchAllBorrowRequests();
+        },
+        staleTime: 1000 * 60 * 5,
+        refetchOnWindowFocus: false,
     });
 
-    // Filter requests based on user conditions
-    const filteredRequests = requests?.filter(request =>
+
+    const othersRequests = requests?.filter(request =>
         request.status === 'OPEN' &&
         request.returnDate > Date.now() &&
         request.author !== address
@@ -62,15 +77,17 @@ const useGetAllBorrowRequestsPeer = () => {
 
     // User's own borrow requests
     const myBorrowOrder = requests?.filter(request => request.author === address) || [];
+    
 
     return {
         isLoading,
         error,
         requests,
-        filteredRequests,
+        othersRequests,
         myBorrowOrder,
     };
 };
+
 
 export default useGetAllBorrowRequestsPeer;
 

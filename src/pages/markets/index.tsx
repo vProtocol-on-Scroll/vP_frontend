@@ -2,6 +2,10 @@ import { useState } from "react";
 import PeerTable from "../../components/Markets/PeerTable";
 import PoolTable from "../../components/Markets/PoolTable";
 import { PeerData } from "../../constants/types";
+import useGetAllBorrowRequestsPeer from "../../hook/read/useGetAllBorrowRequestsPeer";
+import useGetAllLoanListingsOrderPeer from "../../hook/read/useGetAllLoanListingsOrderPeer";
+import { formatAddress } from "../../constants/utils/formatAddress";
+
 
 const marketPoolData = [
   {
@@ -26,55 +30,76 @@ const marketPoolData = [
   },
 ];
 
-const marketPeerData: PeerData[] = [
-  {
-    asset: "USDT",
-    icon: "/coins/tether.svg",
-    duration: "31D",
-    interest: "5.54%",
-    volume: "19,672,710.53",
-    volumeUSD: "$19,661,005.25",
-    address: "0xperouifb...dkm",
-    type: "lend", 
-  },
-  {
-    asset: "FIVE",
-    icon: "/coins/vToken.svg",
-    duration: "31D",
-    interest: "5.54%",
-    volume: "19,672,710.53",
-    volumeUSD: "$19,661,005.25",
-    address: "0xperouifb...dkm",
-    type: "lend", 
-  },
-  {
-    asset: "USDT",
-    icon: "/coins/tether.svg",
-    duration: "31D",
-    interest: "5.54%",
-    volume: "19,672,710.53",
-    volumeUSD: "$19,661,005.25",
-    address: "0xperouifb...dkm",
-    type: "borrow", 
-  },
-  {
-    asset: "FIVE",
-    icon: "/coins/vToken.svg",
-    duration: "31D",
-    interest: "5.54%",
-    volume: "19,672,710.53",
-    volumeUSD: "$19,661,005.25",
-    address: "0xperouifb...dkm",
-    type: "borrow" , 
-  },
-];
+
+export interface Request {
+	requestId: number;
+	author: string;
+	amount: string;
+	interest: number;
+	totalRepayment: string;
+	returnDate: number;
+	expirationDate: number;
+	lender: string;
+	tokenAddress: string;
+	status: string;
+}
+export interface LoanListing {
+	listingId: number;
+	author: string;
+	tokenAddress: string;
+	amount: string;
+	min_amount: string;
+	max_amount: string;
+	returnDate: number;
+	expirationDate: number;
+	interest: number;
+	status: string;
+}
 
 const Markets = () => {
-  const [selectedTab, setSelectedTab] = useState<"vPool" | "vPeer">("vPool");
-  const [orderType, setOrderType] = useState<"lend" | "borrow">("lend"); // State for filtering
+  const { isLoading:BorrowOrderLoading, error:BorrowOrderError, requests } = useGetAllBorrowRequestsPeer(); 
 
-  // Filter marketPeerData based on selected order type
-  const filteredPeerData = marketPeerData.filter((order) => order.type === orderType);
+  const { isLoading:lendOrderLoading, error:lendOderError, listings } = useGetAllLoanListingsOrderPeer();
+
+  
+
+  console.log("requests", requests, BorrowOrderLoading, BorrowOrderError);
+  console.log("listings", listings, lendOrderLoading, lendOderError);
+  
+
+  const borrowPeerData: PeerData[] = requests?.map((request) => ({
+    asset: request.tokenName,
+    icon: request.tokenIcon,
+    // duration:formatUnixTimestamp(request.returnDate),
+    duration: `${Math.round((request.returnDate - Date.now() / 1000) / (24 * 3600))} D`,
+    interest: `${request.interest/100}%`,
+    volume: request.amount,
+    volumeUSD: `$${request.totalRepayment}`,
+    address: formatAddress(request.author),
+    type: "borrow",
+  })) || [];
+
+  const lendPeerData: PeerData[] = listings?.map((request) => ({
+    asset: request.tokenName,
+    icon: request.tokenIcon,
+    // duration: formatUnixTimestamp(request.returnDate),
+    duration: `${Math.round((request.returnDate - Date.now() / 1000) / (24 * 3600))} D`,
+    interest: `${request.interest/100}%`,
+    volume: request.amount,
+    volumeUSD: `$${request.amount}`,
+    address: formatAddress(request.author),
+    type: "lend",
+  })) || [];
+
+
+  const [selectedTab, setSelectedTab] = useState<"vPool" | "vPeer">("vPool");
+  const [orderType, setOrderType] = useState<"lend" | "borrow">("lend"); 
+
+  const allPeerData = [...lendPeerData, ...borrowPeerData];
+  // const allPeerData =[...borrowPeerData];
+
+
+  const filteredPeerData = allPeerData.filter((order) => order.type === orderType);
 
   return (
     <div className="max-w-[868px] w-full m-auto py-6 px-1">
@@ -103,7 +128,7 @@ const Markets = () => {
         </div>
       </div>
 
-      {/* Market Overview */}
+
       <div className="mt-14 rounded-2xl px-6 py-8 transition-all duration-500"
         style={{
           backgroundImage: `linear-gradient(180deg, #E3E8EA, #F4F5F8), 
@@ -112,7 +137,7 @@ const Markets = () => {
         }}
         >
         <div className="w-full flex items-center gap-8">
-          {/* Toggle Buttons */}
+
           <div className="w-1/2 flex flex-col gap-4">
             <h5 className="text-xl font-bold text-[#0D0D0D]">Market Overview</h5>
             <div className="bg-[#FFFFFF33] rounded-3xl p-[2px] flex items-center w-full cursor-pointer">

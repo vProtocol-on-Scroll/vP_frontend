@@ -4,84 +4,95 @@ import { ethers } from 'ethers';
 import { readOnlyProvider } from '../../api/provider';
 import { getVProtocolContract } from '../../api/contractsInstance';
 import peer from "../../abi/peer.json";
+import { LoanListing } from '../../constants/types';
+import { tokenData } from '../../constants/config/tokenData';
 
-export interface LoanListing {
-	listingId: number;
-	author: string;
-	tokenAddress: string;
-	amount: string;
-	min_amount: string;
-	max_amount: string;
-	returnDate: number;
-	expirationDate: number;
-	interest: number;
-	status: string;
-}
 
-// Function to fetch all loan listings
 const fetchAllLoanListingsPeer = async (): Promise<LoanListing[]> => {
-	const contract = getVProtocolContract(readOnlyProvider, peer);
-	let _index = 1;
-	const fetchedListings: LoanListing[] = [];
+    const contract = getVProtocolContract(readOnlyProvider, peer);
+    let _index = 1;
+    const fetchedListings: LoanListing[] = [];
 
-	while (true) {
-		try {
-			const _listing = await contract.getLoanListing(_index);
+    while (true) {
+        try {
+            const _listing = await contract.getLoanListing(_index);
+            console.log(`Fetched Listing at ${_index}:`, JSON.stringify(_listing, (key, value) => 
+                typeof value === 'bigint' ? value.toString() : value, 2));
 
-			if (_listing[0] === 0) break;
+            // Stop fetching if author is the zero address (no valid listing)
+            if (!_listing || _listing[1] === "0x0000000000000000000000000000000000000000") {
+                console.log(`Breaking at index ${_index} as author is zero.`);
+                break;
+            }
 
-			// Convert and structure the listing data
-			const structuredListing: LoanListing = {
-				listingId: Number(_listing[0]),
-				author: _listing[1],
-				tokenAddress: _listing[2],
-				amount: String(ethers.formatEther(_listing[3])),
-				min_amount: String(ethers.formatEther(_listing[4])),
-				max_amount: String(ethers.formatEther(_listing[5])),
-				returnDate: Number(_listing[6]),
-				expirationDate: Number(_listing[7]),
-				interest: Number(_listing[8]),
-				status: _listing[9] === 0 ? 'OPEN' : 'CLOSED',
-			};
+            const tokenInfo = tokenData.find(token => token.address.toLowerCase() === _listing[2].toLowerCase()) || {
+                name: "Unknown",
+                icon: "/coins/unknown.svg",
+            };
 
-			fetchedListings.push(structuredListing);
-			_index += 1;
-		} catch (error) {
-			console.error("Error fetching loan listings:", error);
-			break;
-		}
-	}
+            // Convert and structure the listing data
+            const structuredListing: LoanListing = {
+                listingId: Number(_listing[0]),
+                author: _listing[1],
+                tokenAddress: _listing[2],
+                tokenName: tokenInfo.name, 
+                tokenIcon: tokenInfo.icon, 
+                amount: String(ethers.formatEther(_listing[3])),
+                min_amount: String(ethers.formatEther(_listing[4])),
+                max_amount: String(ethers.formatEther(_listing[5])),
+                returnDate: Number(_listing[6]),
+                expirationDate: Number(_listing[7]),
+                interest: Number(_listing[8]),
+                status: _listing[9] === 0 ? 'OPEN' : 'CLOSED',
+            };
 
-	return fetchedListings;
+            fetchedListings.push(structuredListing);
+            _index += 1;
+
+            // Prevent infinite loop
+            if (_index > 100) {
+                console.warn("Reached max iterations (100). Breaking loop.");
+                break;
+            }
+        } catch (error) {
+            console.error(`Error fetching loan listing at index ${_index}:`, error);
+            break;
+        }
+    }
+
+    return fetchedListings;
 };
 
 const useGetAllLoanListingsOrderPeer = () => {
 	const { address } = useWeb3ModalAccount();
 
-	// Fetch all loan listings
 	const { data: listings, isLoading, error } = useQuery({
 		queryKey: ['allLoanListings'],
-		queryFn: fetchAllLoanListingsPeer,
+		 queryFn: async () => {
+            console.log("Fetching loan requests...");
+            return fetchAllLoanListingsPeer();
+        },
 		staleTime: 1000 * 60 * 5, // Cache for 5 minutes
 		refetchOnWindowFocus: false, // Prevent refetch on window focus
 	});
 
-	// Filter listings based on user conditions
-	const filteredListings = listings?.filter(listing =>
+	console.log("listings", listings);
+	
+
+	const othersListings = listings?.filter(listing =>
 		listing.status === 'OPEN' &&  // Exclude 'CLOSED' listings
 		listing.returnDate > Date.now() && // Exclude listings with expired returnDate
 		Number(listing.max_amount) > 0 &&  // Exclude listings with max_amount <= 0
 		listing.author !== address
 	) || [];
 
-	// User's own loan orders
 	const myLendOrder = listings?.filter(listing => listing.author === address) || [];
 
 	return {
 		isLoading,
 		error,
 		listings,
-		filteredListings,
+		othersListings,
 		myLendOrder,
 	};
 };
@@ -89,4 +100,4 @@ const useGetAllLoanListingsOrderPeer = () => {
 export default useGetAllLoanListingsOrderPeer;
 
 
-// const { isLoading, error, listings, filteredListings, myLendOrder } = useGetAllLoanListingsOrderPeer();
+// const { isLoading, error, listings, othersListings, myLendOrder } = useGetAllLoanListingsOrderPeer();
