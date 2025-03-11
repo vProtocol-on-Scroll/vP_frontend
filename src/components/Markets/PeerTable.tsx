@@ -27,19 +27,17 @@ const PeerTable = ({ peerData }: { peerData: PeerData[] }) => {
     setAction("borrow");
   };
 
-  // ✅ Call service request after state updates
   useEffect(() => {
     if (selectedId !== null && action === "service") {
       serviceRequest();
-      setAction(null); // Reset action after calling
+      setAction(null); 
     }
   }, [selectedId, selectedVolume, selectedAddress, action, serviceRequest]);
 
-  // ✅ Call request loan after state updates
   useEffect(() => {
     if (selectedId !== null && action === "borrow") {
       requestLoan();
-      setAction(null); // Reset action after calling
+      setAction(null); 
     }
   }, [selectedId, selectedVolume, selectedDecimal, action, requestLoan]);
 
