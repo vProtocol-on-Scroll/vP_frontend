@@ -50,7 +50,7 @@ const Dashboard = () => {
         <button
           onClick={() => setActiveTab("vPool")}
           className={`px-8 py-2 text-[13px] font-medium cursor-pointer rounded-3xl transition duration-300 ${
-            activeTab === "vPool" ? "bg-[#01D396] text-[#000]" : "bg-[#fff] text-[#0D0D0D]"
+            activeTab === "vPool" ? "bg-[#01D396] noise-3 text-[#000]" : "bg-[#fff] text-[#0D0D0D]"
           }`}
         >
           vPool
@@ -58,7 +58,7 @@ const Dashboard = () => {
         <button
           onClick={() => setActiveTab("vPeer")}
           className={`px-8 py-2 text-[13px] font-medium cursor-pointer rounded-3xl transition duration-300 ${
-            activeTab === "vPeer" ? "bg-[#01D396] text-[#000]" : "bg-[#fff] text-[#0D0D0D]"
+            activeTab === "vPeer" ? "bg-[#01D396] noise-3 text-[#000]" : "bg-[#fff] text-[#0D0D0D]"
           }`}
         >
           vPeer

@@ -29,7 +29,7 @@ const PoolOrderCard: React.FC<OrderCardProps> = ({
 	}, []);
 
 	return (
-		<div className="max-w-[386px] w-full rounded-xl text-[#0D0D0D] bg-[#FFFFFF] p-3 mt-2">
+		<div className="max-w-[386px] w-full rounded-xl text-[#ffffff] bg-[#12151A] p-3 mt-2 noise-3">
 			<div className="flex justify-between items-start">
 				<div className="flex items-center gap-4">
 					<img src={icon} width={40} height={40} alt={token} />
@@ -40,7 +40,7 @@ const PoolOrderCard: React.FC<OrderCardProps> = ({
 						<p className="font-extrabold text-2xl leading-none tracking-tighter">
 							{amount}
 						</p>
-						<p className="text-[13px] font-kaleko font-normal text-[#0D0D0D80]">
+						<p className="text-[13px] font-kaleko font-normal text-[#ffffff]">
 							{amountUSD}
 						</p>
 					</div>
@@ -56,18 +56,18 @@ const PoolOrderCard: React.FC<OrderCardProps> = ({
 							className="cursor-pointer"
 						/>
 						{isDropdownOpen && (
-							<div className="absolute right-0 mt-2 w-36 bg-white shadow-lg rounded-lg p-2 font-kaleko font-bold">
+							<div className="absolute right-0 mt-2 w-36 bg-[#000000] shadow-lg rounded-lg p-2 font-kaleko font-bold z-20">
 								{type === "borrow" ? (
-									<button className="w-full text-center px-4 py-2 text-sm bg-gray-100 hover:bg-gray-300 rounded-md">
+									<button className="w-full text-center px-4 py-2 text-sm bg-[#12151A] hover:bg-gray-300 rounded-md">
 										Repay
 									</button>
 								) : (
 									<div className="w-full space-y-4">
-										<button className="w-full px-4 py-2 text-sm text-left bg-gray-100 hover:bg-gray-300 rounded-md whitespace-nowrap">
-											Collaterise
+										<button className="w-full px-4 py-2 text-sm text-center bg-[#12151A] hover:bg-gray-300 rounded-md whitespace-nowrap">
+											Collateralise
 										</button>
-										<button className="w-full px-4 py-2 text-sm text-left bg-gray-100 hover:bg-gray-300 rounded-md whitespace-nowrap">
-											Close Position
+										<button className="w-full px-4 py-2 text-sm text-center bg-[#12151A] hover:bg-gray-300 rounded-md whitespace-nowrap">
+											Close
 										</button>
 									</div>
 								)}
@@ -79,19 +79,19 @@ const PoolOrderCard: React.FC<OrderCardProps> = ({
 
 			<div className="flex justify-between items-start mt-6 w-full">
 				<div className="flex flex-col w-1/2">
-					<p className="text-[13px] font-medium text-[#0D0D0D80]">
+					<p className="text-[13px] font-medium text-[#ffffff]">
 						{type === "borrow" ? "Monthly Cost" : "Monthly Yield"}
 					</p>
 					<p className="font-bold text-[16px] font-kaleko">
 						{stat1Value}
-						<span className="text-[#0D0D0D80] text-[13px] pl-2">
+						<span className="text-[#ffffff] text-[13px] pl-2">
 							{stat1ValueUSD}
 						</span>
 					</p>
 				</div>
 
 				<div className="flex flex-col w-1/2 text-left">
-					<p className="text-[13px] font-medium text-[#0D0D0D80]">
+					<p className="text-[13px] font-medium text-[#ffffff]">
 						{type === "borrow" ? "Borrow APR" : "Supply APY"}
 					</p>
 					<p className="font-bold text-[16px] font-kaleko">{stat2Value}</p>

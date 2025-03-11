@@ -15,7 +15,7 @@ const Variant: React.FC<VariantProps> = ({
   const navigate = useNavigate();
   return (
     <div 
-      className="max-w-[430px] w-full rounded-2xl bg-noise-texture" 
+      className="max-w-[430px] w-full rounded-2xl bg-noise-texture noise-2"
       style={{
         backgroundColor: bgColor,
         backgroundImage: `linear-gradient(180deg, #00000000 0%, #12151A80 50%), 

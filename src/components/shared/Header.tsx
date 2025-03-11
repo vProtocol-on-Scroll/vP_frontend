@@ -164,7 +164,7 @@ const Header = () => {
 				<div className="relative" ref={walletDropdownRef}>
 					<button
 						onClick={walletConnect}
-						className="bg-[#01D396] font-kaleko font-bold text-black text-lg px-3 py-1 rounded-2xl transition duration-300"
+						className="bg-[#01D396] font-kaleko font-bold text-black text-lg px-3 py-1 rounded-2xl transition duration-300 noise-3"
 					>
 						{!isConnected ? (
 							<p>Connect</p>
