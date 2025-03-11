@@ -11,6 +11,7 @@ import {
 	getVProtocolContract,
 } from "../../api/contractsInstance";
 import peer from "../../abi/peer.json";
+import erc20 from "../../abi/erc20.json";
 import { ethers, MaxUint256 } from "ethers";
 import { ErrorDecoder } from "ethers-decode-error";
 import { envVars } from "../../constants/config/envVars";
@@ -32,7 +33,7 @@ const useCreateLoanListingOrder = (
 	const { data: allowanceVal = 0, isLoading } = useCheckAllowances(tokenTypeAddress);
 	const navigate = useNavigate();
 
-	const errorDecoder = ErrorDecoder.create([peer]);
+	const errorDecoder = ErrorDecoder.create([peer, erc20]);
 
 	return useCallback(async () => {
         if (!isSupportedChain(chainId)) return toast.warning("SWITCH NETWORK");

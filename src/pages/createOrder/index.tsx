@@ -7,6 +7,7 @@ import { getTokenBalance } from "../../constants/utils/getBalances";
 import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 import useGetUtilitiesPeer from "../../hook/read/useGetUtilitiesPeer";
 import { toast } from "sonner";
+import useCreateBorrowOrder from "../../hook/write/useCreateBorrowOrder";
 
 const CreateOrder = () => {
 	const { id } = useParams();
@@ -131,7 +132,7 @@ const CreateOrder = () => {
 		
 
 		if (!assetValue) missingFields.push("Amount");
-		// if (!percentage) missingFields.push("Interest");
+		if (!percentage) missingFields.push("Interest");
 		if (!dateValue) missingFields.push("Return Date");
 		if (!selectedToken?.address) missingFields.push("Token Address");
 		if (!selectedToken?.decimal) missingFields.push("Token Decimal");
@@ -142,7 +143,6 @@ const CreateOrder = () => {
 			return;
 		}
 
-		const unixReturnDate = Math.floor(new Date(dateValue).getTime() / 1000);
 
 		navigate("/allocation", {
 			state: {
@@ -156,6 +156,9 @@ const CreateOrder = () => {
 			},
 		});
 	};
+
+	const unixReturnDate = Math.floor(new Date(dateValue).getTime() / 1000);
+	const lendingRequestOrder = useCreateBorrowOrder(String(assetValue), percentage, unixReturnDate,selectedToken.address, selectedToken.decimal, unixReturnDate, selectedToken.name);
 
 
 	return (
@@ -368,6 +371,7 @@ const CreateOrder = () => {
 						{id === "borrow" &&
 							<div
 								className={`w-full rounded-md px-6 py-2 text-center cursor-pointer bg-[#01D396] mt-4 font-bold`}
+								onClick={()=>lendingRequestOrder()}
 							>
 								Create Order
 							</div>

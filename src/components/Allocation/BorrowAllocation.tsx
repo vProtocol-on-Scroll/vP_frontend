@@ -35,6 +35,7 @@ export default function BorrowAllocation() {
     };
 
     const loanListingOrder = useCreateLoanListingOrder(String(state?._amount), String(minAllocation), String(maxAllocation), state?._interest, state?._returnDate, state?.tokenTypeAddress, state?.tokenDecimal, state?.tokenName);
+    
 
     const handleOrderCreation = () => {
         // console.log("Borrow Confirmed with range:", minAllocation, maxAllocation, state?._returnDate, state?._interest, state?.tokenDecimal, state._amount );
@@ -42,7 +43,12 @@ export default function BorrowAllocation() {
     };
 
     const handleCancel = () => {
-        navigate(`/create-order/${state?.type}`);
+        if (state?.type === "lend") {
+             navigate(`/create-order/${state?.type}`);
+        } else {
+            navigate(`/create-order/market`);
+        }
+       
     };
 
     return (

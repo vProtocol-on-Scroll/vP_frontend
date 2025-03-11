@@ -8,20 +8,28 @@ import { toast } from "sonner";
 import { getProvider } from "../../api/provider";
 import { getVProtocolContract } from "../../api/contractsInstance";
 import peer from "../../abi/peer.json";
+import erc20 from "../../abi/erc20.json";
 import { ethers } from "ethers";
 import { ErrorDecoder } from "ethers-decode-error";
+import { useNavigate } from "react-router-dom";
 
 const useCreateBorrowOrder = (
     _amount: string,
     _interest: number,
     _returnDate: number,
     tokenTypeAddress: string,
-	tokenDecimal: number
+	tokenDecimal: number,
+	expirationDate: number,
+	tokenName: string,
+	// collateralTokens: string[],
+	// collateralAmounts: number[],
 ) => {
 	const { chainId } = useWeb3ModalAccount();
 	const { walletProvider } = useWeb3ModalProvider();
 
-	const errorDecoder = ErrorDecoder.create([peer]);
+	const errorDecoder = ErrorDecoder.create([peer,erc20]);
+	const navigate = useNavigate();
+
 
 	return useCallback(async () => {
 		if (!isSupportedChain(chainId)) return toast.warning("SWITCH NETWORK");
@@ -37,34 +45,27 @@ const useCreateBorrowOrder = (
 		try {
 			toastId = toast.loading(`Processing order creation...`);
 
-			const transaction = await contract.createLendingRequest(_weiAmount,_interest, _returnDate,tokenTypeAddress);
+			const transaction = await contract.createAndMatchLendingRequest(_weiAmount, (_interest * 100), _returnDate, expirationDate, tokenTypeAddress,[], [], true );
+			
 			const receipt = await transaction.wait();
 
 			if (receipt.status) {
-				toast.success(`${_amount} order successfully created!`, {
+				toast.success(`${_amount} ${tokenName} lending request successfully created!`, {
 					id: toastId,
 				});
+				navigate("/")
 			}
 		} catch (error: unknown) {
 			try {
 				const decodedError = await errorDecoder.decode(error);
-				console.error("Transaction failed:", decodedError);
-				toast.error(`Transaction failed: ${decodedError}`, { id: toastId });
+				console.error("Transaction failed:", decodedError.reason);
+				toast.error(`Transaction failed: ${decodedError.reason}`, { id: toastId });
 			} catch (decodeError) {
 				console.error("Error decoding failed:", decodeError);
 				toast.error("Transaction failed: Unknown error", { id: toastId });
 			}
 		}
-	}, [
-		_amount,
-		chainId,
-		errorDecoder,
-		_interest,
-		_returnDate,
-		tokenDecimal,
-		tokenTypeAddress,
-		walletProvider,
-	]);
+	}, [chainId, walletProvider, _amount, tokenDecimal, _interest, _returnDate, expirationDate, tokenTypeAddress, tokenName, navigate, errorDecoder]);
 };
 
 export default useCreateBorrowOrder;

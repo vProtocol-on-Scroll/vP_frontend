@@ -10,16 +10,18 @@ const fetchUserUtilities = async (address: string) => {
     if (!address) return null;
 
     // getUserTokenCollateral
+    // getAddressToCollateralDeposited
 
     const contract = getVProtocolContract(readOnlyProvider, getters);
+    // const contract2 = getVProtocolContract(readOnlyProvider, getters);
 
     try {
         const collateralValue = await contract.getAccountCollateralValue(address);
-        // const healthFactor = await contract.getHealthFactor(address);
+        const healthFactor = await contract.healthFactor(address, 0);
         
         // Fetch collateral deposits for different tokens
         const collateralDeposits = await Promise.all(
-            tokenData.map(token => contract.getAddressToCollateralDeposited(address, token.address))
+            tokenData.map(token => contract.getUserTokenCollateral(address, token.address))
         );
 
         // Fetch USD values for tokens
@@ -55,7 +57,7 @@ const fetchUserUtilities = async (address: string) => {
         
         return {
             collateralValue,
-            // healthFactor,
+            healthFactor,
             collateralDeposits: formattedDeposits,
             tokenPrices: formattedPrices,
             availableBalances: formattedAvailableBalances,
