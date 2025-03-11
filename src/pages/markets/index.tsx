@@ -96,7 +96,6 @@ const Markets = () => {
   const [orderType, setOrderType] = useState<"lend" | "borrow">("lend"); 
 
   const allPeerData = [...lendPeerData, ...borrowPeerData];
-  // const allPeerData =[...borrowPeerData];
 
 
   const filteredPeerData = allPeerData.filter((order) => order.type === orderType);
@@ -105,7 +104,6 @@ const Markets = () => {
     <div className="max-w-[868px] w-full m-auto py-6 px-1">
       <h3 className="text-left text-[35px] font-kaleko font-extrabold pl-4">Market</h3>
 
-      {/* Summary Section */}
       <div
         className={`w-full rounded-2xl bg-noise-texture transition-all duration-500 ${
           selectedTab === "vPool" ? "bg-[#01D396]" : "bg-[#A66CFF]"

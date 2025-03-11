@@ -28,18 +28,18 @@ const fetchAllLoanListingsPeer = async (): Promise<LoanListing[]> => {
             const tokenInfo = tokenData.find(token => token.address.toLowerCase() === _listing[2].toLowerCase()) || {
                 name: "Unknown",
                 icon: "/coins/unknown.svg",
+                decimal: 18,
             };
 
-            // Convert and structure the listing data
             const structuredListing: LoanListing = {
                 listingId: Number(_listing[0]),
                 author: _listing[1],
                 tokenAddress: _listing[2],
                 tokenName: tokenInfo.name, 
                 tokenIcon: tokenInfo.icon, 
-                amount: String(ethers.formatEther(_listing[3])),
-                min_amount: String(ethers.formatEther(_listing[4])),
-                max_amount: String(ethers.formatEther(_listing[5])),
+                amount: String(ethers.formatUnits(_listing[3], tokenInfo.decimal)),
+                min_amount: String(ethers.formatUnits(_listing[4], tokenInfo.decimal)),
+                max_amount: String(ethers.formatUnits(_listing[5], tokenInfo.decimal)),
                 returnDate: Number(_listing[6]),
                 expirationDate: Number(_listing[7]),
                 interest: Number(_listing[8]),
@@ -49,11 +49,7 @@ const fetchAllLoanListingsPeer = async (): Promise<LoanListing[]> => {
             fetchedListings.push(structuredListing);
             _index += 1;
 
-            // Prevent infinite loop
-            if (_index > 100) {
-                console.warn("Reached max iterations (100). Breaking loop.");
-                break;
-            }
+           
         } catch (error) {
             console.error(`Error fetching loan listing at index ${_index}:`, error);
             break;

@@ -18,7 +18,7 @@ const fetchAllBorrowRequests = async (): Promise<Request[]> => {
             console.log(`Fetched Request at ${_index}:`, JSON.stringify(_request, (key, value) => 
                 typeof value === 'bigint' ? value.toString() : value, 2));
 
-            // 🛑 Stop fetching if author is the zero address
+
             if (!_request || _request[1] === "0x0000000000000000000000000000000000000000") {
                 console.log(`Breaking at index ${_index} as author is zero.`);
                 break;
@@ -27,14 +27,15 @@ const fetchAllBorrowRequests = async (): Promise<Request[]> => {
              const tokenInfo = tokenData.find(token => token.address.toLowerCase() === _request[8].toLowerCase()) || {
                 name: "Unknown",
                 icon: "/coins/unknown.svg",
+                decimal:6,
             };
 
             const structuredRequest: Request = {
                 requestId: Number(_request[0]),
                 author: _request[1],
-                amount: String(ethers.formatEther(_request[2])),
+                amount: String(ethers.formatUnits(_request[2], tokenInfo.decimal)),
                 interest: Number(_request[3]),
-                totalRepayment: String(ethers.formatEther(_request[4])),
+                totalRepayment: String(ethers.formatUnits(_request[4], tokenInfo.decimal)),
                 returnDate: Number(_request[5]),
                 expirationDate: Number(_request[6]),
                 lender: _request[7],
@@ -75,7 +76,6 @@ const useGetAllBorrowRequestsPeer = () => {
         request.author !== address
     ) || [];
 
-    // User's own borrow requests
     const myBorrowOrder = requests?.filter(request => request.author === address) || [];
     
 

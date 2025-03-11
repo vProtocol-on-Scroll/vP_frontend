@@ -10,20 +10,18 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState<"vPool" | "vPeer">("vPool");
 
   return (
-    // max-w-[1024px]/m
+    // max-w-[1024px]
     <div className="max-w-[1300px] w-full m-auto p-6">
       {/* <h3 className="text-left text-[35px] font-kaleko font-extrabold">
         Positions <span className="text-[25px]">{">"} {activeTab}</span>
       </h3> */}
 
-      {/* max-w-[868px] */}
-      {/* Stats */}
-      <div className="mt-10 flex items-center gap-3 max-w-[1300px] m-auto">
+      <div className="mt-12 lg:mt-16 flex items-center gap-3 max-w-[1300px] m-auto">
         <VariantCarousel />
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-4 mt-4">
+      <div className="flex items-center gap-4 mt-4 max-w-[868px] m-auto">
         <button
           onClick={() => setActiveTab("vPool")}
           className={`px-8 py-2 text-[13px] font-medium cursor-pointer rounded-3xl transition duration-300 ${
