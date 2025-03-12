@@ -15,7 +15,7 @@ const fetchAllBorrowRequests = async (): Promise<Request[]> => {
     while (true) {
         try {
             const _request = await contract.getRequest(_index);
-            console.log(`Fetched Request at ${_index}:`, JSON.stringify(_request, (key, value) => 
+            console.log(`Fetched Request at ${_index}:`, JSON.stringify(_request, (_key, value) =>
                 typeof value === 'bigint' ? value.toString() : value, 2));
 
 

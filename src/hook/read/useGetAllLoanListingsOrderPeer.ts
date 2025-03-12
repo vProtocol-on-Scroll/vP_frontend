@@ -16,7 +16,7 @@ const fetchAllLoanListingsPeer = async (): Promise<LoanListing[]> => {
     while (true) {
         try {
             const _listing = await contract.getLoanListing(_index);
-            console.log(`Fetched Listing at ${_index}:`, JSON.stringify(_listing, (key, value) => 
+            console.log(`Fetched Listing at ${_index}:`, JSON.stringify(_listing, (_key, value) =>
                 typeof value === 'bigint' ? value.toString() : value, 2));
 
             // Stop fetching if author is the zero address (no valid listing)
