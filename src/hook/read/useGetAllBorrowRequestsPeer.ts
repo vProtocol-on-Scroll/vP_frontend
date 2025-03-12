@@ -40,11 +40,12 @@ const fetchAllBorrowRequests = async (): Promise<Request[]> => {
                 expirationDate: Number(_request[6]),
                 lender: _request[7],
                 tokenAddress: _request[8],
-                status: _request[9] === 0 ? 'OPEN' : _request[9] === 1 ? 'SERVICED' : 'CLOSED',
+                status: Number(_request[9]) === 0 ? 'OPEN' : _request[9] === 1 ? 'SERVICED' : 'CLOSED',
                 tokenName: tokenInfo.name, 
                 tokenIcon: tokenInfo.icon,
                 tokenDecimal: tokenInfo.decimal,
             };
+// console.log("_request[9]", _request[9]);
 
             fetchedRequests.push(structuredRequest);
             _index += 1;
@@ -77,6 +78,9 @@ const useGetAllBorrowRequestsPeer = () => {
         request.author !== address
     ) || [];
 
+    console.log("requests", requests);
+    console.log("othersRequests", othersRequests);
+    
     const myBorrowOrder = requests?.filter(request => request.author === address) || [];
     
 
@@ -92,4 +96,4 @@ const useGetAllBorrowRequestsPeer = () => {
 
 export default useGetAllBorrowRequestsPeer;
 
-// const { isLoading, error, requests, filteredRequests, myBorrowOrder } = useGetAllBorrowRequestsPeer();
+// const { isLoading, error, requests, othersRequests, myBorrowOrder } = useGetAllBorrowRequestsPeer();

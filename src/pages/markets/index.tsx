@@ -57,17 +57,17 @@ export interface LoanListing {
 }
 
 const Markets = () => {
-  const { isLoading:BorrowOrderLoading, error:BorrowOrderError, requests } = useGetAllBorrowRequestsPeer(); 
+  const { isLoading:BorrowOrderLoading, error:BorrowOrderError, othersRequests } = useGetAllBorrowRequestsPeer(); 
 
-  const { isLoading:lendOrderLoading, error:lendOderError, listings } = useGetAllLoanListingsOrderPeer();
+  const { isLoading:lendOrderLoading, error:lendOderError, othersListings } = useGetAllLoanListingsOrderPeer();
 
   
 
-  console.log("requests", requests, BorrowOrderLoading, BorrowOrderError);
-  console.log("listings", listings, lendOrderLoading, lendOderError);
+  console.log("requests", BorrowOrderLoading, BorrowOrderError);
+  console.log("listings", lendOrderLoading, lendOderError);
   
 
-  const borrowPeerData: PeerData[] = requests?.map((request) => ({
+  const borrowPeerData: PeerData[] = othersRequests?.map((request) => ({
     asset: request.tokenName,
     icon: request.tokenIcon,
     // duration:formatUnixTimestamp(request.returnDate),
@@ -82,7 +82,7 @@ const Markets = () => {
     type: "borrow",
   })) || [];
 
-  const lendPeerData: PeerData[] = listings?.map((listing) => ({
+  const lendPeerData: PeerData[] = othersListings?.map((listing) => ({
     asset: listing.tokenName,
     icon: listing.tokenIcon,
     // duration: formatUnixTimestamp(request.returnDate),

@@ -44,8 +44,9 @@ const fetchAllLoanListingsPeer = async (): Promise<LoanListing[]> => {
                 returnDate: Number(_listing[6]),
                 expirationDate: Number(_listing[7]),
                 interest: Number(_listing[8]),
-                status: _listing[9] === 0 ? 'OPEN' : 'CLOSED',
+                status: Number(_listing[9]) === 0 ? 'OPEN' : 'CLOSED',
             };
+// console.log("_listing[9]", _listing[9]);
 
             fetchedListings.push(structuredListing);
             _index += 1;
@@ -78,12 +79,14 @@ const useGetAllLoanListingsOrderPeer = () => {
 
 	const othersListings = listings?.filter(listing =>
 		listing.status === 'OPEN' &&  // Exclude 'CLOSED' listings
-		listing.returnDate > Date.now() && // Exclude listings with expired returnDate
+		listing.returnDate > 0 && // Exclude listings with expired returnDate
 		Number(listing.max_amount) > 0 &&  // Exclude listings with max_amount <= 0
 		listing.author !== address
 	) || [];
 
-	const myLendOrder = listings?.filter(listing => listing.author === address) || [];
+    const myLendOrder = listings?.filter(listing => listing.author === address) || [];
+    
+    console.log("othersListings", othersListings);
 
 	return {
 		isLoading,
