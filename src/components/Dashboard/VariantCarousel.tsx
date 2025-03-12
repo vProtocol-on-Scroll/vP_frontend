@@ -11,7 +11,7 @@ const VariantCarousel = () => {
                 <div className="w-[300px] sm:w-[500px] lg:w-[950px]  h-auto flex items-center justify-center">
                     <Variant
                         title="Total Collateral"
-                        amount="$0.00"
+                        amount="$100,504.94"
                         buttonText="Deposit"
                         bgColor="#01F5FF"
                         typeAssets="Assets"
@@ -26,9 +26,9 @@ const VariantCarousel = () => {
                 <div className="w-[300px] sm:w-[500px] lg:w-[950px]  h-auto flex items-center justify-center">
                     <Variant
                         title="Total Supplied"
-                        amount="$0.00"
+                        amount="$540,100.72"
                         buttonText="Supply"
-                        stats={[{ label: "Net APY", value: "$0.00" }]}
+                        stats={[{ label: "Net APY", value: "$5.40" }]}
                         bgColor="#A66CFF"
                         link="/transact/supply"
                     />
@@ -41,7 +41,7 @@ const VariantCarousel = () => {
                 <div className="w-[300px] sm:w-[500px] lg:w-[950px]  h-auto flex items-center justify-center">
                     <Variant
                         title="Available to Borrow"
-                        amount="$0.00"
+                        amount="$80,403.952"
                         buttonText="Borrow"
                         healthFactor={1}
                         bgColor="#01D396"
