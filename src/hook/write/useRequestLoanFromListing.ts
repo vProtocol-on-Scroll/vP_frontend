@@ -13,16 +13,18 @@ import { ethers } from "ethers";
 import { ErrorDecoder } from "ethers-decode-error";
 
 const useRequestLoanFromListing = (
-    _orderId: number,
-    _amount: string,
-	tokenDecimal: number
+    
 ) => {
 	const { chainId } = useWeb3ModalAccount();
 	const { walletProvider } = useWeb3ModalProvider();
 
 	const errorDecoder = ErrorDecoder.create([peer, erc20]);
 
-	return useCallback(async () => {
+	return useCallback(async (
+		_orderId: number,
+    	_amount: string,
+		tokenDecimal: number
+	) => {
 		if (!isSupportedChain(chainId)) return toast.warning("SWITCH NETWORK");
 
 		const readWriteProvider = getProvider(walletProvider);
@@ -54,7 +56,7 @@ const useRequestLoanFromListing = (
 				toast.error("Transaction failed: Unknown error", { id: toastId });
 			}
 		}
-	}, [_amount, _orderId, chainId, errorDecoder, tokenDecimal, walletProvider]);
+	}, [chainId, errorDecoder, walletProvider]);
 };
 
 export default useRequestLoanFromListing;

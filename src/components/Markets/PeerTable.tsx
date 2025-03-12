@@ -1,45 +1,14 @@
 import { PeerData } from "../../constants/types";
 import useServiceRequest from "../../hook/write/useServiceRequest";
 import useRequestLoanFromListing from "../../hook/write/useRequestLoanFromListing";
-import { useState, useEffect } from "react";
 
 const PeerTable = ({ peerData }: { peerData: PeerData[] }) => {
-  const [selectedVolume, setSelectedVolume] = useState("");
-  const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [selectedAddress, setSelectedAddress] = useState("");
-  const [selectedDecimal, setSelectedDecimal] = useState(18);
-  const [action, setAction] = useState<"borrow" | "service" | null>(null);
+  
 
-  const serviceRequest = useServiceRequest(selectedVolume, Number(selectedId), selectedAddress);
-  const requestLoan = useRequestLoanFromListing(Number(selectedId), selectedVolume, selectedDecimal);
+  const serviceRequest = useServiceRequest();
+  const requestLoan = useRequestLoanFromListing();
 
-  const handleService = (volume: string, id: number, address: string) => {
-    setSelectedVolume(volume);
-    setSelectedId(id);
-    setSelectedAddress(address);
-    setAction("service");
-  };
-
-  const handleBorrow = (id: number, volume: string, decimal: number) => {
-    setSelectedId(id);
-    setSelectedVolume(volume);
-    setSelectedDecimal(decimal);
-    setAction("borrow");
-  };
-
-  useEffect(() => {
-    if (selectedId !== null && action === "service") {
-      serviceRequest();
-      setAction(null); 
-    }
-  }, [selectedId, selectedVolume, selectedAddress, action, serviceRequest]);
-
-  useEffect(() => {
-    if (selectedId !== null && action === "borrow") {
-      requestLoan();
-      setAction(null); 
-    }
-  }, [selectedId, selectedVolume, selectedDecimal, action, requestLoan]);
+  
 
   return (
     <div className="overflow-x-auto">
@@ -74,16 +43,16 @@ const PeerTable = ({ peerData }: { peerData: PeerData[] }) => {
                 {peer.type === "lend" && (
                   <div 
                     className="bg-[#01D396] rounded-lg py-2 px-4 cursor-pointer"
-                    onClick={() => handleBorrow(peer.id, peer.volume, peer.tokenDecimal)}
+                    onClick={() => requestLoan(Number(peer.id), String(peer.volume), peer.tokenDecimal)}
                   >
-                    Borrow
+                    Request
                   </div>
                 )}
               
                 {peer.type === "borrow" && (
                   <div 
                     className="bg-[#A66CFF] rounded-lg py-2 px-4 cursor-pointer"
-                    onClick={() => handleService(peer.volume, peer.id, peer.tokenAddress)}
+                    onClick={() => serviceRequest(String(peer.volume), Number(peer.id), peer.tokenAddress)}
                   >
                     Service
                   </div>

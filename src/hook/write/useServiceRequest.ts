@@ -15,31 +15,35 @@ import erc20 from "../../abi/erc20.json";
 import { MaxUint256 } from "ethers";
 import { ErrorDecoder } from "ethers-decode-error";
 import { envVars } from "../../constants/config/envVars";
-import useCheckAllowances from "../read/useCheckAllowances";
 
 const useServiceRequest = (
-	_amount: string,
-	_requestId: number,
-	tokenTypeAddress: string,
+
 ) => {
-	const { chainId } = useWeb3ModalAccount();
+	const { chainId, address } = useWeb3ModalAccount();
 	const { walletProvider } = useWeb3ModalProvider();
-	const { data: allowanceVal = 0, isLoading } = useCheckAllowances(tokenTypeAddress);
+
+
 
 	const errorDecoder = ErrorDecoder.create([peer, erc20]);
 
-	console.log("_amount", _amount, "_requestId,", _requestId, "tokenTypeAddress", tokenTypeAddress);
+	// console.log("_amount", _amount, "_requestId,", _requestId, "tokenTypeAddress", tokenTypeAddress);
 	
 
-	return useCallback(async () => {
-        if (!isSupportedChain(chainId)) return toast.warning("SWITCH NETWORK");
-        if (isLoading) return toast.loading("Checking allowance...");
+	return useCallback(async (
+		_amount: string,
+		_requestId: number,
+		tokenTypeAddress: string
+	) => {
+		if (!isSupportedChain(chainId)) return toast.warning("SWITCH NETWORK");
+		
 
 		const readWriteProvider = getProvider(walletProvider);
 		const signer = await readWriteProvider.getSigner();
 		const contract = getVProtocolContract(signer, peer);
 		const erc20contract = getERC20Contract(signer, tokenTypeAddress);
 
+		const allowance = await erc20contract.allowance(address, envVars.vProtocolContractAddress);
+        const allowanceVal = Number(allowance);
 
 		let toastId: string | number | undefined;
 
@@ -78,7 +82,7 @@ const useServiceRequest = (
 				toast.error("Transaction failed: Unknown error", { id: toastId });
 			}
 		}
-	}, [chainId, isLoading, walletProvider, tokenTypeAddress, allowanceVal, _amount, _requestId, errorDecoder]);
+	}, [chainId, walletProvider, address, errorDecoder]);
 };
 
 export default useServiceRequest;
