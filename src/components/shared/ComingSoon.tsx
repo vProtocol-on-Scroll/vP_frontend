@@ -5,7 +5,7 @@ const ComingSoon = () => {
     <div className="flex flex-col justify-center items-center h-screen bg-gradient-to-br moving-gradient text-white">
 
           <div
-              className="text-center px-6 py-10 border border-white rounded-lg shadow-lg bg-[#01D396] noise-3"
+              className="text-center px-6 py-10 border border-white rounded-lg shadow-lg  noise-3"
               data-aos="zoom-in"
               data-aos-duration="1000"
           >
@@ -17,7 +17,7 @@ const ComingSoon = () => {
             <div>
               <Link to="/">
                 <button
-                    className="bg-white text-[#01D396]  px-6 py-2 rounded-lg font-medium hover:bg-[#000000] hover:text-white transition duration-300"
+                    className="bg-white text-[#000000]  px-6 py-2 rounded-lg font-medium hover:bg-[#12151A] hover:text-white transition duration-300"
                 >
                   Home
                 </button>

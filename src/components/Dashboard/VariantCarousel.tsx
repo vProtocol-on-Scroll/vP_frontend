@@ -11,19 +11,19 @@ import { Asset } from "../../constants/types";
 const VariantCarousel = () => {
     const { data } = useGetUtilitiesPeer();
     const { totalSupply, totalCollateral, isLoading, userPosition } = useGetUserPosition()
-    
+
 
     const netAPY = userPosition
         ? userPosition
             .filter(pos => {
                 const token = tokenData.find(t => t.address === pos.address);
-                if (!token) return false; 
+                if (!token) return false;
                 const formattedDeposit = parseFloat(ethers.formatUnits(pos.poolDeposits, token.decimal || 18));
                 return formattedDeposit > 0;
             })
             .reduce((sum, pos) => sum + parseFloat(String(pos.supplyAPY)) / 100, 0)
             .toFixed(2)
-        : "0.00"; 
+        : "0.00";
 
     const assets: Asset[] = userPosition
         ? userPosition
@@ -37,12 +37,12 @@ const VariantCarousel = () => {
                 return {
                     src: token.icon,
                     name: token.name,
-                    vol: `${formattedCollateral.toFixed(2)}${token.token}`, 
+                    vol: `${formattedCollateral.toFixed(2)}${token.token}`,
                 };
             })
             .filter((asset): asset is Asset => asset !== null)
         : [];
-    
+
 
     const slides = [
         {
@@ -96,18 +96,39 @@ const VariantCarousel = () => {
     const [goToSlide, setGoToSlide] = useState(0);
     const [isUserInteracted, setIsUserInteracted] = useState(false); // Track user interaction
 
-    // Function to handle automatic slide changes
+    // // Function to handle automatic slide changes
+    // const autoSlide = useCallback(() => {
+    //     if (!isUserInteracted) {
+    //         setGoToSlide((prevSlide) => (prevSlide + 1) % slides.length);
+    //     }
+    // }, [isUserInteracted, slides.length]);
+
+    // Function to handle automatic slide changes (modified)
     const autoSlide = useCallback(() => {
-        if (!isUserInteracted) {
-            setGoToSlide((prevSlide) => (prevSlide + 1) % slides.length);
-        }
-    }, [isUserInteracted, slides.length]);
+        setGoToSlide((prevSlide) => {
+            const nextSlide = prevSlide + 1;
+            if (nextSlide >= slides.length) {
+                // Clear interval once all slides are visited
+                setIsUserInteracted(true); // Mark the interaction to stop auto-slide
+                return prevSlide; // Keep it at the last slide
+            }
+            return nextSlide;
+        });
+    }, [slides.length]);
+
+    // // Set up the auto-slide interval
+    // useEffect(() => {
+    //     const interval = setInterval(autoSlide, 5000); // Change slides every 5 seconds
+    //     return () => clearInterval(interval); // Cleanup on component unmount
+    // }, [autoSlide]);
 
     // Set up the auto-slide interval
     useEffect(() => {
-        const interval = setInterval(autoSlide, 5000); // Change slides every 5 seconds
-        return () => clearInterval(interval); // Cleanup on component unmount
-    }, [autoSlide]);
+        if (!isUserInteracted) { // Only set the interval if the user hasn't interacted
+            const interval = setInterval(autoSlide, 5000); // Change slides every 5 seconds
+            return () => clearInterval(interval); // Cleanup on component unmount
+        }
+    }, [autoSlide, isUserInteracted]);
 
     // Handle user interaction with dots
     const handleDotClick = (index: number) => {
@@ -121,7 +142,7 @@ const VariantCarousel = () => {
             <Carousel
                 slides={slides}
                 goToSlide={goToSlide}
-                offsetRadius={2} 
+                offsetRadius={2}
                 showNavigation={true}
                 animationConfig={config.gentle}
                 // animationScale={1} // Scale factor for slides. Set to 1 to maintain their size.

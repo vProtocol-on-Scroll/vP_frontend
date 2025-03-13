@@ -94,7 +94,7 @@ const Variant: React.FC<VariantProps> = ({
 
         {/* Health Factor Section (if applicable) */}
         {healthFactor !== null && (
-          <div className="flex flex-col items-center justify-between mt-6">
+          <div className="flex flex-col items-center justify-between mt-3">
             <div className="flex items-center justify-between w-full">
               <p className="text-[16px] font-kaleko font-bold flex items-center">
                 Health Factor 
@@ -111,9 +111,9 @@ const Variant: React.FC<VariantProps> = ({
             </div>
 
             {/* Battery Health Bar */}
-            <div className="w-full h-3 mt-2 bg-gray-300 rounded-full relative overflow-hidden">
+            <div className="w-full h-3 mt-1 bg-gray-300 rounded-full relative overflow-hidden">
               <div 
-                className="h-full rounded-full transition-all duration-500" 
+                className="h-full  rounded-full transition-all duration-500"
                 style={{
                   width: `${isNaN(healthFactor) || healthFactor > 1 ? 100 : healthFactor === 0 ? 10 : healthFactor * 100}%`,
                   background: healthGradient(healthFactor),
