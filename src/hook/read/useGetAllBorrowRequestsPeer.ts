@@ -20,11 +20,11 @@ const fetchAllBorrowRequests = async (): Promise<Request[]> => {
 
 
             if (!_request || _request[1] === "0x0000000000000000000000000000000000000000") {
-                console.log(`Breaking at index ${_index} as author is zero.`);
+                // console.log(`Breaking at index ${_index} as author is zero.`);
                 break;
             }
 
-             const tokenInfo = tokenData.find(token => token.address.toLowerCase() === _request[8].toLowerCase()) || {
+            const tokenInfo = tokenData.find(token => token.address.toLowerCase() === _request[8].toLowerCase()) || {
                 name: "Unknown",
                 icon: "/coins/unknown.svg",
                 decimal:6,
@@ -40,12 +40,11 @@ const fetchAllBorrowRequests = async (): Promise<Request[]> => {
                 expirationDate: Number(_request[6]),
                 lender: _request[7],
                 tokenAddress: _request[8],
-                status: Number(_request[9]) === 0 ? 'OPEN' : _request[9] === 1 ? 'SERVICED' : 'CLOSED',
+                status: Number(_request[9]) === 0 ? 'OPEN' : Number(_request[9]) === 1 ? 'SERVICED' : 'CLOSED',
                 tokenName: tokenInfo.name, 
                 tokenIcon: tokenInfo.icon,
                 tokenDecimal: tokenInfo.decimal,
             };
-// console.log("_request[9]", _request[9]);
 
             fetchedRequests.push(structuredRequest);
             _index += 1;
@@ -78,8 +77,8 @@ const useGetAllBorrowRequestsPeer = () => {
         request.author !== address
     ) || [];
 
-    console.log("requests", requests);
-    console.log("othersRequests", othersRequests);
+    // console.log("requests", requests);
+    // console.log("othersRequests", othersRequests);
     
     const myBorrowOrder = requests?.filter(request => request.author === address) || [];
     

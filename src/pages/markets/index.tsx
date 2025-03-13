@@ -31,31 +31,6 @@ const marketPoolData = [
 ];
 
 
-export interface Request {
-	requestId: number;
-	author: string;
-	amount: string;
-	interest: number;
-	totalRepayment: string;
-	returnDate: number;
-	expirationDate: number;
-	lender: string;
-	tokenAddress: string;
-	status: string;
-}
-export interface LoanListing {
-	listingId: number;
-	author: string;
-	tokenAddress: string;
-	amount: string;
-	min_amount: string;
-	max_amount: string;
-	returnDate: number;
-	expirationDate: number;
-	interest: number;
-	status: string;
-}
-
 const Markets = () => {
   const { isLoading:BorrowOrderLoading, error:BorrowOrderError, othersRequests } = useGetAllBorrowRequestsPeer(); 
 

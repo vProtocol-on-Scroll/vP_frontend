@@ -1,77 +1,75 @@
+import { tokenData } from "../../constants/config/tokenData";
 import { OrderCardProps } from "../../constants/types";
+import useGetUserPosition from "../../hook/read/useGetUserPosition";
+import useGetUtilitiesPeer from "../../hook/read/useGetUtilitiesPeer";
 import Empty from "./Empty";
 import PoolOrderCard from "./PoolOrderCard";
-
-const poolData: OrderCardProps[] = [
-  {
-    type: "supply",
-    token: "USDT",
-    icon: "/coins/tether.svg",
-    amount: "0.00",
-    amountUSD: "$0.00",
-    stat1Value: "0.00",
-    stat1ValueUSD: "$0.00",
-    stat2Value: "6.48%",
-  },
-  {
-    type: "borrow",
-    token: "USDT",
-    icon: "/coins/tether.svg",
-    amount: "3.36M",
-    amountUSD: "$13.67M",
-    stat1Value: "3.36M",
-    stat1ValueUSD: "$13.67M",
-    stat2Value: "1.53%",
-  },
-  {
-    type: "supply",
-    token: "FIVE",
-    icon: "/coins/vToken.svg",
-    amount: "500.00",
-    amountUSD: "$500.00",
-    stat1Value: "2.00",
-    stat1ValueUSD: "$2.00",
-    stat2Value: "5.20%",
-  },
-  {
-    type: "borrow",
-    token: "FIVE",
-    icon: "/coins/vToken.svg",
-    amount: "1.25M",
-    amountUSD: "$1.25M",
-    stat1Value: "1.25M",
-    stat1ValueUSD: "$2.50M",
-    stat2Value: "2.75%",
-  },
-  {
-    type: "supply",
-    token: "USDT",
-    icon: "/coins/tether.svg",
-    amount: "500.00",
-    amountUSD: "$500.00",
-    stat1Value: "2.00",
-    stat1ValueUSD: "$2.00",
-    stat2Value: "5.20%",
-  },
-  {
-    type: "borrow",
-    token: "FIVE",
-    icon: "/coins/vToken.svg",
-    amount: "1.25M",
-    amountUSD: "$1.25M",
-    stat1Value: "1.25M",
-    stat1ValueUSD: "$2.50M",
-    stat2Value: "2.75%",
-  },
-];
+import { formatUnits } from "ethers";
 
 const PoolOrderHistory = () => {
+  const { userPosition } = useGetUserPosition();
+  const { data, isLoading } = useGetUtilitiesPeer();
+
+  if (!userPosition) {
+    return (
+      <Empty
+        text1={"Let's get things rolling—supply liquidity"}
+        text2={"and take loans from the"}
+        text3={"vProtocol Pools"}
+        btn1={"Supply"}
+        btn2={"Borrow"}
+        link1={"/transact/supply"}
+        link2={"/transact/borrow"}
+      />
+    );
+  }
+
+  const poolData: OrderCardProps[] = userPosition.flatMap((pos, index) => {
+    const token = tokenData[index]; // Get corresponding token metadata
+    const poolDeposits = pos.poolDeposits;
+    const poolBorrows = pos.poolBorrows; 
+    const borrowAPR = pos.borrowAPR;
+    const supplyAPY = pos.supplyAPY;
+    const usdPrice = data?.tokenPrices[index]
+
+    const formattedDeposit = parseFloat(formatUnits(poolDeposits, token.decimal));
+    const formattedBorrow = parseFloat(formatUnits(poolBorrows, token.decimal));
+
+    const supplyEntry =
+      formattedDeposit > 0
+        ? {
+            type: "supply",
+            token: token.token,
+            icon: token.icon || `/coins/vToken.svg`,
+            amount: formattedDeposit.toFixed(2),
+            amountUSD: `$${isLoading ? formattedDeposit.toFixed(2) : (usdPrice! * formattedDeposit).toFixed(3)}`, 
+            stat1Value: "NA",
+            stat1ValueUSD: "",
+            stat2Value: `${(parseFloat(String(supplyAPY)) / 100).toFixed(2)}%`,
+          }
+        : null;
+
+    const borrowEntry =
+      formattedBorrow > 0
+        ? {
+            type: "borrow",
+            token: token.token,
+            icon: token.icon || `/coins/vToken.svg`,
+            amount: formattedBorrow.toFixed(2),
+           amountUSD: `$${isLoading ? formattedDeposit.toFixed(2) : (usdPrice! * formattedDeposit).toFixed(3)}`,  
+            stat1Value: "NA",
+            stat1ValueUSD: "",
+            stat2Value: `${(parseFloat(String(borrowAPR)) / 100).toFixed(2)}%`,
+          }
+        : null;
+
+    return [supplyEntry, borrowEntry].filter(Boolean) as OrderCardProps[];
+  });
+
   return (
     <div className="mt-4 2xl:mt-1 max-w-[868px] m-auto w-full">
       <div className="flex justify-between">
-
-        {poolData.length > 0 ?
-        (
+        {poolData.length > 0 ? (
           <>
             {/* Supplies */}
             <div className="w-1/2 p-6">
@@ -93,19 +91,17 @@ const PoolOrderHistory = () => {
                 ))}
             </div>
           </>
-        )
-        :
-        (
-          <>
-            <Empty text1={"Let's get things rolling—supply liquidity"} text2={"and take loans from the"} text3={"vProtocol Pools"}
-                btn1={"Supply"}
-                btn2={"Borrow"}
-                link1={"/transact/supply"}
-                link2={"/transact/borrow"} 
-            />
-          </>
+        ) : (
+          <Empty
+            text1={"Let's get things rolling—supply liquidity"}
+            text2={"and take loans from the"}
+            text3={"vProtocol Pools"}
+            btn1={"Supply"}
+            btn2={"Borrow"}
+            link1={"/transact/supply"}
+            link2={"/transact/borrow"}
+          />
         )}
-       
       </div>
     </div>
   );

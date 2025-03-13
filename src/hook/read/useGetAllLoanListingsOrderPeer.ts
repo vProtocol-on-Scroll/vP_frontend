@@ -19,9 +19,9 @@ const fetchAllLoanListingsPeer = async (): Promise<LoanListing[]> => {
             console.log(`Fetched Listing at ${_index}:`, JSON.stringify(_listing, (_key, value) =>
                 typeof value === 'bigint' ? value.toString() : value, 2));
 
-            // Stop fetching if author is the zero address (no valid listing)
+
             if (!_listing || _listing[1] === "0x0000000000000000000000000000000000000000") {
-                console.log(`Breaking at index ${_index} as author is zero.`);
+                // console.log(`Breaking at index ${_index} as author is zero.`);
                 break;
             }
 
@@ -74,7 +74,7 @@ const useGetAllLoanListingsOrderPeer = () => {
 		refetchOnWindowFocus: false, // Prevent refetch on window focus
 	});
 
-	console.log("listings", listings);
+	// console.log("listings", listings);
 	
 
 	const othersListings = listings?.filter(listing =>
@@ -85,15 +85,18 @@ const useGetAllLoanListingsOrderPeer = () => {
 	) || [];
 
     const myLendOrder = listings?.filter(listing => listing.author === address) || [];
+
+    const myActiveLendOrder = myLendOrder?.filter(listing => listing.status === 'OPEN') || [];
     
-    console.log("othersListings", othersListings);
+    // console.log("othersListings", othersListings);
 
 	return {
 		isLoading,
 		error,
 		listings,
 		othersListings,
-		myLendOrder,
+        myLendOrder,
+        myActiveLendOrder,
 	};
 };
 

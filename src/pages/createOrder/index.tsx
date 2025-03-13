@@ -8,12 +8,14 @@ import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 import useGetUtilitiesPeer from "../../hook/read/useGetUtilitiesPeer";
 import { toast } from "sonner";
 import useCreateBorrowOrder from "../../hook/write/useCreateBorrowOrder";
+import useGetUserPosition from "../../hook/read/useGetUserPosition";
 
 const CreateOrder = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 
 	const { isConnected, chainId, address } = useWeb3ModalAccount();
+	const { totalCollateral } = useGetUserPosition()
 
 	const { data } = useGetUtilitiesPeer();
 
@@ -102,11 +104,14 @@ const CreateOrder = () => {
 		};
 		fetchBalance();
 
-		if (data?.availableBalances) {
-			const totalBalance = data.availableBalances.reduce(
-				(acc, curr) => acc + curr,
-				0
-			);
+		if (totalCollateral) {
+			// const totalBalance = data.availableBalances.reduce(
+			// 	(acc, curr) => acc + curr,
+			// 	0
+			// );
+
+			const totalBalance = totalCollateral
+			
 			setAvailableBal(totalBalance);
     }
     
@@ -125,6 +130,7 @@ const CreateOrder = () => {
 		selectedToken.address,
 		selectedToken.decimal,
 		data,
+		totalCollateral,
 	]);
 
 	const handleNavigation = () => {

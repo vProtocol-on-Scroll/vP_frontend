@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { VariantProps } from "../../constants/types";
 import { useNavigate } from "react-router-dom";
 
@@ -11,8 +11,11 @@ const Variant: React.FC<VariantProps> = ({
   typeAssets,
   bgColor,
   link,
+  assets,
 }) => {
   const navigate = useNavigate();
+   const [tooltip, setTooltip] = useState<{ name: string; vol: string } | null>(null);
+  
   return (
     <div 
       className="max-w-[430px] w-full rounded-2xl bg-noise-texture noise-2"
@@ -47,10 +50,28 @@ const Variant: React.FC<VariantProps> = ({
                   ?
                 </span>
               </p>
-              <div className="text-[16px] font-kaleko font-normal flex items-center">
-                <img src="/coins/svg/ETH.svg" alt="asset" className="w-6 aspect-square rounded-full border border-gray-300 object-cover"/>
-                <img src="/coins/svg/USDC.svg" alt="asset" className="w-6 aspect-square rounded-full border border-gray-300 object-cover -ml-2"/>
-                <img src="/coins/svg/WBTC.svg" alt="asset" className="w-6 aspect-square rounded-full border border-gray-300 object-cover -ml-2"/>
+              <div className="relative flex items-center text-[16px] font-kaleko font-bold cursor-pointer">
+                {assets?.map((asset, index) => (
+                  <div
+                    key={index}
+                    className="relative w-full"
+                    onMouseEnter={() => setTooltip({ name: asset.name, vol: asset.vol })}
+                    onMouseLeave={() => setTooltip(null)}
+                    onTouchStart={() => setTooltip({ name: asset.name, vol: asset.vol })}
+                    onTouchEnd={() => setTooltip(null)}
+                  >
+                    <img
+                      src={asset.src}
+                      alt={asset.name}
+                      className={`w-8 aspect-square rounded-full border border-gray-300 object-cover ${index !== 0 ? "-ml-2" : ""}`}
+                    />
+                    {tooltip && tooltip.name === asset.name && (
+                      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded-md whitespace-nowrap">
+                        {tooltip.name} - {tooltip.vol}
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -81,7 +102,12 @@ const Variant: React.FC<VariantProps> = ({
                   ?
                 </span>
               </p>
-              <p className="text-[16px] font-extrabold">{Math.round(healthFactor * 100)}%</p>
+              {
+                isNaN(healthFactor) || healthFactor > 1 ? 
+                  <p className="text-[20px] font-extrabold mr-4">∞</p> 
+                  : 
+                  <p className="text-[16px] font-extrabold">{Math.round(healthFactor * 100)}%</p>
+              }
             </div>
 
             {/* Battery Health Bar */}
@@ -89,7 +115,7 @@ const Variant: React.FC<VariantProps> = ({
               <div 
                 className="h-full rounded-full transition-all duration-500" 
                 style={{
-                  width: `${healthFactor * 100}%`,
+                  width: `${isNaN(healthFactor) || healthFactor > 1 ? 100 : healthFactor === 0 ? 10 : healthFactor * 100}%`,
                   background: healthGradient(healthFactor),
                 }}
               />
@@ -103,9 +129,8 @@ const Variant: React.FC<VariantProps> = ({
 
 export default Variant;
 
-// Health bar gradient function
 const healthGradient = (factor: number) => {
-  if (factor < 0.6) return "#FF0000"; // Red only
-  if (factor == 0.6 || factor <= 0.79) return "linear-gradient(90deg, #FF0000 0%, #FFFF00 100%)"; // Red + small yellow
-  return "linear-gradient(90deg, #FF0000 0%, #FFFF00 50%, #008000 100%)"; // Full gradient
+  if (factor < 0.6) return "#FF0000"; 
+  if (factor == 0.6 || factor <= 0.79) return "linear-gradient(90deg, #FF0000 0%, #FFFF00 100%)"; 
+  return "linear-gradient(90deg, #FF0000 0%, #FFFF00 50%, #008000 100%)"; 
 };

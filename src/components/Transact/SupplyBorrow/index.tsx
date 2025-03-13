@@ -7,6 +7,7 @@ import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 import { getTokenBalance } from "../../../constants/utils/getBalances";
 import useGetUtilitiesPeer from "../../../hook/read/useGetUtilitiesPeer";
 import useSupply from "../../../hook/write/useSupply";
+import useGetUserPosition from "../../../hook/read/useGetUserPosition";
 
 const SupplyBorrow = () => {
 	const { id } = useParams();
@@ -14,6 +15,7 @@ const SupplyBorrow = () => {
 
 
 	const { data } = useGetUtilitiesPeer();
+	const { totalCollateral } = useGetUserPosition()
 
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -46,12 +48,10 @@ const SupplyBorrow = () => {
 		};
 		fetchBalance();
 
-		if (data?.availableBalances) {
-			const totalBalance = data.availableBalances.reduce(
-				(acc, curr) => acc + curr,
-				0
-			);
-			setAvailableBal(totalBalance);
+		if (totalCollateral) {
+			const totalBalance = totalCollateral
+
+			setAvailableBal(Number(totalBalance));
 		}
 
 		if (data?.tokenPrices) {
@@ -69,6 +69,7 @@ const SupplyBorrow = () => {
 		selectedToken.address,
 		selectedToken.decimal,
 		data,
+		totalCollateral,
 	]);
 
 	const handleAssetValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {

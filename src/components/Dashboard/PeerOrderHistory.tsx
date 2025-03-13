@@ -2,77 +2,78 @@ import { Link } from "react-router-dom";
 import { OrderCardProps } from "../../constants/types";
 import Empty from "./Empty";
 import PeerOrderCard from "./PeerOrderCard";
-
-const peerData: OrderCardProps[] = [
-	{
-		type: "lend",
-		token: "USDT",
-		icon: "/coins/tether.svg",
-		amount: "0.00",
-		amountUSD: "$0.00",
-		expiry: "3D 5H 30M",
-		profitOrInterestValue: "3.45",
-		profitOrInterestValueUSD: "0.00",
-		duration: "31D",
-	},
-	{
-		type: "borrow",
-		token: "USDT",
-		icon: "/coins/tether.svg",
-		amount: "3.36M",
-		amountUSD: "$13.67M",
-		expiry: "3D 5H 30M",
-		profitOrInterestValue: "3.45",
-		profitOrInterestValueUSD: "0.00",
-		duration: "31D",
-	},
-	{
-		type: "lend",
-		token: "FIVE",
-		icon: "/coins/vToken.svg",
-		amount: "500.00",
-		amountUSD: "$500.00",
-		expiry: "3D 5H 30M",
-		profitOrInterestValue: "3.45",
-		profitOrInterestValueUSD: "0.00",
-		duration: "31D",
-	},
-	{
-		type: "borrow",
-		token: "FIVE",
-		icon: "/coins/vToken.svg",
-		amount: "1.25M",
-		amountUSD: "$1.25M",
-		expiry: "3D 5H 30M",
-		profitOrInterestValue: "3.45",
-		profitOrInterestValueUSD: "0.00",
-		duration: "31D",
-	},
-	{
-		type: "lend",
-		token: "USDT",
-		icon: "/coins/tether.svg",
-		amount: "500.00",
-		amountUSD: "$500.00",
-		expiry: "3D 5H 30M",
-		profitOrInterestValue: "3.45",
-		profitOrInterestValueUSD: "0.00",
-		duration: "31D",
-	},
-	{
-		type: "borrow",
-		token: "FIVE",
-		icon: "/coins/vToken.svg",
-		amount: "1.25M",
-		amountUSD: "$1.25M",
-		expiry: "3D 5H 30M",
-		profitOrInterestValue: "3.45",
-		profitOrInterestValueUSD: "0.00",
-		duration: "31D",
-	},
-];
+import useGetUserActiveRequestPeer from "../../hook/read/useGetUserActiveRequestPeer";
+import useGetAllLoanListingsOrderPeer from "../../hook/read/useGetAllLoanListingsOrderPeer";
+import useGetUtilitiesPeer from "../../hook/read/useGetUtilitiesPeer";
 
 const PeerOrderHistory = () => {
+	const { data: activeRequests } = useGetUserActiveRequestPeer();
+	const { myActiveLendOrder } = useGetAllLoanListingsOrderPeer();
+	const { data, isLoading } = useGetUtilitiesPeer();
+
+	const tokenPrices: Record<string, number> = {
+		"ETH": data?.tokenPrices[0] || 1, 
+		"USDC": data?.tokenPrices[1] || 1,
+		"WETH": data?.tokenPrices[2] || 1,
+		"WBTC": data?.tokenPrices[3] || 1,
+	};
+
+	const getTokenUSDV = (tokenName: string): number => {
+	return tokenPrices[tokenName.toUpperCase()] || 1; 
+	};
+
+	if (!activeRequests && !myActiveLendOrder) {
+	return (
+		<Empty
+		text1={"Let's get things rolling—create your"}
+		text2={"first order now and start your"}
+		text3={"lending adventure!"}
+		btn1={"Create Borrow Order"}
+		btn2={"Create Lend Order"}
+		link1={"/create-order/borrow"}
+		link2={"/create-order/lend"}
+		/>
+	);
+	}
+
+	const borrowOrders = activeRequests?.map((req) => {
+	const usdv = getTokenUSDV(req.tokenName || "Unknown"); // Get USD value
+	const amountUSD = parseFloat(req.amount) * usdv;
+	const profitOrInterestValueUSD = amountUSD * (req.interest / 100);
+
+	return {
+		type: "borrow" as const,
+		token: req.tokenName || "Unknown",
+		icon: req.tokenIcon || "/coins/vToken.svg",
+		amount: req.amount,
+		amountUSD: `$${isLoading ? 0 : amountUSD.toFixed(2)}`, 
+		expiry: `${Math.ceil((req.expirationDate - Date.now() / 1000) / (60 * 60 * 24))}D`, 
+		profitOrInterestValue: `${(req.interest / 100).toFixed(2)}%`,
+		profitOrInterestValueUSD: `$${isLoading ? 0 : profitOrInterestValueUSD.toFixed(2)}`,
+		duration: `${Math.ceil((req.returnDate - Date.now() / 1000) / (60 * 60 * 24))}D`, 
+	};
+	}) || [];
+
+	const lendOrders = myActiveLendOrder?.map((lend) => {
+	const usdv = getTokenUSDV(lend.tokenName || "Unknown"); // Get USD value
+	const amountUSD = parseFloat(lend.amount) * usdv;
+	const profitOrInterestValueUSD = amountUSD * (lend.interest / 100);
+
+	return {
+		type: "lend" as const,
+		token: lend.tokenName || "Unknown",
+		icon: lend.tokenIcon || "/coins/vToken.svg",
+		amount: lend.amount,
+		amountUSD: `$${isLoading ? 0 : amountUSD.toFixed(2)}`, 
+		expiry: `${Math.ceil(lend.returnDate / (24 * 3600))} D`,
+		profitOrInterestValue: `${(lend.interest / 100).toFixed(2)}%`,
+		profitOrInterestValueUSD: `$${isLoading ? 0 : profitOrInterestValueUSD.toFixed(2)}`,
+		duration: `${Math.ceil(lend.returnDate / (24 * 3600))}D`,
+	};
+	}) || [];
+
+	const peerData: OrderCardProps[] = [...lendOrders, ...borrowOrders];
+
 	return (
 		<div className="mt-4 2xl:mt-1 max-w-[868px] m-auto w-full">
 			<div className="flex justify-between">
@@ -112,21 +113,18 @@ const PeerOrderHistory = () => {
 								.map((item, index) => (
 									<PeerOrderCard key={index} {...item} />
 								))}
-            </div>
-            
+						</div>
 					</>
 				) : (
-					<>
-						<Empty
-							text1={"Let's get things rolling—create your"}
-							text2={"first order now and start your"}
-							text3={"lending adventure!"}
-							btn1={"Create Borrow Order"}
-							btn2={"Create Lend Order"}
-							link1={"/create-order/borrow"}
-							link2={"/create-order/lend"}
-						/>
-					</>
+					<Empty
+						text1={"Let's get things rolling—create your"}
+						text2={"first order now and start your"}
+						text3={"lending adventure!"}
+						btn1={"Create Borrow Order"}
+						btn2={"Create Lend Order"}
+						link1={"/create-order/borrow"}
+						link2={"/create-order/lend"}
+					/>
 				)}
 			</div>
 		</div>

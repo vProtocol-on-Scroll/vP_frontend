@@ -22,17 +22,18 @@ const fetchUserUtilities = async (address: string) => {
         // Fetch collateral deposits for different tokens
         const collateralDeposits = await Promise.all(
             tokenData.map(token => contract.getUserTokenCollateral(address, token.address))
+            // tokenData.map(token => contract.getTotalDeposits(token.address))
         );
 
         // Fetch USD values for tokens
         const tokenPrices = await Promise.all(
-            tokenData.map(token => contract.getUsdValue(token.address, 1, 0))
+            tokenData.map(token => contract.getUsdValue(token.address, 1))
         );
 
         // Fetch available balance for different tokens
-        const availableBalances = await Promise.all(
-            tokenData.map(token => contract.getAddressToAvailableBalance(address, token.address))
-        );
+        // const availableBalances = await Promise.all(
+        //     tokenData.map(token => contract.getAddressToAvailableBalance(address, token.address))
+        // );
 
         const totalAvailableBalance = await contract.getAccountAvailableValue(address);
         const userCollateralTokens = await contract.getUserCollateralTokens(address);
@@ -42,10 +43,10 @@ const fetchUserUtilities = async (address: string) => {
             Number(ethers.formatUnits(deposit, tokenData[index].decimal || 18))
         );
 
-        const formattedPrices = tokenPrices.map(price => Number(ethers.formatEther(price)));
-        const formattedAvailableBalances = availableBalances.map((balance, index) =>
-            Number(ethers.formatUnits(balance, tokenData[index].decimal || 18))
-        );
+        const formattedPrices = tokenPrices.map((price, index) => Number(ethers.formatUnits(price, tokenData[index].format || 0)));
+        // const formattedAvailableBalances = availableBalances.map((balance, index) =>
+        //     Number(ethers.formatUnits(balance, tokenData[index].decimal || 18))
+        // );
 
         // Calculate total collateral value
         const totalCollateralValue = formattedDeposits.reduce(
@@ -60,9 +61,9 @@ const fetchUserUtilities = async (address: string) => {
             healthFactor,
             collateralDeposits: formattedDeposits,
             tokenPrices: formattedPrices,
-            availableBalances: formattedAvailableBalances,
-            totalAvailableBalance,
-            userCollateralTokens,
+            // availableBalances: formattedAvailableBalances,
+            availableBalances : totalAvailableBalance,
+            userCollateralTokens, //array of tokens
             totalCollateralValue,
         };
     } catch (error) {

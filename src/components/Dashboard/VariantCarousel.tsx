@@ -2,8 +2,48 @@ import  { useState, useEffect, useCallback  } from "react";
 import  Carousel  from "react-spring-3d-carousel";
 import { config } from "react-spring";
 import Variant from "../../components/Dashboard/Variant";
+import useGetUtilitiesPeer from "../../hook/read/useGetUtilitiesPeer";
+import useGetUserPosition from "../../hook/read/useGetUserPosition";
+import { tokenData } from "../../constants/config/tokenData";
+import { ethers } from "ethers";
+import { Asset } from "../../constants/types";
 
 const VariantCarousel = () => {
+    const { data } = useGetUtilitiesPeer();
+    const { totalSupply, totalCollateral, isLoading, userPosition } = useGetUserPosition()
+    
+
+    const netAPY = userPosition
+        ? userPosition
+            .filter(pos => {
+                const token = tokenData.find(t => t.address === pos.address);
+                if (!token) return false; 
+                const formattedDeposit = parseFloat(ethers.formatUnits(pos.poolDeposits, token.decimal || 18));
+                return formattedDeposit > 0;
+            })
+            .reduce((sum, pos) => sum + parseFloat(String(pos.supplyAPY)) / 100, 0)
+            .toFixed(2)
+        : "0.00"; 
+
+    const assets: Asset[] = userPosition
+        ? userPosition
+            .map((pos) => {
+                const token = tokenData.find((t) => t.address === pos.address);
+                if (!token) return null;
+
+                const formattedCollateral = parseFloat(ethers.formatUnits(pos.collateral, token.decimal || 18));
+                if (formattedCollateral <= 0) return null;
+
+                return {
+                    src: token.icon,
+                    name: token.name,
+                    vol: `${formattedCollateral.toFixed(2)}${token.token}`, 
+                };
+            })
+            .filter((asset): asset is Asset => asset !== null)
+        : [];
+    
+
     const slides = [
         {
             key: "1",
@@ -11,11 +51,12 @@ const VariantCarousel = () => {
                 <div className="w-[300px] sm:w-[500px] lg:w-[950px]  h-auto flex items-center justify-center">
                     <Variant
                         title="Total Collateral"
-                        amount="$0.00"
+                        amount={`$${isLoading ? "0" : totalCollateral ?? "0"}`}
                         buttonText="Deposit"
                         bgColor="#01F5FF"
                         typeAssets="Assets"
                         link="/transact/deposit-collateral"
+                        assets={assets}
                     />
                 </div>
             ),
@@ -26,9 +67,9 @@ const VariantCarousel = () => {
                 <div className="w-[300px] sm:w-[500px] lg:w-[950px]  h-auto flex items-center justify-center">
                     <Variant
                         title="Total Supplied"
-                        amount="$0.00"
+                        amount={`$${isLoading ? "0" : totalSupply ?? "0"}`}
                         buttonText="Supply"
-                        stats={[{ label: "Net APY", value: "$0.00" }]}
+                        stats={[{ label: "Net APY", value: `${netAPY}%` }]}
                         bgColor="#A66CFF"
                         link="/transact/supply"
                     />
@@ -41,9 +82,9 @@ const VariantCarousel = () => {
                 <div className="w-[300px] sm:w-[500px] lg:w-[950px]  h-auto flex items-center justify-center">
                     <Variant
                         title="Available to Borrow"
-                        amount="$0.00"
+                        amount={`$${isLoading ? "0" : (totalCollateral ?? 0) * 0.79}`}
                         buttonText="Borrow"
-                        healthFactor={1}
+                        healthFactor={Number(data?.healthFactor)}
                         bgColor="#01D396"
                         link="/markets"
                     />
@@ -80,7 +121,7 @@ const VariantCarousel = () => {
             <Carousel
                 slides={slides}
                 goToSlide={goToSlide}
-                offsetRadius={2} // Number of slides shown to the sides of the active one
+                offsetRadius={2} 
                 showNavigation={true}
                 animationConfig={config.gentle}
                 // animationScale={1} // Scale factor for slides. Set to 1 to maintain their size.

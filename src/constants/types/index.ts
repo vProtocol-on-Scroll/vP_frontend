@@ -1,3 +1,8 @@
+export interface Asset {
+  src: string;
+  name: string;
+  vol: string;
+}
 export interface VariantProps {
   title: string;
   amount: string;
@@ -7,6 +12,7 @@ export interface VariantProps {
   typeAssets?: string;
   bgColor: string;
   link: string;
+  assets?: Asset[]; 
 }
 
 export interface OrderCardProps {

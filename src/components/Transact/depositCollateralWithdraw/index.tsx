@@ -6,6 +6,7 @@ import useGetUtilitiesPeer from "../../../hook/read/useGetUtilitiesPeer";
 import { isSupportedChain } from "../../../constants/utils/chains";
 import { getTokenBalance } from "../../../constants/utils/getBalances";
 import useDepositCollateral from "../../../hook/write/useDepositCollateral";
+import useGetUserPosition from "../../../hook/read/useGetUserPosition";
 
 const DepositCollateralWithdraw = () => {
 	const { id } = useParams();
@@ -13,6 +14,8 @@ const DepositCollateralWithdraw = () => {
 	const { isConnected, chainId, address } = useWeb3ModalAccount();
 
 	const { data } = useGetUtilitiesPeer();
+	const { totalCollateral } = useGetUserPosition()
+	
 
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [selectedToken, setSelectedToken] = useState(defaultTokenData[1]);
@@ -41,7 +44,7 @@ const DepositCollateralWithdraw = () => {
 
 	// Handle max button click
 	const handleMaxClick = () => {
-		const maxAmount = id === "borrow" ? availableBal * 0.79 : walletBalance;
+		const maxAmount = id === "withdraw" ? Number(availableBal) : walletBalance;
 		setAssetValue(maxAmount);
 		updateFiatEquivalent(maxAmount, selectedToken.tokenPrice);
 	};
@@ -71,11 +74,8 @@ const DepositCollateralWithdraw = () => {
 		};
 		fetchBalance();
 
-		if (data?.availableBalances) {
-			const totalBalance = data.availableBalances.reduce(
-				(acc, curr) => acc + curr,
-				0
-			);
+		if (totalCollateral) {
+			const totalBalance = totalCollateral
 			setAvailableBal(totalBalance);
 		}
 
@@ -87,14 +87,7 @@ const DepositCollateralWithdraw = () => {
 				}))
 			);
 		}
-	}, [
-		isConnected,
-		address,
-		chainId,
-		selectedToken.address,
-		selectedToken.decimal,
-		data,
-  ]);
+	}, [isConnected, address, chainId, selectedToken.address, selectedToken.decimal, data, totalCollateral]);
   
   const deposit = useDepositCollateral(selectedToken.address, String(assetValue), selectedToken.decimal, selectedToken.name)
 
