@@ -36,41 +36,32 @@ const PeerOrderHistory = () => {
 	);
 	}
 
-	const borrowOrders = activeRequests?.map((req) => {
-	const usdv = getTokenUSDV(req.tokenName || "Unknown"); // Get USD value
-	const amountUSD = parseFloat(req.amount) * usdv;
-	const profitOrInterestValueUSD = amountUSD * (req.interest / 100);
+	const mapOrders = (orders: any[], type: "borrow" | "lend"): OrderCardProps[] => {
+	return orders?.map((order) => {
+		const usdv = getTokenUSDV(order.tokenName || "Unknown"); 
+		const amountUSD = parseFloat(order.amount) * usdv;
+		const profitOrInterestValueUSD = amountUSD * (order.interest / 100);
 
-	return {
-		type: "borrow" as const,
-		token: req.tokenName || "Unknown",
-		icon: req.tokenIcon || "/coins/vToken.svg",
-		amount: req.amount,
-		amountUSD: `$${isLoading ? 0 : amountUSD.toFixed(2)}`, 
-		expiry: `${Math.ceil((req.expirationDate - Date.now() / 1000) / (60 * 60 * 24))}D`, 
-		profitOrInterestValue: `${(req.interest / 100).toFixed(2)}%`,
+		return {
+		type,
+		token: order.tokenName || "Unknown",
+		icon: order.tokenIcon || "/coins/vToken.svg",
+		amount: order.amount,
+		amountUSD: `$${isLoading ? 0 : amountUSD.toFixed(2)}`,
+		expiry: type === "borrow"
+			? `${Math.ceil((order.expirationDate - Date.now() / 1000) / (60 * 60 * 24))}D`
+			: `${order.returnDate} D`,
+		profitOrInterestValue: `${(order.interest / 100).toFixed(2)}%`,
 		profitOrInterestValueUSD: `$${isLoading ? 0 : profitOrInterestValueUSD.toFixed(2)}`,
-		duration: `${Math.ceil((req.returnDate - Date.now() / 1000) / (60 * 60 * 24))}D`, 
-	};
+		duration: type === "borrow"
+			? `${Math.ceil((order.returnDate - Date.now() / 1000) / (60 * 60 * 24))}D`
+			: `${order.returnDate}D`,
+		};
 	}) || [];
-
-	const lendOrders = myActiveLendOrder?.map((lend) => {
-	const usdv = getTokenUSDV(lend.tokenName || "Unknown"); // Get USD value
-	const amountUSD = parseFloat(lend.amount) * usdv;
-	const profitOrInterestValueUSD = amountUSD * (lend.interest / 100);
-
-	return {
-		type: "lend" as const,
-		token: lend.tokenName || "Unknown",
-		icon: lend.tokenIcon || "/coins/vToken.svg",
-		amount: lend.amount,
-		amountUSD: `$${isLoading ? 0 : amountUSD.toFixed(2)}`, 
-		expiry: `${Math.ceil(lend.returnDate / (24 * 3600))} D`,
-		profitOrInterestValue: `${(lend.interest / 100).toFixed(2)}%`,
-		profitOrInterestValueUSD: `$${isLoading ? 0 : profitOrInterestValueUSD.toFixed(2)}`,
-		duration: `${Math.ceil(lend.returnDate / (24 * 3600))}D`,
 	};
-	}) || [];
+
+	const borrowOrders = mapOrders(activeRequests ?? [], "borrow");
+	const lendOrders = mapOrders(myActiveLendOrder ?? [], "lend");
 
 	const peerData: OrderCardProps[] = [...lendOrders, ...borrowOrders];
 

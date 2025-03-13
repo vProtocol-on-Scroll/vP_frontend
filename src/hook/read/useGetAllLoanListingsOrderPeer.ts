@@ -16,8 +16,8 @@ const fetchAllLoanListingsPeer = async (): Promise<LoanListing[]> => {
     while (true) {
         try {
             const _listing = await contract.getLoanListing(_index);
-            console.log(`Fetched Listing at ${_index}:`, JSON.stringify(_listing, (_key, value) =>
-                typeof value === 'bigint' ? value.toString() : value, 2));
+            // console.log(`Fetched Listing at ${_index}:`, JSON.stringify(_listing, (_key, value) =>
+            //     typeof value === 'bigint' ? value.toString() : value, 2));
 
 
             if (!_listing || _listing[1] === "0x0000000000000000000000000000000000000000") {
@@ -41,8 +41,8 @@ const fetchAllLoanListingsPeer = async (): Promise<LoanListing[]> => {
                 amount: String(ethers.formatUnits(_listing[3], tokenInfo.decimal)),
                 min_amount: String(ethers.formatUnits(_listing[4], tokenInfo.decimal)),
                 max_amount: String(ethers.formatUnits(_listing[5], tokenInfo.decimal)),
-                returnDate: Number(_listing[6]),
-                expirationDate: Number(_listing[7]),
+                returnDate: Math.floor(Number(_listing[6]) / (24 * 3600)),
+                expirationDate: Math.floor(Number(_listing[7]) / (24 * 3600)),
                 interest: Number(_listing[8]),
                 status: Number(_listing[9]) === 0 ? 'OPEN' : 'CLOSED',
             };
@@ -86,6 +86,8 @@ const useGetAllLoanListingsOrderPeer = () => {
 
     const myLendOrder = listings?.filter(listing => listing.author === address) || [];
 
+    const avalaibleSupply = listings?.filter(listing => listing.status === 'OPEN') || [];
+
     const myActiveLendOrder = myLendOrder?.filter(listing => listing.status === 'OPEN') || [];
     
     // console.log("othersListings", othersListings);
@@ -97,6 +99,7 @@ const useGetAllLoanListingsOrderPeer = () => {
 		othersListings,
         myLendOrder,
         myActiveLendOrder,
+        avalaibleSupply,
 	};
 };
 

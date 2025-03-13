@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface LoadingProps {
-    size?: number; // Allows you to customize the size of the spinner
+    size?: number; 
 }
 
 const Loading: React.FC<LoadingProps> = ({ size = 50 }) => {

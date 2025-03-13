@@ -122,7 +122,7 @@ const SupplyBorrow = () => {
 				<div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6">
 					<div className="w-full">
 						<div className="bg-[#E8E8E8] rounded-xl p-3">
-							<p className="mb-2 text-base text-[#808080]">I will deposit</p>
+							<p className="mb-2 text-base text-[#808080]">{id === "supply" ? "I will deposit" : "I will borrow" }</p>
 
 							<div className="bg-white rounded-xl p-2">
 								<div className="flex items-start w-full mb-4">
@@ -275,7 +275,7 @@ const SupplyBorrow = () => {
 								Borrow Now
 							</div>
 						}
-						{id !== "borrow" &&
+						{id === "supply" &&
 							<div
 								onClick={() => {
 									// console.log("SUPPLY DETAILS", assetValue, selectedToken.address, selectedToken.decimal);

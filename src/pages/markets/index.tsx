@@ -5,81 +5,79 @@ import { PeerData } from "../../constants/types";
 import useGetAllBorrowRequestsPeer from "../../hook/read/useGetAllBorrowRequestsPeer";
 import useGetAllLoanListingsOrderPeer from "../../hook/read/useGetAllLoanListingsOrderPeer";
 import { formatAddress } from "../../constants/utils/formatAddress";
+import useGetTotalSBPool from "../../hook/read/useGetTotalSBPool";
+import useGetUtilitiesPeer from "../../hook/read/useGetUtilitiesPeer";
 
-
-const marketPoolData = [
-  {
-    asset: "USDT",
-    icon: "/coins/tether.svg",
-    supplyApy: "1.23%",
-    borrowApr: "5.54%",
-    totalSupply: "19,672,710.53",
-    totalSupplyUSD: "$19,661,005.25",
-    totalBorrow: "5,608,592.73",
-    totalBorrowUSD: "$5,608,592.73",
-  },
-  {
-    asset: "FIVE",
-    icon: "/coins/vToken.svg",
-    supplyApy: "2.10%",
-    borrowApr: "4.89%",
-    totalSupply: "12,345,678.90",
-    totalSupplyUSD: "$12,300,000.00",
-    totalBorrow: "4,321,987.65",
-    totalBorrowUSD: "$4,310,000.00",
-  },
-];
 
 
 const Markets = () => {
-  const { isLoading:BorrowOrderLoading, error:BorrowOrderError, othersRequests } = useGetAllBorrowRequestsPeer(); 
+  const { isLoading: BorrowOrderLoading, othersRequests, borrowedRequests } = useGetAllBorrowRequestsPeer();
+  const { isLoading: lendOrderLoading, othersListings, avalaibleSupply } = useGetAllLoanListingsOrderPeer();
+  const { supplyBorrow, totalBorrowUSD, totalSupplyUSD } = useGetTotalSBPool()
+  const { data, isLoading: utilitiesLoading } = useGetUtilitiesPeer();
 
-  const { isLoading:lendOrderLoading, error:lendOderError, othersListings } = useGetAllLoanListingsOrderPeer();
+  const tokenPrices: Record<string, number> = {
+    "ETH": data?.tokenPrices[0] || 1,
+    "USDC": data?.tokenPrices[1] || 1,
+    "WETH": data?.tokenPrices[2] || 1,
+    "WBTC": data?.tokenPrices[3] || 1,
+  };
 
+  const getTokenUSDV = (tokenName: string): number => {
+    return tokenPrices[tokenName.toUpperCase()] || 1;
+  };
+
+  console.log("requests", BorrowOrderLoading);
+  console.log("listings", lendOrderLoading, utilitiesLoading);
   
+  const mapPeerData = (items: any[], type: "borrow" | "lend"): PeerData[] => {
+    return items?.map((item) => {
+      const usdv = getTokenUSDV(item.tokenName || "Unknown"); // Get USD value
+      const amountUSD = parseFloat(item.amount) * usdv;
 
-  console.log("requests", BorrowOrderLoading, BorrowOrderError);
-  console.log("listings", lendOrderLoading, lendOderError);
-  
+      return {
+        asset: item.tokenName,
+        icon: item.tokenIcon,
+        duration: `${item.returnDate} D`,
+        interest: `${item.interest / 100}%`,
+        volume: item.amount,
+        volumeUSD: `$${utilitiesLoading ? 0 : amountUSD.toFixed(2)}`,
+        address: formatAddress(item.author),
+        tokenAddress: item.tokenAddress,
+        id: item.requestId || item.listingId,
+        tokenDecimal: item.tokenDecimal,
+        type,
+      };
+    }) || [];
+  };
 
-  const borrowPeerData: PeerData[] = othersRequests?.map((request) => ({
-    asset: request.tokenName,
-    icon: request.tokenIcon,
-    // duration:formatUnixTimestamp(request.returnDate),
-    duration: `${Math.round((request.returnDate - Date.now() / 1000) / (24 * 3600))} D`,
-    interest: `${request.interest/100}%`,
-    volume: request.amount,
-    volumeUSD: `$${request.totalRepayment}`,
-    address: formatAddress(request.author),
-    tokenAddress: request.tokenAddress,
-    id: request.requestId,
-    tokenDecimal: request.tokenDecimal,
-    type: "borrow",
-  })) || [];
+  const borrowPeerData = mapPeerData(othersRequests, "borrow");
+  const totalborrowedPeerData = mapPeerData(borrowedRequests, "borrow");
+  const lendPeerData = mapPeerData(othersListings, "lend");
+  const totalSupplylendPeerData = mapPeerData(avalaibleSupply, "lend");
 
-  const lendPeerData: PeerData[] = othersListings?.map((listing) => ({
-    asset: listing.tokenName,
-    icon: listing.tokenIcon,
-    // duration: formatUnixTimestamp(request.returnDate),
-    duration: `${Math.floor(listing.returnDate / (24 * 3600))} D`,
-    interest: `${listing.interest/100}%`,
-    volume: listing.amount,
-    volumeUSD: `$${listing.amount}`,
-    address: formatAddress(listing.author),
-    tokenAddress: listing.tokenAddress,
-    id: listing.listingId,
-    tokenDecimal: listing.tokenDecimal,
-    type: "lend",
-  })) || [];
+
+
+  const marketPoolData = supplyBorrow.filter(token => 
+    token.totalSupply > 0n && token.totalSupply > token.totalBorrow
+  ).map(token => ({
+    asset: token.name,
+    icon: token.icon,
+    supplyApy: `${(Number(token.supplyAPY) / 100).toFixed(2)}%`,
+    borrowApr: `${(Number(token.borrowAPR) / 100).toFixed(2)}%`,
+    totalSupply: token.totalSupply.toString(),
+    totalSupplyUSD: `$${token.supplyValueUSD.toFixed(2)}`,
+    totalBorrow: token.totalBorrow.toString(),
+    totalBorrowUSD: `$${token.borrowValueUSD.toFixed(2)}`,
+  }));
 
 
   const [selectedTab, setSelectedTab] = useState<"vPool" | "vPeer">("vPool");
   const [orderType, setOrderType] = useState<"lend" | "borrow">("lend"); 
 
   const allPeerData = [...lendPeerData, ...borrowPeerData];
-
-
   const filteredPeerData = allPeerData.filter((order) => order.type === orderType);
+
 
   return (
     <div className="max-w-[868px] w-full m-auto py-6 px-1">
@@ -94,14 +92,22 @@ const Markets = () => {
           <div className="bg-[#FFFFFF] text-[#0D0D0D] font-kaleko w-1/2 p-4 rounded-2xl">
             <p className="font-normal text-sm">Total Supply</p>
             <p className="font-extrabold text-[28px]">
-              {selectedTab === "vPool" ? "$61,235,195" : "$12,000,000"}
+             {`$${(
+                totalSupplylendPeerData.reduce((sum, token) => sum + parseFloat(token.volumeUSD.slice(1)), 0) +
+                parseFloat(String(totalSupplyUSD))
+              ).toFixed(2)}`
+              }
             </p>
           </div>
 
           <div className="text-white font-kaleko w-1/2 p-4 rounded-2xl">
             <p className="font-normal text-sm">Total Borrow</p>
             <p className="font-extrabold text-[28px]">
-              {selectedTab === "vPool" ? "$10,235,195" : "$5,500,000"}
+              {`$${(
+                totalborrowedPeerData.reduce((sum, token) => sum + parseFloat(token.volumeUSD.slice(1)), 0) +
+                parseFloat(String(totalBorrowUSD))
+              ).toFixed(2)}`
+              }
             </p>
           </div>
         </div>
@@ -166,20 +172,20 @@ const Markets = () => {
                 <div className="bg-white rounded-3xl w-full px-4 py-2">
                     <p className="text-[#0D0D0D80] font-medium text-sm">{selectedTab} Total Supply</p>
                     <p className="text-[#0D0D0D] font-extrabold text-xl mt-1">
-                        {selectedTab === "vPool" ? "$51,305,620" : "$6,500,000"}
+                      ${parseFloat(String(totalSupplyUSD)).toFixed(2)}
                     </p>
                 </div>
                 <div className="bg-transparent rounded-3xl w-full px-4 py-2">
                     <p className="text-[#0D0D0D80] font-medium text-sm">{selectedTab} Total Borrow</p>
                     <p className="text-[#0D0D0D] font-extrabold text-xl mt-1">
-                        {selectedTab === "vPool" ? "$7,807,480" : "$3,200,000"}
+                      ${parseFloat(String(totalBorrowUSD)).toFixed(2)}
                     </p>
                 </div>
             </div>
           )}
         </div>
 
-        {/* Table Display */}
+
         <div className="mt-8 w-full">
           {selectedTab === "vPool" ? (
             <PoolTable poolData={marketPoolData} />

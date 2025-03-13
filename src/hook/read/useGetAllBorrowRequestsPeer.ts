@@ -15,8 +15,8 @@ const fetchAllBorrowRequests = async (): Promise<Request[]> => {
     while (true) {
         try {
             const _request = await contract.getRequest(_index);
-            console.log(`Fetched Request at ${_index}:`, JSON.stringify(_request, (_key, value) =>
-                typeof value === 'bigint' ? value.toString() : value, 2));
+            // console.log(`Fetched Request at ${_index}:`, JSON.stringify(_request, (_key, value) =>
+            //     typeof value === 'bigint' ? value.toString() : value, 2));
 
 
             if (!_request || _request[1] === "0x0000000000000000000000000000000000000000") {
@@ -36,7 +36,7 @@ const fetchAllBorrowRequests = async (): Promise<Request[]> => {
                 amount: String(ethers.formatUnits(_request[2], tokenInfo.decimal)),
                 interest: Number(_request[3]),
                 totalRepayment: String(ethers.formatUnits(_request[4], tokenInfo.decimal)),
-                returnDate: Number(_request[5]),
+                returnDate:  Math.round((Number(_request[5]) - Date.now() / 1000) / (24 * 3600)),
                 expirationDate: Number(_request[6]),
                 lender: _request[7],
                 tokenAddress: _request[8],
@@ -77,6 +77,9 @@ const useGetAllBorrowRequestsPeer = () => {
         request.author !== address
     ) || [];
 
+    const borrowedRequests = requests?.filter(request => request.status !== 'OPEN') || [];
+
+
     // console.log("requests", requests);
     // console.log("othersRequests", othersRequests);
     
@@ -89,6 +92,7 @@ const useGetAllBorrowRequestsPeer = () => {
         requests,
         othersRequests,
         myBorrowOrder,
+        borrowedRequests,
     };
 };
 
