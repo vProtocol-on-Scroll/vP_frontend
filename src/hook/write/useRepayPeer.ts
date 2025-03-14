@@ -43,6 +43,7 @@ const useRepayPeer = (
 			toastId = toast.loading(`Processing repayments...`);
 
 			if (allowanceVal == 0 || allowanceVal < Number(_amount)) {
+				toast.loading(`Approving tokens...`, { id: toastId });
 				const allowance = await erc20contract.approve(
 					envVars.vProtocolContractAddress,
 					MaxUint256
@@ -52,6 +53,8 @@ const useRepayPeer = (
 				if (!allowanceReceipt.status)
 					return toast.error("Approval failed!", { id: toastId });
 			}
+
+			toast.loading(`Processing repayment of ${_amount}...`, { id: toastId })
 
 			const transaction = await contract.repayLoan(
 				_requestId,
@@ -67,8 +70,8 @@ const useRepayPeer = (
 		} catch (error: unknown) {
 			try {
 				const decodedError = await errorDecoder.decode(error);
-				console.error("Transaction failed:", decodedError);
-				toast.error(`Repayment failed: ${decodedError}`, { id: toastId });
+				console.error("Transaction failed:", decodedError.reason);
+				toast.error(`Repayment failed: ${decodedError.reason}`, { id: toastId });
 			} catch (decodeError) {
 				console.error("Error decoding failed:", decodeError);
 				toast.error("Repayment failed: Unknown error", { id: toastId });

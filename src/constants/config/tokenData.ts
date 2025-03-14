@@ -20,7 +20,7 @@ export const tokenData = [
 	{
 		token: "WETH",
 		icon: "/coins/weth.png",
-		tokenPrice: 2300, // Default price
+		tokenPrice: 1913, // Default price
 		address: "0x9959f02663B7c7BA0ED578613136F15FD56C67E8",
 		name: "WETH",
 		decimal: 18,

@@ -1,5 +1,7 @@
 import { OrderCardProps } from "../../constants/types";
 import { useEffect, useRef, useState } from "react";
+import useRepayPeer from "../../hook/write/useRepayPeer";
+import useCloseListingAd from "../../hook/write/useCloseListingAd";
 
 const PeerOrderCard: React.FC<OrderCardProps> = ({
 	type,
@@ -11,6 +13,8 @@ const PeerOrderCard: React.FC<OrderCardProps> = ({
 	profitOrInterestValueUSD,
 	profitOrInterestValue,
 	duration,
+	tokenAddress,
+	id,
 }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   
@@ -25,6 +29,9 @@ const PeerOrderCard: React.FC<OrderCardProps> = ({
 		document.addEventListener("mousedown", handleClickOutside);
 		return () => document.removeEventListener("mousedown", handleClickOutside);
 	}, []);
+
+	const repayLoan = useRepayPeer(amount, Number(id), String(tokenAddress))
+	const closeAds = useCloseListingAd( Number(id))
 
 	return (
 		<div className="max-w-[386px] w-full rounded-xl text-[#ffffff] bg-[#12151A] p-3 mt-2 relative noise-3">
@@ -43,8 +50,8 @@ const PeerOrderCard: React.FC<OrderCardProps> = ({
 							{amountUSD}
 						</p>
 					</div>
-          <div className="relative cursor-pointer" ref={dropdownRef}
-            onClick={() => setDropdownOpen(!isDropdownOpen)}>
+					<div className="relative cursor-pointer" ref={dropdownRef}
+						onClick={() => setDropdownOpen(!isDropdownOpen)}>
 						<img 
 							src="/icons/ellipse.svg" 
 							alt="options" 
@@ -54,12 +61,17 @@ const PeerOrderCard: React.FC<OrderCardProps> = ({
 						{isDropdownOpen && (
 							<div className="absolute right-0 mt-2 w-36 bg-[#000000] shadow-lg rounded-lg p-2 font-kaleko font-bold z-20">
 								{type === "borrow" ? (
-									<button className="w-full text-center px-4 py-2 text-sm bg-[#12151A] hover:bg-gray-300 rounded-md">
-										Repay
+									<button className="w-full text-center px-4 py-2 text-xs text-[#12151A] hover:bg-gray-300 bg-white rounded-md"
+										
+									onClick={()=>repayLoan()}
+									>
+										Repay Loan
 									</button>
 								) : (
-									<button className="w-full px-4 py-2 text-sm text-center bg-[#12151A] hover:bg-gray-300 rounded-md whitespace-nowrap">
-										Close
+									<button className="w-full px-4 py-2 text-xs text-center text-[#12151A] hover:bg-gray-300 bg-white rounded-md whitespace-nowrap"
+										onClick={()=>closeAds()}
+									>
+										Close Ads
 									</button>
 								)}
 							</div>

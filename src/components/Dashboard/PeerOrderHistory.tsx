@@ -47,6 +47,8 @@ const PeerOrderHistory = () => {
 		token: order.tokenName || "Unknown",
 		icon: order.tokenIcon || "/coins/vToken.svg",
 		amount: order.amount,
+		id: order.requestId,
+  		tokenAddress: order.tokenAddress,
 		amountUSD: `$${isLoading ? 0 : amountUSD.toFixed(2)}`,
 		expiry: type === "borrow"
 			? `${Math.ceil((order.expirationDate - Date.now() / 1000) / (60 * 60 * 24))}D`

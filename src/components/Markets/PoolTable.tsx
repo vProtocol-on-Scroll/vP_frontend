@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 interface PoolData {
   asset: string;
   icon: string;
@@ -10,6 +12,8 @@ interface PoolData {
 }
 
 const PoolTable = ({ poolData }: { poolData: PoolData[] }) => {
+  const navigate = useNavigate()
+
   return (
     <div className="overflow-x-auto">
       <table className="w-full border-separate border-spacing-y-4">
@@ -24,7 +28,16 @@ const PoolTable = ({ poolData }: { poolData: PoolData[] }) => {
         </thead>
         <tbody className="text-[#0D0D0D] text-lg font-extrabold">
           {poolData.map((pool, index) => (
-            <tr key={index} className="bg-white shadow-lg rounded-2xl">
+            <tr key={index} className="bg-white shadow-lg rounded-2xl cursor-pointer"
+              onClick={() =>
+                navigate("/transact/borrow", {
+                  state: {
+                    _amount: pool.totalSupply,
+                    borrowApr: pool.borrowApr,
+                    tokenName: pool.asset,
+                  },
+                })}
+            >
               <td className="flex gap-2 items-center py-4 px-6">
                 <img src={pool.icon} width={40} height={40} alt={pool.asset} />
                 <span className="text-base">{pool.asset}</span>

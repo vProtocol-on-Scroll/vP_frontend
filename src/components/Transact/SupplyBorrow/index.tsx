@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { tokenData as defaultTokenData } from "../../../constants/config/tokenData";
 import { percentages } from "../../../constants/config/percentage";
@@ -8,19 +8,26 @@ import { getTokenBalance } from "../../../constants/utils/getBalances";
 import useGetUtilitiesPeer from "../../../hook/read/useGetUtilitiesPeer";
 import useSupply from "../../../hook/write/useSupply";
 import useGetUserPosition from "../../../hook/read/useGetUserPosition";
+import { TokenType } from "../../../constants/types";
+import useCreatePositionPool from "../../../hook/write/useCreatePositionPool";
+
 
 const SupplyBorrow = () => {
 	const { id } = useParams();
 	const { isConnected, chainId, address } = useWeb3ModalAccount();
+	const location = useLocation();
+    const state = location.state || {};
 
 
 	const { data } = useGetUtilitiesPeer();
 	const { totalCollateral } = useGetUserPosition()
 
+	const createBorrowPosition = useCreatePositionPool()
+
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
 	const [selectedToken, setSelectedToken] = useState(defaultTokenData[1]);
-	const [updatedTokenData, setUpdatedTokenData] = useState(defaultTokenData);
+	const [updatedTokenData, setUpdatedTokenData] =  useState<TokenType[]>(defaultTokenData);
 
 	const [assetValue, setAssetValue] = useState<string | number>("0");
 	const [fiatEquivalent, setFiatEquivalent] = useState<number>(0);
@@ -30,6 +37,15 @@ const SupplyBorrow = () => {
 	const [walletBalance, setWalletBalance] = useState(0);
 	const [availableBal, setAvailableBal] = useState(0);
 
+
+	useEffect(() => {
+		if (id === "borrow" && state.tokenName) {
+			const borrowToken = defaultTokenData.find((t) => t.name === state.tokenName);
+			if (borrowToken) {
+				setSelectedToken(borrowToken);
+			}
+		}
+	}, [id, state.tokenName]);
 
 	useEffect(() => {
 		const fetchBalance = async () => {
@@ -66,8 +82,7 @@ const SupplyBorrow = () => {
 		isConnected,
 		address,
 		chainId,
-		selectedToken.address,
-		selectedToken.decimal,
+		selectedToken,
 		data,
 		totalCollateral,
 	]);
@@ -76,7 +91,8 @@ const SupplyBorrow = () => {
 		const value = e.target.value;
 		if (!isNaN(Number(value)) && Number(value) >= 0) {
 			setAssetValue(value);
-			updateFiatEquivalent(Number(value), selectedToken.tokenPrice);
+			const selected = updatedTokenData.find((t) => t.name === selectedToken.name);
+			updateFiatEquivalent(Number(value), selected?.tokenPrice ?? 0);
 		}
 	};
 
@@ -86,6 +102,8 @@ const SupplyBorrow = () => {
 	};
 
 	const handleTokenSelect = (token: string) => {
+		if (id === "borrow") return;
+		
 		const selected = updatedTokenData.find((t) => t.token === token);
 		if (selected) {
 			setSelectedToken(selected);
@@ -150,8 +168,8 @@ const SupplyBorrow = () => {
 									</div>
 
 									<div
-										onClick={toggleDropdown}
-										className="flex items-center gap-2 ml-auto cursor-pointer relative"
+										onClick={id === "borrow" ? undefined : toggleDropdown}
+										className={`flex items-center gap-2 ml-auto relative ${id === "borrow" ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
 									>
 										<img
 											src={selectedToken.icon}
@@ -255,14 +273,16 @@ const SupplyBorrow = () => {
 										<h3 className="text-[#808080] text-[15.38px] mb-1">
 											{id === "borrow" ? "Borrow APR" : "Supply APY"}
 										</h3>
-										<p className="text-xl text-[#0A0A0A]">5.359%</p>
+										<p className="text-xl text-[#0A0A0A]">
+											{id === "borrow" ? state.borrowApr : "5.359%"}
+										</p>
 									</div>
 
 									<div className="pb-4">
 										<h3 className="text-[#808080] text-[15.38px] mb-1">
 											{id === "borrow" ? "Monthly Cost" : "Monthly yield"}
 										</h3>
-										<p className="text-xl text-[#0A0A0A]">$120.37</p>
+										<p className="text-xl text-[#0A0A0A]">${id === "borrow" ? ((parseFloat(state.borrowApr) * fiatEquivalent) / 12).toFixed(3) : "50.359%"}</p>
 									</div>
 								</div>
 							</div>
@@ -271,6 +291,9 @@ const SupplyBorrow = () => {
 						{id === "borrow" &&
 							<div
 								className={`w-full rounded-md px-6 py-2 text-center cursor-pointer bg-[#01D396] mt-4 font-bold`}
+								onClick={() =>
+									createBorrowPosition(String(assetValue), selectedToken.address, selectedToken.decimal, selectedToken.name)
+								}
 							>
 								Borrow Now
 							</div>

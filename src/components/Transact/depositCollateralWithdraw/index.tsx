@@ -38,7 +38,8 @@ const DepositCollateralWithdraw = () => {
 		const value = e.target.value;
 		if (!isNaN(Number(value)) && Number(value) >= 0) {
 			setAssetValue(value);
-			updateFiatEquivalent(Number(value), selectedToken.tokenPrice);
+			const selected = updatedTokenData.find((t) => t.name === selectedToken.name);
+			updateFiatEquivalent(Number(value), selected?.tokenPrice ?? 0);
 		}
 	};
 

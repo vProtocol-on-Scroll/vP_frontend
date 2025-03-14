@@ -28,6 +28,8 @@ export interface OrderCardProps {
   profitOrInterestValue?: string;
   profitOrInterestValueUSD?: string;
   duration?: string;
+  id?: number;
+  tokenAddress?: string;
 }
 
 export interface PeerData {
@@ -59,4 +61,14 @@ export interface LoanListing {
   tokenName: string,
   tokenIcon: any,
   tokenDecimal: number,
+}
+
+export interface TokenType {
+  token: string;
+  icon: string;
+  tokenPrice: number;
+  address: string;
+  name: string;
+  decimal: number;
+  format: number;
 }
