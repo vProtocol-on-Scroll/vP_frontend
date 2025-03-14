@@ -2,6 +2,7 @@ import { OrderCardProps } from "../../constants/types";
 import { useEffect, useRef, useState } from "react";
 import useRepayPeer from "../../hook/write/useRepayPeer";
 import useCloseListingAd from "../../hook/write/useCloseListingAd";
+import { formatMoney } from "../../constants/utils/formatMoney";
 
 const PeerOrderCard: React.FC<OrderCardProps> = ({
 	type,
@@ -15,6 +16,7 @@ const PeerOrderCard: React.FC<OrderCardProps> = ({
 	duration,
 	tokenAddress,
 	id,
+	decimal,
 }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   
@@ -30,7 +32,7 @@ const PeerOrderCard: React.FC<OrderCardProps> = ({
 		return () => document.removeEventListener("mousedown", handleClickOutside);
 	}, []);
 
-	const repayLoan = useRepayPeer(amount, Number(id), String(tokenAddress))
+	const repayLoan = useRepayPeer(amount, Number(id), String(tokenAddress), decimal)
 	const closeAds = useCloseListingAd( Number(id))
 
 	return (
@@ -44,10 +46,10 @@ const PeerOrderCard: React.FC<OrderCardProps> = ({
 				<div className="flex gap-6">
 					<div className="flex flex-col items-end">
 						<p className="font-extrabold text-2xl leading-none tracking-tighter">
-							{amount}
+							{formatMoney(amount)}
 						</p>
 						<p className="text-[13px] font-kaleko font-normal text-[#fff]">
-							{amountUSD}
+							${formatMoney(amountUSD)}
 						</p>
 					</div>
 					<div className="relative cursor-pointer" ref={dropdownRef}
@@ -93,7 +95,7 @@ const PeerOrderCard: React.FC<OrderCardProps> = ({
 					<p className="font-bold text-[16px] font-kaleko">
 						{profitOrInterestValue}
 						<span className="text-[#ffffff] text-[13px] pl-2">
-							{profitOrInterestValueUSD}
+							${formatMoney(profitOrInterestValueUSD!)}
 						</span>
 					</p>
 				</div>

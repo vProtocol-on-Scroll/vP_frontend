@@ -42,9 +42,9 @@ const PoolOrderHistory = () => {
             token: token.token,
             icon: token.icon || `/coins/vToken.svg`,
             amount: formattedDeposit.toFixed(2),
-            amountUSD: `$${isLoading ? formattedDeposit.toFixed(2) : (usdPrice! * formattedDeposit).toFixed(3)}`, 
+            amountUSD: `${isLoading ? formattedDeposit.toFixed(2) : (usdPrice! * formattedDeposit).toFixed(3)}`, 
             stat1Value: (((Number(supplyAPY) / 100) * formattedDeposit)/12).toFixed(2),
-            stat1ValueUSD: `$${(((Number(supplyAPY) / 100) * (usdPrice! * formattedDeposit))/12).toFixed(2)}`,
+            stat1ValueUSD: `${(((Number(supplyAPY) / 100) * (usdPrice! * formattedDeposit))/12).toFixed(2)}`,
             stat2Value: `${(parseFloat(String(supplyAPY)) / 100).toFixed(2)}%`,
           }
         : null;
@@ -56,9 +56,9 @@ const PoolOrderHistory = () => {
             token: token.token,
             icon: token.icon || `/coins/vToken.svg`,
             amount: formattedBorrow.toFixed(2),
-            amountUSD: `$${isLoading ? formattedDeposit.toFixed(2) : (usdPrice! * formattedDeposit).toFixed(3)}`,  
+            amountUSD: `${isLoading ? formattedDeposit.toFixed(2) : (usdPrice! * formattedDeposit).toFixed(3)}`,  
             stat1Value: (((Number(borrowAPR) / 100) * formattedDeposit)/12).toFixed(2),
-            stat1ValueUSD: `$${(((Number(borrowAPR) / 100) * (usdPrice! * formattedDeposit))/12).toFixed(2)}`,
+            stat1ValueUSD: `${(((Number(borrowAPR) / 100) * (usdPrice! * formattedDeposit))/12).toFixed(2)}`,
             stat2Value: `${(parseFloat(String(borrowAPR)) / 100).toFixed(2)}%`,
           }
         : null;

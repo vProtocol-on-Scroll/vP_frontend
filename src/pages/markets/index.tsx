@@ -7,6 +7,7 @@ import useGetAllLoanListingsOrderPeer from "../../hook/read/useGetAllLoanListing
 import { formatAddress } from "../../constants/utils/formatAddress";
 import useGetTotalSBPool from "../../hook/read/useGetTotalSBPool";
 import useGetUtilitiesPeer from "../../hook/read/useGetUtilitiesPeer";
+import { formatMoney } from "../../constants/utils/formatMoney";
 
 
 
@@ -41,7 +42,7 @@ const Markets = () => {
         duration: `${item.returnDate} D`,
         interest: `${item.interest / 100}%`,
         volume: item.amount,
-        volumeUSD: `$${utilitiesLoading ? 0 : amountUSD.toFixed(2)}`,
+        volumeUSD: `${utilitiesLoading ? 0 : amountUSD.toFixed(2)}`,
         address: formatAddress(item.author),
         tokenAddress: item.tokenAddress,
         id: item.requestId || item.listingId,
@@ -66,9 +67,9 @@ const Markets = () => {
     supplyApy: `${(Number(token.supplyAPY) / 100).toFixed(2)}%`,
     borrowApr: `${(Number(token.borrowAPR) / 100).toFixed(2)}%`,
     totalSupply: token.totalSupply.toString(),
-    totalSupplyUSD: `$${token.supplyValueUSD.toFixed(2)}`,
+    totalSupplyUSD: `${token.supplyValueUSD.toFixed(2)}`,
     totalBorrow: token.totalBorrow.toString(),
-    totalBorrowUSD: `$${token.borrowValueUSD.toFixed(2)}`,
+    totalBorrowUSD: `${token.borrowValueUSD.toFixed(2)}`,
   }));
 
 
@@ -77,6 +78,17 @@ const Markets = () => {
 
   const allPeerData = [...lendPeerData, ...borrowPeerData];
   const filteredPeerData = allPeerData.filter((order) => order.type === orderType);
+
+
+  const totalBorrowedAmount = (
+    totalborrowedPeerData.reduce((sum, token) => sum + parseFloat(token.volumeUSD.slice(1)), 0) +
+    parseFloat(String(totalBorrowUSD))
+  ).toFixed(2);
+
+  const totalSuppliedAmount = (
+    totalSupplylendPeerData.reduce((sum, token) => sum + parseFloat(token.volumeUSD.slice(1)), 0) +
+    parseFloat(String(totalSupplyUSD))
+  ).toFixed(2);
 
 
   return (
@@ -92,22 +104,14 @@ const Markets = () => {
           <div className="bg-[#FFFFFF] text-[#0D0D0D] font-kaleko w-1/2 p-4 rounded-2xl">
             <p className="font-normal text-sm">Total Supply</p>
             <p className="font-extrabold text-[28px]">
-             {`$${(
-                totalSupplylendPeerData.reduce((sum, token) => sum + parseFloat(token.volumeUSD.slice(1)), 0) +
-                parseFloat(String(totalSupplyUSD))
-              ).toFixed(2)}`
-              }
+             {`$${formatMoney(totalSuppliedAmount)}`}
             </p>
           </div>
 
           <div className="text-white font-kaleko w-1/2 p-4 rounded-2xl">
             <p className="font-normal text-sm">Total Borrow</p>
             <p className="font-extrabold text-[28px]">
-              {`$${(
-                totalborrowedPeerData.reduce((sum, token) => sum + parseFloat(token.volumeUSD.slice(1)), 0) +
-                parseFloat(String(totalBorrowUSD))
-              ).toFixed(2)}`
-              }
+             {`$${formatMoney(totalBorrowedAmount)}`}
             </p>
           </div>
         </div>
@@ -172,13 +176,13 @@ const Markets = () => {
                 <div className="bg-white rounded-3xl w-full px-4 py-2">
                     <p className="text-[#0D0D0D80] font-medium text-sm">{selectedTab} Total Supply</p>
                     <p className="text-[#0D0D0D] font-extrabold text-xl mt-1">
-                      ${parseFloat(String(totalSupplyUSD)).toFixed(2)}
+                       ${formatMoney(parseFloat(String(totalSupplyUSD)).toFixed(2))}
                     </p>
                 </div>
                 <div className="bg-transparent rounded-3xl w-full px-4 py-2">
                     <p className="text-[#0D0D0D80] font-medium text-sm">{selectedTab} Total Borrow</p>
                     <p className="text-[#0D0D0D] font-extrabold text-xl mt-1">
-                      ${parseFloat(String(totalBorrowUSD)).toFixed(2)}
+                      ${formatMoney(parseFloat(String(totalBorrowUSD)).toFixed(2))}
                     </p>
                 </div>
             </div>

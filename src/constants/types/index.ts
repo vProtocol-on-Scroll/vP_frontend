@@ -30,6 +30,7 @@ export interface OrderCardProps {
   duration?: string;
   id?: number;
   tokenAddress?: string;
+  decimal:number
 }
 
 export interface PeerData {

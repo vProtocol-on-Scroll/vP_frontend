@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { formatMoney } from "../../constants/utils/formatMoney";
 
 interface PoolData {
   asset: string;
@@ -45,15 +46,15 @@ const PoolTable = ({ poolData }: { poolData: PoolData[] }) => {
               <td className="text-center py-4 px-6">{pool.supplyApy}</td>
               <td className="text-center py-4 px-6">{pool.borrowApr}</td>
               <td className="text-center py-4 px-6">
-                <p>{pool.totalSupply}</p>
+                <p>{formatMoney(pool.totalSupply)}</p>
                 <p className="text-[#0D0D0D80] font-medium text-[13px] leading-none">
-                  {pool.totalSupplyUSD}
+                  ${formatMoney(pool.totalSupplyUSD)}
                 </p>
               </td>
               <td className="text-center py-4 px-6">
-                <p>{pool.totalBorrow}</p>
+                <p>{formatMoney(pool.totalBorrow)}</p>
                 <p className="text-[#0D0D0D80] font-medium text-[13px] leading-none">
-                  {pool.totalBorrowUSD}
+                  ${formatMoney(pool.totalBorrowUSD)}
                 </p>
               </td>
             </tr>

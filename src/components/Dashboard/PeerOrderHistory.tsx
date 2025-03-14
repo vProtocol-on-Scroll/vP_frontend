@@ -47,14 +47,15 @@ const PeerOrderHistory = () => {
 		token: order.tokenName || "Unknown",
 		icon: order.tokenIcon || "/coins/vToken.svg",
 		amount: order.amount,
-		id: order.requestId,
+		id: type === "borrow" ? order.requestId : order.listingId,
   		tokenAddress: order.tokenAddress,
-		amountUSD: `$${isLoading ? 0 : amountUSD.toFixed(2)}`,
+		decimal: order.tokenDecimal,
+		amountUSD: `${isLoading ? 0 : amountUSD.toFixed(2)}`,
 		expiry: type === "borrow"
 			? `${Math.ceil((order.expirationDate - Date.now() / 1000) / (60 * 60 * 24))}D`
 			: `${order.returnDate} D`,
 		profitOrInterestValue: `${(order.interest / 100).toFixed(2)}%`,
-		profitOrInterestValueUSD: `$${isLoading ? 0 : profitOrInterestValueUSD.toFixed(2)}`,
+		profitOrInterestValueUSD: `${isLoading ? 0 : profitOrInterestValueUSD.toFixed(2)}`,
 		duration: type === "borrow"
 			? `${Math.ceil((order.returnDate - Date.now() / 1000) / (60 * 60 * 24))}D`
 			: `${order.returnDate}D`,

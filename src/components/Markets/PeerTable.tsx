@@ -1,6 +1,7 @@
 import { PeerData } from "../../constants/types";
 import useServiceRequest from "../../hook/write/useServiceRequest";
 import useRequestLoanFromListing from "../../hook/write/useRequestLoanFromListing";
+import { formatMoney } from "../../constants/utils/formatMoney";
 
 const PeerTable = ({ peerData }: { peerData: PeerData[] }) => {
   
@@ -34,9 +35,9 @@ const PeerTable = ({ peerData }: { peerData: PeerData[] }) => {
               <td className="text-center p-4">{peer.duration}</td>
               <td className="text-center p-4">{peer.interest}</td>
               <td className="text-center p-4">
-                <p>{peer.volume}</p>
+                <p>{formatMoney(peer.volume)}</p>
                 <p className="text-[#0D0D0D80] font-medium text-[13px] leading-none">
-                  {peer.volumeUSD}
+                  ${formatMoney(peer.volumeUSD)}
                 </p>
               </td>
               <td className="text-center p-4">

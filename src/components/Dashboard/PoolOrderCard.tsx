@@ -1,5 +1,6 @@
 // import { useEffect, useRef, useState } from "react";
 import { OrderCardProps } from "../../constants/types";
+import { formatMoney } from "../../constants/utils/formatMoney";
 // import { useNavigate } from "react-router-dom";
 
 const PoolOrderCard: React.FC<OrderCardProps> = ({
@@ -41,10 +42,10 @@ const PoolOrderCard: React.FC<OrderCardProps> = ({
 				<div className="flex gap-6">
 					<div className="flex flex-col items-end">
 						<p className="font-extrabold text-2xl leading-none tracking-tighter">
-							{amount}
+							{formatMoney(amount)}
 						</p>
 						<p className="text-[13px] font-kaleko font-normal text-[#ffffff]">
-							{amountUSD}
+							${formatMoney(amountUSD)}
 						</p>
 					</div>
 					{/* <div
@@ -95,9 +96,9 @@ const PoolOrderCard: React.FC<OrderCardProps> = ({
 						{type === "borrow" ? "Monthly Cost" : "Monthly Yield"}
 					</p>
 					<p className="font-bold text-[16px] font-kaleko">
-						{stat1Value}
+						{formatMoney(stat1Value!)}
 						<span className="text-[#ffffff] text-[13px] pl-2">
-							{stat1ValueUSD}
+							${formatMoney(stat1ValueUSD!)}
 						</span>
 					</p>
 				</div>

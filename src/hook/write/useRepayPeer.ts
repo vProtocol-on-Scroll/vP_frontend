@@ -11,7 +11,7 @@ import {
 	getVProtocolContract,
 } from "../../api/contractsInstance";
 import peer from "../../abi/peer.json";
-import { MaxUint256 } from "ethers";
+import { ethers, MaxUint256 } from "ethers";
 import { ErrorDecoder } from "ethers-decode-error";
 import { envVars } from "../../constants/config/envVars";
 import useCheckAllowances from "../read/useCheckAllowances";
@@ -20,6 +20,7 @@ const useRepayPeer = (
 	_amount: string,
 	_requestId: number,
 	tokenTypeAddress: string,
+	tokenDecimal: number,
 ) => {
 	const { chainId } = useWeb3ModalAccount();
 	const { walletProvider } = useWeb3ModalProvider();
@@ -36,7 +37,10 @@ const useRepayPeer = (
 		const contract = getVProtocolContract(signer, peer);
 		const erc20contract = getERC20Contract(signer, tokenTypeAddress);
 
+		const _weiAmount = ethers.parseUnits(_amount, tokenDecimal);
 
+		// console.log("amount", _amount, "_weiAmount", _weiAmount);
+		
 		let toastId: string | number | undefined;
 
 		try {
@@ -58,7 +62,7 @@ const useRepayPeer = (
 
 			const transaction = await contract.repayLoan(
 				_requestId,
-				_amount
+				_weiAmount
 			);
 			const receipt = await transaction.wait();
 
@@ -77,7 +81,7 @@ const useRepayPeer = (
 				toast.error("Repayment failed: Unknown error", { id: toastId });
 			}
 		}
-	}, [chainId, isLoading, walletProvider, tokenTypeAddress, allowanceVal, _amount, _requestId, errorDecoder]);
+	}, [chainId, isLoading, walletProvider, tokenTypeAddress, _amount, tokenDecimal, allowanceVal, _requestId, errorDecoder]);
 };
 
 export default useRepayPeer;
