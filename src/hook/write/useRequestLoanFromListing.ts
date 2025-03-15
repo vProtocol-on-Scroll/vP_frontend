@@ -12,6 +12,7 @@ import erc20 from "../../abi/erc20.json";
 import { ethers } from "ethers";
 import { ErrorDecoder } from "ethers-decode-error";
 import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 const useRequestLoanFromListing = (
     
@@ -20,6 +21,7 @@ const useRequestLoanFromListing = (
 	const { walletProvider } = useWeb3ModalProvider();
 
 	const errorDecoder = ErrorDecoder.create([peer, erc20]);
+	const navigate = useNavigate();
 
 	const queryClient = useQueryClient();
 
@@ -50,6 +52,8 @@ const useRequestLoanFromListing = (
 				});
 				queryClient.invalidateQueries({ queryKey: ["allLoanListings"] });
 				queryClient.invalidateQueries({ queryKey: ["userActiveRequests"] }); 
+
+				navigate("/")
 			}
 		} catch (error: unknown) {
 			try {

@@ -32,8 +32,8 @@ const Header = () => {
 		if (!isConnected) {
 			open();
 		} else if (isConnected && !isSupportedChain(chainId)) {
-      switchNetwork(SUPPORTED_CHAIN_ID);
-      setIsWalletDropdownOpen(false)
+      		switchNetwork(SUPPORTED_CHAIN_ID);
+      		setIsWalletDropdownOpen(false)
       
 		} else {
 			setIsWalletDropdownOpen((prev) => !prev);

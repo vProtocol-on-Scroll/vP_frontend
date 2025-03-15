@@ -44,7 +44,7 @@ export interface PeerData {
   id: any;
   tokenAddress: any;
   tokenDecimal: number;
-  type: "lend" | "borrow";
+  type: "lend" | "borrow" | "lend2";
 }
 
 

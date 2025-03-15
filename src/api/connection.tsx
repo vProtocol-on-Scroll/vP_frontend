@@ -13,7 +13,7 @@ const scroll = {
     name: 'Scroll',
     currency: 'ETH',
     explorerUrl: 'https://sepolia.scrollscan.com/',
-    rpcUrl: `${projectId}`
+    rpcUrl: `${envVars.httpRPC}`
 }
 
 

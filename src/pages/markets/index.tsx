@@ -40,7 +40,7 @@ const Markets = () => {
 
 	const isLoading = BorrowOrderLoading || lendOrderLoading;
 
-	const mapPeerData = (items: any[], type: "borrow" | "lend"): PeerData[] => {
+	const mapPeerData = (items: any[], type: "borrow" | "lend" | "lend2"): PeerData[] => {
 		return (
 			items?.map((item) => {
 				const usdv = getTokenUSDV(item.tokenName || "Unknown"); // Get USD value
@@ -51,7 +51,7 @@ const Markets = () => {
 					icon: item.tokenIcon,
 					duration: `${item.returnDate} D`,
 					interest: `${item.interest / 100}%`,
-					volume: item.amount,
+          volume: type === "lend" ? item.max_amount : item.amount,
 					volumeUSD: `${utilitiesLoading ? 0 : amountUSD.toFixed(2)}`,
 					address: formatAddress(item.author),
 					tokenAddress: item.tokenAddress,
@@ -66,7 +66,7 @@ const Markets = () => {
 	const borrowPeerData = mapPeerData(othersRequests, "borrow");
 	const totalborrowedPeerData = mapPeerData(borrowedRequests, "borrow");
 	const lendPeerData = mapPeerData(othersListings, "lend");
-	const totalSupplylendPeerData = mapPeerData(avalaibleSupply, "lend");
+	const totalSupplylendPeerData = mapPeerData(avalaibleSupply, "lend2");
 
 	const marketPoolData = supplyBorrow
 		.filter(

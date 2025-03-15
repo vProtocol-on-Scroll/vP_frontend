@@ -60,11 +60,6 @@ const SupplyBorrow = () => {
 		}
 	}, [apyAprData, id, selectedToken]);
 
-	useEffect(() => {
-	  console.log("apyyyy", APY);
-	  
-	}, [APY])
-
 
 	useEffect(() => {
 		const fetchBalance = async () => {
