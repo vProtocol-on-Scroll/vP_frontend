@@ -103,22 +103,34 @@ const Header = () => {
 			</div>
 
 			<nav className="hidden lg:flex items-center gap-3">
-				{headerNav.map((item, index) => (
-					<Link
-						key={index}
-						to={item.link}
-						className={`text-xl flex items-center gap-2 font-medium px-3 py-[2px] transition duration-300
-              				${
-								currentPath === item.link
-									? "bg-[#D7D7D733] rounded-3xl"
-									: "hover:opacity-70"
-							}
-            			`}
-					>
-						<img src={item.icon} width={item.width} height={24} alt={item.name} />
-						{item.name}
-					</Link>
-				))}
+				{headerNav.map((item, index) => {
+					if (item.name === "Withdraw" && !isConnected) return null;
+
+					return item.link.startsWith("http") ? (
+						<a
+							key={index}
+							href={item.link}
+							target="_blank"
+							rel="noopener noreferrer"
+							className={`text-xl flex items-center gap-2 font-medium px-3 py-[2px] transition duration-300
+								hover:opacity-70`}
+						>
+							<img src={item.icon} width={item.width} height={24} alt={item.name} />
+							{item.name}
+						</a>
+					) : (
+						<Link
+							key={index}
+							to={item.link}
+							className={`text-xl flex items-center gap-2 font-medium px-3 py-[2px] transition duration-300
+								${pathname === item.link ? "bg-[#D7D7D733] rounded-3xl" : "hover:opacity-70"}
+							`}
+						>
+							<img src={item.icon} width={item.width} height={24} alt={item.name} />
+							{item.name}
+						</Link>
+					);
+				})}
 			</nav>
 
 			{/* Right Section (Mobile Menu + Wallet) */}
@@ -139,23 +151,45 @@ const Header = () => {
 						</button>
 
 						<nav className="flex flex-col items-center gap-6 md:gap-12">
-							{headerNav.map((item, index) => (
-								<Link
-									key={index}
-									to={item.link}
-									className={`text-base flex items-center gap-2 font-medium px-2 py-2 rounded-lg w-full text-center
-                    						${
-											currentPath === item.link
-												? "bg-[#D7D7D733] text-white"
-												: "hover:opacity-70"
-											}
-                						`}
-										onClick={toggleMenu}
-									>
-									<img src={item.icon} width={item.width} height={24} alt={item.name} />
-									{item.name}
-								</Link>
-							))}
+							{headerNav.map((item, index) => {
+								if (item.name === "Withdraw" && !isConnected) return null;
+
+								return item.link.startsWith("http") ? (
+									<a
+										key={index}
+										href={item.link}
+										target="_blank"
+										rel="noopener noreferrer"
+										className={`text-base flex items-center gap-2 font-medium px-2 py-2 rounded-lg w-full text-center
+												${
+												currentPath === item.link
+													? "bg-[#D7D7D733] text-white"
+													: "hover:opacity-70"
+												}
+											`}
+											onClick={toggleMenu}
+										>
+										<img src={item.icon} width={item.width} height={24} alt={item.name} />
+										{item.name}
+									</a>
+								):(
+									<Link
+										key={index}
+										to={item.link}
+										className={`text-base flex items-center gap-2 font-medium px-2 py-2 rounded-lg w-full text-center
+												${
+												currentPath === item.link
+													? "bg-[#D7D7D733] text-white"
+													: "hover:opacity-70"
+												}
+											`}
+											onClick={toggleMenu}
+										>
+										<img src={item.icon} width={item.width} height={24} alt={item.name} />
+										{item.name}
+									</Link>
+								)
+						})}
 						</nav>
 					</div>
 				)}

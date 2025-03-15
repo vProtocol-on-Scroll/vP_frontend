@@ -8,8 +8,11 @@ import { toast } from "sonner";
 import { getProvider } from "../../api/provider";
 import { getVProtocolContract } from "../../api/contractsInstance";
 import pool from "../../abi/pool.json";
+import erc20 from "../../abi/erc20.json";
 import { ethers } from "ethers";
 import { ErrorDecoder } from "ethers-decode-error";
+import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 const useWithdrawPool = (
     _amount: string,
@@ -18,8 +21,10 @@ const useWithdrawPool = (
 ) => {
 	const { chainId } = useWeb3ModalAccount();
 	const { walletProvider } = useWeb3ModalProvider();
+	const queryClient = useQueryClient();
+	const navigate = useNavigate();
 
-	const errorDecoder = ErrorDecoder.create([pool]);
+	const errorDecoder = ErrorDecoder.create([pool, erc20]);
 
 	return useCallback(async () => {
 		if (!isSupportedChain(chainId)) return toast.warning("SWITCH NETWORK");
@@ -35,13 +40,17 @@ const useWithdrawPool = (
 		try {
 			toastId = toast.loading(`Processing withdrawal...`);
 
-			const transaction = await contract.withdraw(tokenTypeAddress,_weiAmount);
+			const transaction = await contract.withdraw(tokenTypeAddress,_weiAmount, false);
 			const receipt = await transaction.wait();
 
 			if (receipt.status) {
 				toast.success(`${_amount} successfully withdrawn!`, {
 					id: toastId,
 				});
+				queryClient.invalidateQueries({ queryKey: ["userPosition"] });
+				queryClient.invalidateQueries({ queryKey: ["getTotalSupplyBorrow"] });
+                queryClient.invalidateQueries({ queryKey: ["getAPR&APY"] });
+				navigate("/")
 			}
 		} catch (error: unknown) {
 			try {
@@ -53,7 +62,7 @@ const useWithdrawPool = (
 				toast.error("Transaction failed: Unknown error", { id: toastId });
 			}
 		}
-	}, [_amount, chainId, errorDecoder, tokenDecimal, tokenTypeAddress, walletProvider]);
+	}, [_amount, chainId, errorDecoder, navigate, queryClient, tokenDecimal, tokenTypeAddress, walletProvider]);
 };
 
 export default useWithdrawPool;

@@ -10,6 +10,7 @@ import useSupply from "../../../hook/write/useSupply";
 import useGetUserPosition from "../../../hook/read/useGetUserPosition";
 import { TokenType } from "../../../constants/types";
 import useCreatePositionPool from "../../../hook/write/useCreatePositionPool";
+import ConnectPrompt from "../../shared/ConnectPrompt";
 
 
 const SupplyBorrow = () => {
@@ -129,6 +130,19 @@ const SupplyBorrow = () => {
 	};
 
 	const supply = useSupply(String(assetValue), selectedToken.address, selectedToken.decimal, selectedToken.name)
+
+	if (!isConnected) {
+		return (
+			<div className="font-kaleko py-6 h-screen">
+				<div className="w-full m-auto">
+					<h3 className="text-base text-white px-2 mb-2">
+						{id == "supply" ? "Supply" : "Borrow"}
+					</h3>
+					<ConnectPrompt />
+				</div>      
+			</div>
+		)
+	}
 
 	return (
 		<div className="flex flex-col justify-center items-center font-kaleko p-2 lg:p-0 h-screen -mt-36 w-full max-w-[1152px]">

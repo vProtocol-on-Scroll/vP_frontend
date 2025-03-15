@@ -17,6 +17,7 @@ import { ethers, MaxUint256 } from "ethers";
 import { envVars } from "../../constants/config/envVars";
 import { ErrorDecoder } from "ethers-decode-error";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 const useDepositCollateral = (
 	tokenTypeAddress: string,
@@ -28,12 +29,15 @@ const useDepositCollateral = (
 	const { walletProvider } = useWeb3ModalProvider();
 	const { data: allowanceVal = 0, isLoading } = useCheckAllowances(tokenTypeAddress); 
 	const navigate = useNavigate();
+	const queryClient = useQueryClient();
 
 	const errorDecoder = ErrorDecoder.create([pool, erc20]);
 
 	return useCallback(async () => {
 		if (!isSupportedChain(chainId)) return toast.warning("SWITCH NETWORK");
 		if (isLoading) return toast.loading("Checking allowance...");
+
+		
 
 		const readWriteProvider = getProvider(walletProvider);
 		const signer = await readWriteProvider.getSigner();
@@ -71,6 +75,7 @@ const useDepositCollateral = (
 				toast.success(`${_amount}${tokenName} successfully deposited as collateral!`, {
 					id: toastId,
 				});
+				queryClient.invalidateQueries({ queryKey: ["userPosition"] });
 				navigate("/")
 			}
 		} catch (error: unknown) {
@@ -83,7 +88,7 @@ const useDepositCollateral = (
 				toast.error("Transaction failed: Unknown error", { id: toastId });
 			}
 		}
-	}, [chainId, isLoading, walletProvider, tokenTypeAddress, _amount, tokenDecimal, allowanceVal, tokenName, navigate, errorDecoder]);
+	}, [chainId, isLoading, walletProvider, tokenTypeAddress, _amount, tokenDecimal, allowanceVal, tokenName, queryClient, navigate, errorDecoder]);
 };
 
 export default useDepositCollateral;

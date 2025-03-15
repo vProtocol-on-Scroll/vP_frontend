@@ -15,6 +15,7 @@ import erc20 from "../../abi/erc20.json";
 import { MaxUint256 } from "ethers";
 import { ErrorDecoder } from "ethers-decode-error";
 import { envVars } from "../../constants/config/envVars";
+import { useQueryClient } from "@tanstack/react-query";
 
 const useServiceRequest = (
 
@@ -22,7 +23,7 @@ const useServiceRequest = (
 	const { chainId, address } = useWeb3ModalAccount();
 	const { walletProvider } = useWeb3ModalProvider();
 
-
+	const queryClient = useQueryClient();
 
 	const errorDecoder = ErrorDecoder.create([peer, erc20]);
 
@@ -71,6 +72,8 @@ const useServiceRequest = (
 				toast.success(`request ${_requestId} successfully serviced!`, {
 					id: toastId,
 				});
+
+				queryClient.invalidateQueries({ queryKey: ["allBorrowRequests"] });
 			}
 		} catch (error: unknown) {
 			try {
@@ -82,7 +85,7 @@ const useServiceRequest = (
 				toast.error("Transaction failed: Unknown error", { id: toastId });
 			}
 		}
-	}, [chainId, walletProvider, address, errorDecoder]);
+	}, [chainId, walletProvider, address, queryClient, errorDecoder]);
 };
 
 export default useServiceRequest;

@@ -13,6 +13,7 @@ import { ethers, MaxUint256 } from "ethers";
 import { ErrorDecoder } from "ethers-decode-error";
 import useCheckAllowances from "../read/useCheckAllowances";
 import { envVars } from "../../constants/config/envVars";
+import { useQueryClient } from "@tanstack/react-query";
 
 const useSupply = (
     _amount: string,
@@ -25,7 +26,7 @@ const useSupply = (
 
     const errorDecoder = ErrorDecoder.create([pool, erc20]);
     const { data: allowanceVal = 0, isLoading } = useCheckAllowances(tokenTypeAddress); 
-
+    const queryClient = useQueryClient();
    
 
     return useCallback(async () => {
@@ -68,7 +69,10 @@ const useSupply = (
 			if (receipt.status) {
 				toast.success(`${_amount}${tokenName} successfully supplied, happy earning!`, {
 					id: toastId,
-				});
+                });
+                queryClient.invalidateQueries({ queryKey: ["userPosition"] });
+                queryClient.invalidateQueries({ queryKey: ["getTotalSupplyBorrow"] });
+                queryClient.invalidateQueries({ queryKey: ["getAPR&APY"] });
 			}
 		} catch (error: unknown) {
 			try {
@@ -80,7 +84,7 @@ const useSupply = (
 				toast.error("Transaction failed: Unknown error", { id: toastId });
 			}
 		}
-	}, [_amount, allowanceVal, chainId, errorDecoder, isLoading, tokenDecimal, tokenName, tokenTypeAddress, walletProvider]);
+	}, [_amount, allowanceVal, chainId, errorDecoder, isLoading, queryClient, tokenDecimal, tokenName, tokenTypeAddress, walletProvider]);
 };
 
 export default useSupply;

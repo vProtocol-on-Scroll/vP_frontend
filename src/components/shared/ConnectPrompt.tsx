@@ -1,5 +1,13 @@
+import { useWeb3Modal, useWeb3ModalAccount } from "@web3modal/ethers/react";
 
 const ConnectPrompt = () => {
+    const { isConnected } = useWeb3ModalAccount();
+    const { open } = useWeb3Modal();
+    const walletConnect = () => {
+        if (!isConnected) {
+            open();
+        } 
+    };
     return (
         <div className="flex flex-col justify-center items-center h-screen bg-gradient-to-br moving-gradient text-white">
 
@@ -14,11 +22,12 @@ const ConnectPrompt = () => {
                     To access this feature, please connect your wallet!
                 </p>
                 <div>
-                        <button
-                            className="bg-white text-[#000000]  px-6 py-2 rounded-lg font-medium hover:bg-[#12151A] hover:text-white transition duration-300"
-                        >
-                            Connect Wallet
-                        </button>
+                    <button
+                        className="bg-white text-[#000000]  px-6 py-2 rounded-lg font-medium hover:bg-[#12151A] hover:text-white transition duration-300"
+                        onClick={walletConnect}
+                    >
+                        Connect Wallet
+                    </button>
                 </div>
             </div>
 

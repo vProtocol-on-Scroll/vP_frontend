@@ -7,8 +7,10 @@ import useGetUserPosition from "../../hook/read/useGetUserPosition";
 import { tokenData } from "../../constants/config/tokenData";
 import { ethers } from "ethers";
 import { Asset } from "../../constants/types";
+import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 
 const VariantCarousel = () => {
+    const { isConnected } = useWeb3ModalAccount();
     const { data } = useGetUtilitiesPeer();
     const { totalSupply, totalCollateral, isLoading, userPosition } = useGetUserPosition()
 
@@ -51,7 +53,7 @@ const VariantCarousel = () => {
                 <div className="w-[300px] sm:w-[500px] lg:w-[950px]  h-auto flex items-center justify-center">
                     <Variant
                         title="Total Collateral"
-                        amount={`$${isLoading ? "0" : totalCollateral ?? "0"}`}
+                        amount={`${isLoading || !isConnected ? "0" : totalCollateral ?? "0"}`}
                         buttonText="Deposit"
                         bgColor="#01F5FF"
                         typeAssets="Assets"
@@ -67,9 +69,9 @@ const VariantCarousel = () => {
                 <div className="w-[300px] sm:w-[500px] lg:w-[950px]  h-auto flex items-center justify-center">
                     <Variant
                         title="Total Supplied"
-                        amount={`$${isLoading ? "0" : totalSupply ?? "0"}`}
+                       amount={`${isLoading || !isConnected ? "0" : totalSupply ?? "0"}`}
                         buttonText="Supply"
-                        stats={[{ label: "Net APY", value: `${netAPY}%` }]}
+                        stats={[{ label: "Net APY", value: `${isConnected ? netAPY : "0.00"}%` }]}
                         bgColor="#A66CFF"
                         link="/transact/supply"
                     />
@@ -82,7 +84,7 @@ const VariantCarousel = () => {
                 <div className="w-[300px] sm:w-[500px] lg:w-[950px]  h-auto flex items-center justify-center">
                     <Variant
                         title="Available to Borrow"
-                        amount={`$${isLoading ? "0" : (totalCollateral ?? 0) * 0.79}`}
+                        amount={`${isLoading || !isConnected ? "0" : (totalCollateral ?? 0) * 0.79}`}
                         buttonText="Borrow"
                         healthFactor={Number(data?.healthFactor)}
                         bgColor="#01D396"

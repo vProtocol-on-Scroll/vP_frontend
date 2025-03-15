@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { VariantProps } from "../../constants/types";
 import { useNavigate } from "react-router-dom";
+import { formatMoney } from "../../constants/utils/formatMoney";
 
 const Variant: React.FC<VariantProps> = ({ 
   title, 
@@ -31,7 +32,7 @@ const Variant: React.FC<VariantProps> = ({
         <div className="flex items-center justify-between">
           <div>
             <p className="text-[12px] font-kaleko font-normal">{title}</p>
-            <p className="text-[24px] font-kaleko font-extrabold">{amount}</p>
+            <p className="text-[24px] font-kaleko font-extrabold">${formatMoney(amount)}</p>
           </div>
           <div onClick={() => navigate(link)}
             className="bg-[#F4F4F5] px-4 py-2 flex items-center gap-4 rounded-lg cursor-pointer">
@@ -67,7 +68,7 @@ const Variant: React.FC<VariantProps> = ({
                     />
                     {tooltip && tooltip.name === asset.name && (
                       <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded-md whitespace-nowrap">
-                        {tooltip.name} - {tooltip.vol}
+                        {tooltip.name} - {formatMoney(tooltip.vol)}
                       </div>
                     )}
                   </div>

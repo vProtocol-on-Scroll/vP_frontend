@@ -5,10 +5,11 @@ import PeerOrderCard from "./PeerOrderCard";
 import useGetUserActiveRequestPeer from "../../hook/read/useGetUserActiveRequestPeer";
 import useGetAllLoanListingsOrderPeer from "../../hook/read/useGetAllLoanListingsOrderPeer";
 import useGetUtilitiesPeer from "../../hook/read/useGetUtilitiesPeer";
+import Loading from "../shared/Loading";
 
 const PeerOrderHistory = () => {
-	const { data: activeRequests } = useGetUserActiveRequestPeer();
-	const { myActiveLendOrder } = useGetAllLoanListingsOrderPeer();
+	const { data: activeRequests, isLoading: borrowLoading } = useGetUserActiveRequestPeer();
+	const { myActiveLendOrder, isLoading: lendLoading } = useGetAllLoanListingsOrderPeer();
 	const { data, isLoading } = useGetUtilitiesPeer();
 
 	const tokenPrices: Record<string, number> = {
@@ -69,60 +70,64 @@ const PeerOrderHistory = () => {
 	const peerData: OrderCardProps[] = [...lendOrders, ...borrowOrders];
 
 	return (
-		<div className="mt-4 2xl:mt-1 max-w-[868px] m-auto w-full">
-			<div className="flex justify-between">
-				{peerData.length > 0 ? (
-					<>
-						{/* Supplies */}
-						<div className="w-1/2 p-6">
-							<div className="flex items-center justify-between">
-								<h4 className="font-bold text-xl mb-4 font-kaleko pl-3">
-									Lend Orders
-								</h4>
+	<div className="mt-4 2xl:mt-1 max-w-[868px] m-auto w-full">
+		{isLoading || borrowLoading || lendLoading ? (
+		<div className="mt-6">
+			<Loading size={60} />
+		</div>
+		) : peerData.length > 0 ? (
+		<div className="flex justify-between relative">
+			{/* Supplies */}
+			<div className="w-1/2 p-6 relative">
+			<div className="flex items-center justify-between">
+				<h4 className="font-bold text-xl mb-4 font-kaleko pl-3">
+				Lend Orders
+				</h4>
+				<Link to={"/create-order/lend"} className="pr-3">
+				<img src="/icons/plusDatabase.svg" />
+				</Link>
+			</div>
+			{lendOrders.length > 0 ? (
+				lendOrders.map((item, index) => <PeerOrderCard key={index} {...item} />)
+			) : (
+				<p className="absolute inset-0 flex items-center justify-center text-gray-500 text-xl opacity-30">
+				No Order Available
+				</p>
+			)}
+			</div>
 
-								<Link to={"/create-order/lend"} className="pr-3">
-									<img src="/icons/plusDatabase.svg" />
-								</Link>
-							</div>
-							{peerData
-								.filter((item) => item.type === "lend")
-								.map((item, index) => (
-									<PeerOrderCard key={index} {...item} />
-								))}
-						</div>
-
-						{/* Borrows */}
-						<div className="w-1/2 p-6">
-							<div className="flex items-center justify-between">
-								<h4 className="font-bold text-xl mb-4 font-kaleko pl-3">
-									Borrow Orders
-								</h4>
-								<Link to={"/create-order/borrow"} className="pr-3">
-									<img src="/icons/plusCloud.svg" />
-								</Link>
-							</div>
-
-							{peerData
-								.filter((item) => item.type === "borrow")
-								.map((item, index) => (
-									<PeerOrderCard key={index} {...item} />
-								))}
-						</div>
-					</>
-				) : (
-					<Empty
-						text1={"Let's get things rolling—create your"}
-						text2={"first order now and start your"}
-						text3={"lending adventure!"}
-						btn1={"Create Borrow Order"}
-						btn2={"Create Lend Order"}
-						link1={"/create-order/borrow"}
-						link2={"/create-order/lend"}
-					/>
-				)}
+			{/* Borrows */}
+			<div className="w-1/2 p-6 relative">
+			<div className="flex items-center justify-between">
+				<h4 className="font-bold text-xl mb-4 font-kaleko pl-3">
+				Borrow Orders
+				</h4>
+				<Link to={"/create-order/borrow"} className="pr-3">
+				<img src="/icons/plusCloud.svg" />
+				</Link>
+			</div>
+			{borrowOrders.length > 0 ? (
+				borrowOrders.map((item, index) => <PeerOrderCard key={index} {...item} />)
+			) : (
+				<p className="absolute inset-0 flex items-center justify-center text-gray-500 text-xl opacity-30">
+					No Order Available
+				</p>
+			)}
 			</div>
 		</div>
-	);
+		) : (
+		<Empty
+			text1={"Let's get things rolling—create your"}
+			text2={"first order now and start your"}
+			text3={"lending adventure!"}
+			btn1={"Create Borrow Order"}
+			btn2={"Create Lend Order"}
+			link1={"/create-order/borrow"}
+			link2={"/create-order/lend"}
+		/>
+		)}
+	</div>
+);
 };
 
 export default PeerOrderHistory;

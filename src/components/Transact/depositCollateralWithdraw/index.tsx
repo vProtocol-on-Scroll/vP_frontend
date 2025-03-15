@@ -7,6 +7,8 @@ import { isSupportedChain } from "../../../constants/utils/chains";
 import { getTokenBalance } from "../../../constants/utils/getBalances";
 import useDepositCollateral from "../../../hook/write/useDepositCollateral";
 import useGetUserPosition from "../../../hook/read/useGetUserPosition";
+import ConnectPrompt from "../../shared/ConnectPrompt";
+import useWithdrawPool from "../../../hook/write/useWithdrawPool";
 
 const DepositCollateralWithdraw = () => {
 	const { id } = useParams();
@@ -14,7 +16,7 @@ const DepositCollateralWithdraw = () => {
 	const { isConnected, chainId, address } = useWeb3ModalAccount();
 
 	const { data } = useGetUtilitiesPeer();
-	const { totalCollateral } = useGetUserPosition()
+	const { totalCollateral,  } = useGetUserPosition()
 	
 
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -90,7 +92,21 @@ const DepositCollateralWithdraw = () => {
 		}
 	}, [isConnected, address, chainId, selectedToken.address, selectedToken.decimal, data, totalCollateral]);
   
-  const deposit = useDepositCollateral(selectedToken.address, String(assetValue), selectedToken.decimal, selectedToken.name)
+	const deposit = useDepositCollateral(selectedToken.address, String(assetValue), selectedToken.decimal, selectedToken.name)
+	const withdrawal = useWithdrawPool(String(assetValue), selectedToken.address, selectedToken.decimal)
+	
+	if (!isConnected) {
+		return (
+			<div className="font-kaleko py-6 h-screen">
+				<div className="w-full m-auto">
+					<h3 className="text-base text-white px-2 mb-2">
+						{id == "withdraw" ? "Withdraw" : "Deposit Collateral"}
+					</h3>
+					<ConnectPrompt />
+				</div>      
+			</div>
+		)
+	}
 
 	return (
 		<div  className="flex flex-col justify-center items-center font-kaleko p-2 lg:p-0 h-screen 2xl:-mt-36 -mt-16">
@@ -176,9 +192,9 @@ const DepositCollateralWithdraw = () => {
 
 					{/* Wallet balance display */}
 					<p className="text-xs text-gray-500 mb-2">
-						{id === "withdraw" ? "Available Balance: " : "Wallet Balance: "}
+						{id === "withdraw" ? "" : "Wallet Balance: "}
 						{id === "withdraw"
-							? `${Number(availableBal)} USD`
+							? `${""}`
 							: `${walletBalance} ${selectedToken.token}`}
 					</p>
 
@@ -193,6 +209,9 @@ const DepositCollateralWithdraw = () => {
         {id == "withdraw" &&
           <div
             className={`w-full rounded-md px-6 py-2 text-center cursor-pointer bg-[#01D396] mt-6 font-bold`}
+			onClick={() => {
+              withdrawal();
+            }}
           >
             Withdraw
          </div>

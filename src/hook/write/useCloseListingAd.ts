@@ -9,6 +9,7 @@ import { getProvider } from "../../api/provider";
 import {getVProtocolContract,} from "../../api/contractsInstance";
 import peer from "../../abi/peer.json";
 import { ErrorDecoder } from "ethers-decode-error";
+import { useQueryClient } from "@tanstack/react-query";
 
 const useCloseListingAd = (
 	_requestId: number,
@@ -16,7 +17,10 @@ const useCloseListingAd = (
 	const { chainId } = useWeb3ModalAccount();
 	const { walletProvider } = useWeb3ModalProvider();
 
-	const errorDecoder = ErrorDecoder.create([peer]);
+    const errorDecoder = ErrorDecoder.create([peer]);
+    
+    const queryClient = useQueryClient();
+
 
 	return useCallback(async () => {
         if (!isSupportedChain(chainId)) return toast.warning("SWITCH NETWORK");
@@ -40,7 +44,8 @@ const useCloseListingAd = (
 			if (receipt.status) {
 				toast.success(`ads position of ${_requestId} closed!`, {
 					id: toastId,
-				});
+                });
+                queryClient.invalidateQueries({ queryKey: ["allLoanListings"] });
 			}
 		} catch (error: unknown) {
 			try {
@@ -52,7 +57,7 @@ const useCloseListingAd = (
 				toast.error("Repayment failed: Unknown error", { id: toastId });
 			}
 		}
-	}, [chainId, walletProvider, _requestId, errorDecoder]);
+	}, [chainId, walletProvider, _requestId, queryClient, errorDecoder]);
 };
 
 export default useCloseListingAd;

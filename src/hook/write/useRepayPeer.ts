@@ -15,6 +15,7 @@ import { ethers, MaxUint256 } from "ethers";
 import { ErrorDecoder } from "ethers-decode-error";
 import { envVars } from "../../constants/config/envVars";
 import useCheckAllowances from "../read/useCheckAllowances";
+import { useQueryClient } from "@tanstack/react-query";
 
 const useRepayPeer = (
 	_amount: string,
@@ -25,6 +26,8 @@ const useRepayPeer = (
 	const { chainId } = useWeb3ModalAccount();
 	const { walletProvider } = useWeb3ModalProvider();
 	const { data: allowanceVal = 0, isLoading } = useCheckAllowances(tokenTypeAddress);
+
+	const queryClient = useQueryClient();
 
 	const errorDecoder = ErrorDecoder.create([peer]);
 
@@ -70,6 +73,8 @@ const useRepayPeer = (
 				toast.success(`loan ${_requestId} successfully repayed!`, {
 					id: toastId,
 				});
+				queryClient.invalidateQueries({ queryKey: ["userActiveRequests"] }); 
+	
 			}
 		} catch (error: unknown) {
 			try {
@@ -81,7 +86,7 @@ const useRepayPeer = (
 				toast.error("Repayment failed: Unknown error", { id: toastId });
 			}
 		}
-	}, [chainId, isLoading, walletProvider, tokenTypeAddress, _amount, tokenDecimal, allowanceVal, _requestId, errorDecoder]);
+	}, [chainId, isLoading, walletProvider, tokenTypeAddress, _amount, tokenDecimal, allowanceVal, _requestId, queryClient, errorDecoder]);
 };
 
 export default useRepayPeer;
