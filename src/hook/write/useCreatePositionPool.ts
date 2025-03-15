@@ -40,6 +40,8 @@ const useCreatePositionPool = (
 		const contract = getVProtocolContract(signer, pool);
 
 		const _weiAmount = ethers.parseUnits(_amount, tokenDecimal);
+		console.log('Amount (normal):', _amount);
+		console.log('Amount in wei:', _weiAmount.toString());
 
 		let toastId: string | number | undefined;
 

@@ -5,7 +5,7 @@ import { Toaster } from "sonner";
 const AppLayout = ({ children }: any) => {
 	return (
 		<Web3Modal>
-			<div className="w-full max-w-[1728px] m-auto relative overflow-hidden min-h-screen">
+			<div className="w-full max-w-[2000px] m-auto relative overflow-hidden min-h-screen">
 				{/* Gradients as Images */}
 				<img
 					src="/grad1.svg"
