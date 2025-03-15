@@ -310,7 +310,7 @@ const SupplyBorrow = () => {
 											{id === "borrow" ? "Borrow APR" : "Supply APY"}
 										</h3>
 										<p className="text-xl text-[#0A0A0A]">
-											{id === "borrow" ? state.borrowApr : APY !== null ? `${(Number(APY) / 100).toFixed(2)}%` : "0.00%"}
+											{id === "borrow" ? state.borrowApr : APY !== null ? `${(Number(APY) / 100000000).toFixed(2)}%` : "0.00%"}
 										</p>
 									</div>
 

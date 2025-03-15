@@ -25,6 +25,8 @@ const PoolOrderHistory = () => {
     );
   }
 
+  // console.log("userPosition", userPosition);
+  
   const poolData: OrderCardProps[] = userPosition.flatMap((pos, index) => {
     const token = tokenData[index]; // Get corresponding token metadata
     const poolDeposits = pos.poolDeposits;
@@ -44,9 +46,9 @@ const PoolOrderHistory = () => {
             icon: token.icon || `/coins/vToken.svg`,
             amount: formattedDeposit.toFixed(2),
             amountUSD: `${isLoading ? formattedDeposit.toFixed(2) : (usdPrice! * formattedDeposit).toFixed(3)}`,
-            stat1Value: (((Number(supplyAPY) / 100) * formattedDeposit) / 12).toFixed(2),
-            stat1ValueUSD: `${(((Number(supplyAPY) / 100) * (usdPrice! * formattedDeposit)) / 12).toFixed(2)}`,
-            stat2Value: `${(parseFloat(String(supplyAPY)) / 100).toFixed(2)}%`,
+            stat1Value: (((Number(supplyAPY) / 100000000) * formattedDeposit) / 12).toFixed(2),
+            stat1ValueUSD: `${(((Number(supplyAPY) / 100000000) * (usdPrice! * formattedDeposit)) / 12).toFixed(2)}`,
+            stat2Value: `${(parseFloat(String(supplyAPY)) / 100000000).toFixed(2)}%`,
           }
         : null;
 
@@ -58,9 +60,9 @@ const PoolOrderHistory = () => {
             icon: token.icon || `/coins/vToken.svg`,
             amount: formattedBorrow.toFixed(2),
             amountUSD: `${isLoading ? formattedDeposit.toFixed(2) : (usdPrice! * formattedDeposit).toFixed(3)}`,
-            stat1Value: (((Number(borrowAPR) / 100) * formattedDeposit) / 12).toFixed(2),
-            stat1ValueUSD: `${(((Number(borrowAPR) / 100) * (usdPrice! * formattedDeposit)) / 12).toFixed(2)}`,
-            stat2Value: `${(parseFloat(String(borrowAPR)) / 100).toFixed(2)}%`,
+            stat1Value: (((Number(borrowAPR) / 10000) * formattedDeposit) / 12).toFixed(2),
+            stat1ValueUSD: `${(((Number(borrowAPR) / 10000) * (usdPrice! * formattedDeposit)) / 12).toFixed(2)}`,
+            stat2Value: `${(parseFloat(String(borrowAPR)) / 10000).toFixed(2)}%`,
           }
         : null;
 
@@ -69,6 +71,9 @@ const PoolOrderHistory = () => {
 
   const supplyOrders = poolData.filter((item) => item.type === "supply");
   const borrowOrders = poolData.filter((item) => item.type === "borrow");
+
+  // console.log("borrowOrders", poolData);
+  
 
   return (
     <div className="mt-4 2xl:mt-1 max-w-[868px] m-auto w-full relative">

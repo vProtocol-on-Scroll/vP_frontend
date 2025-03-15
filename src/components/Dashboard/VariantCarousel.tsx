@@ -15,6 +15,8 @@ const VariantCarousel = () => {
     const { data } = useGetUtilitiesPeer();
     const { totalSupply, totalCollateral, isLoading, userPosition } = useGetUserPosition()
 
+    // console.log(Number(data?.healthFactor)/ 1e18);
+    
 
     const netAPY = userPosition
         ? userPosition
@@ -24,7 +26,7 @@ const VariantCarousel = () => {
                 const formattedDeposit = parseFloat(ethers.formatUnits(pos.poolDeposits, token.decimal || 18));
                 return formattedDeposit > 0;
             })
-            .reduce((sum, pos) => sum + parseFloat(String(pos.supplyAPY)) / 100, 0)
+            .reduce((sum, pos) => sum + parseFloat(String(pos.supplyAPY)) / 100000000, 0)
             .toFixed(2)
         : "0.00";
 
@@ -87,7 +89,7 @@ const VariantCarousel = () => {
                         title="Available to Borrow"
                         amount={`${isLoading || !isConnected ? "0" : (totalCollateral ?? 0) * 0.79}`}
                         buttonText="Borrow"
-                        healthFactor={Number(data?.healthFactor)}
+                        healthFactor={(Number(data?.healthFactor))/ 1e18}
                         bgColor="#01D396"
                         link="/markets"
                     />
