@@ -63,6 +63,7 @@ export default {
       //   ss: "375px",
       //   sm: "412px",
       'between-lg-xl': { max: '1296px', min: '1024px' }, // Custom range
+        max550: { max: '550px' }, // Custom max-width breakpoint for 580px
       },
     },
   },

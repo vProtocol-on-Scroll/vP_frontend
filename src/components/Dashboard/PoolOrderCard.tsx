@@ -33,7 +33,7 @@ const PoolOrderCard: React.FC<OrderCardProps> = ({
 
 	
 	return (
-		<div className="max-w-[386px] w-full rounded-xl text-[#ffffff] bg-[#12151A] p-3 mt-2 noise-3">
+		<div className="w-full rounded-xl text-[#ffffff] bg-[#12151A] p-3 mt-2 noise-3">
 			<div className="flex justify-between items-start">
 				<div className="flex items-center gap-4">
 					<img src={icon} width={40} height={40} alt={token} />

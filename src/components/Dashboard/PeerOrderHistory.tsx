@@ -76,9 +76,9 @@ const PeerOrderHistory = () => {
 			<Loading size={60} />
 		</div>
 		) : peerData.length > 0 ? (
-		<div className="flex justify-between relative">
+		<div className="flex flex-wrap justify-between relative max550:flex-col">
 			{/* Supplies */}
-			<div className="w-1/2 p-6 relative">
+			<div className="w-1/2 max550:w-full p-6 relative">
 			<div className="flex items-center justify-between">
 				<h4 className="font-bold text-xl mb-4 font-kaleko pl-3">
 				Lend Orders
@@ -97,7 +97,7 @@ const PeerOrderHistory = () => {
 			</div>
 
 			{/* Borrows */}
-			<div className="w-1/2 p-6 relative">
+			<div className="w-1/2 max550:w-full p-6 relative">
 			<div className="flex items-center justify-between">
 				<h4 className="font-bold text-xl mb-4 font-kaleko pl-3">
 				Borrow Orders

@@ -77,9 +77,9 @@ const PoolOrderHistory = () => {
           <Loading size={60} />
         </div>
       ) : poolData.length > 0 ? (
-        <div className="flex justify-between relative">
+        <div className="flex flex-wrap justify-between relative max550:flex-col">
           {/* Supplies */}
-          <div className="w-1/2 p-6 relative">
+          <div className="w-1/2 max550:w-full p-6 relative">
             <h4 className="font-bold text-xl mb-4 font-kaleko pl-3">Supplies</h4>
             {supplyOrders.length > 0 ? (
               supplyOrders.map((item, index) => <PoolOrderCard key={index} {...item} />)
@@ -91,7 +91,7 @@ const PoolOrderHistory = () => {
           </div>
 
           {/* Borrows */}
-          <div className="w-1/2 p-6 relative">
+          <div className="w-1/2 max550:w-full p-6 relative">
             <h4 className="font-bold text-xl mb-4 font-kaleko pl-3">Borrows</h4>
             {borrowOrders.length > 0 ? (
               borrowOrders.map((item, index) => <PoolOrderCard key={index} {...item} />)
