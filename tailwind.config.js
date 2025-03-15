@@ -58,11 +58,12 @@ export default {
           'scrollbar-width': 'none', /* Firefox */
         },
       },
-      // screens: {
+      screens: {
       //   xs: "260px",
       //   ss: "375px",
       //   sm: "412px",
-      // },
+      'between-lg-xl': { max: '1296px', min: '1024px' }, // Custom range
+      },
     },
   },
   plugins: [plugin()],

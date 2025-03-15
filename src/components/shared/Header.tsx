@@ -80,7 +80,7 @@ const Header = () => {
 	}, [isWalletDropdownOpen]);
 
 	return (
-		<header className="w-full px-4 py-3 flex justify-between items-center bg-black text-white relative">
+		<header className="w-full px-4 py-3 flex justify-between items-center bg-black text-white relative between-lg-xl:px-0">
 			<div>
 				<a href="https://www.vprotocol.xyz/" target="_blank">
 					<img
@@ -115,7 +115,7 @@ const Header = () => {
 							className={`text-xl flex items-center gap-2 font-medium px-3 py-[2px] transition duration-300
 								hover:opacity-70`}
 						>
-							<img src={item.icon} width={item.width} height={24} alt={item.name} />
+							<img src={item.icon} width={item.width} height={24} alt={item.name} className="between-lg-xl:hidden"/>
 							{item.name}
 						</a>
 					) : (
@@ -126,7 +126,7 @@ const Header = () => {
 								${pathname === item.link ? "bg-[#D7D7D733] rounded-3xl" : "hover:opacity-70"}
 							`}
 						>
-							<img src={item.icon} width={item.width} height={24} alt={item.name} />
+							<img src={item.icon} width={item.width} height={24} alt={item.name} className="between-lg-xl:hidden"/>
 							{item.name}
 						</Link>
 					);
@@ -137,12 +137,13 @@ const Header = () => {
 			<div className="flex items-center gap-3">
 				{/* Mobile Menu Button */}
 				<button id="menu-button" className="lg:hidden" onClick={toggleMenu}>
-					<img src="/icons/hamburger.svg" alt="Menu" width="25" />
+					<img src="/icons/hamburger.svg" alt="Menu" width="25"/>
 				</button>
 
 				{/* Mobile Navigation Menu */}
 				{isMenuOpen && (
-					<div className="fixed inset-0 bg-black bg-opacity-90 flex flex-col items-center justify-center z-50">
+					<div
+						className="fixed inset-0 bg-black bg-opacity-90 flex flex-col items-center justify-center z-50">
 						<button
 							className="absolute top-6 right-6 text-white text-3xl"
 							onClick={toggleMenu}
@@ -162,34 +163,34 @@ const Header = () => {
 										rel="noopener noreferrer"
 										className={`text-base flex items-center gap-2 font-medium px-2 py-2 rounded-lg w-full text-center
 												${
-												currentPath === item.link
-													? "bg-[#D7D7D733] text-white"
-													: "hover:opacity-70"
-												}
+											currentPath === item.link
+												? "bg-[#D7D7D733] text-white"
+												: "hover:opacity-70"
+										}
 											`}
-											onClick={toggleMenu}
-										>
-										<img src={item.icon} width={item.width} height={24} alt={item.name} />
+										onClick={toggleMenu}
+									>
+										<img src={item.icon} width={item.width} height={24} alt={item.name}/>
 										{item.name}
 									</a>
-								):(
+								) : (
 									<Link
 										key={index}
 										to={item.link}
 										className={`text-base flex items-center gap-2 font-medium px-2 py-2 rounded-lg w-full text-center
 												${
-												currentPath === item.link
-													? "bg-[#D7D7D733] text-white"
-													: "hover:opacity-70"
-												}
+											currentPath === item.link
+												? "bg-[#D7D7D733] text-white"
+												: "hover:opacity-70"
+										}
 											`}
-											onClick={toggleMenu}
-										>
-										<img src={item.icon} width={item.width} height={24} alt={item.name} />
+										onClick={toggleMenu}
+									>
+										<img src={item.icon} width={item.width} height={24} alt={item.name}/>
 										{item.name}
 									</Link>
 								)
-						})}
+							})}
 						</nav>
 					</div>
 				)}
@@ -224,7 +225,8 @@ const Header = () => {
 					</button>
 
 					{isWalletDropdownOpen && (
-						<div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 shadow-md text-black rounded-lg z-50">
+						<div
+							className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 shadow-md text-black rounded-lg z-50">
 							<div className="p-4 flex flex-col items-center gap-2 border-b">
 								<img
 									src={walletInfo?.icon || "/"}
