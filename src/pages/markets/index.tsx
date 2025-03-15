@@ -158,7 +158,7 @@ const Markets = () => {
                             url('/noise.svg')`,
 						}}
 					>
-						<div className="w-full flex flex-wrap-reverse items-center gap-8">
+						<div className="w-full flex max550:flex-wrap-reverse items-center gap-8">
 							<div className="w-1/2 max550:w-full flex flex-col gap-4">
 								<h5 className="text-xl font-bold text-[#0D0D0D]">
 									Market Overview
