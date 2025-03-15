@@ -151,15 +151,15 @@ const Markets = () => {
 					</div>
 
 					<div
-						className="mt-14 rounded-2xl px-6 py-8 transition-all duration-500"
+						className="mt-14 rounded-2xl px-6 py-8 transition-all duration-500 max550:px-3 max550:py-4 "
 						style={{
 							backgroundImage: `linear-gradient(180deg, #E3E8EA, #F4F5F8), 
                             linear-gradient(90deg, #00000000 0%, #12151A80 50%), 
                             url('/noise.svg')`,
 						}}
 					>
-						<div className="w-full flex items-center gap-8">
-							<div className="w-1/2 flex flex-col gap-4">
+						<div className="w-full flex flex-wrap-reverse items-center gap-8">
+							<div className="w-1/2 max550:w-full flex flex-col gap-4">
 								<h5 className="text-xl font-bold text-[#0D0D0D]">
 									Market Overview
 								</h5>
@@ -189,14 +189,14 @@ const Markets = () => {
 
 							{/* Order Type Toggle for Peer Market */}
 							{selectedTab === "vPeer" && (
-								<div className="bg-white/70 rounded-3xl p-2 flex items-center w-1/2 gap-2">
+								<div className="bg-white/70 rounded-3xl p-2 flex items-center w-1/2 gap-2 max550:w-full">
 									<div
 										className={`rounded-3xl w-full px-4 py-2 cursor-pointer ${
 											orderType === "lend" ? "bg-[#01D396]" : "bg-transparent"
 										}`}
 										onClick={() => setOrderType("lend")}
 									>
-										<p className="text-[#0D0D0D] font-extrabold text-xl mt-1">
+										<p className="text-[#0D0D0D] font-extrabold text-xl mt-1 max550:text-sm">
 											Lend Orders
 										</p>
 									</div>
@@ -206,7 +206,7 @@ const Markets = () => {
 										}`}
 										onClick={() => setOrderType("borrow")}
 									>
-										<p className="text-[#0D0D0D] font-extrabold text-xl mt-1">
+										<p className="text-[#0D0D0D] font-extrabold text-xl mt-1 max550:text-sm">
 											Borrow Orders
 										</p>
 									</div>
