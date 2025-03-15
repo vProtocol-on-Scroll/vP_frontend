@@ -40,11 +40,14 @@ const fetchAllBorrowRequests = async (): Promise<Request[]> => {
                 expirationDate: Number(_request[6]),
                 lender: _request[7],
                 tokenAddress: _request[8],
-                status: Number(_request[9]) === 0 ? 'OPEN' : Number(_request[9]) === 1 ? 'SERVICED' : 'CLOSED',
+                status: Number(_request[10]) === 0 ? 'OPEN' : Number(_request[10]) === 1 ? 'SERVICED' : 'CLOSED',
                 tokenName: tokenInfo.name, 
                 tokenIcon: tokenInfo.icon,
                 tokenDecimal: tokenInfo.decimal,
             };
+
+            // console.log("RRRR", _request[10]);
+            
 
             fetchedRequests.push(structuredRequest);
             _index += 1;
@@ -63,7 +66,7 @@ const useGetAllBorrowRequestsPeer = () => {
       const { data: requests, isLoading, error } = useQuery({
         queryKey: ['allBorrowRequests'],
         queryFn: async () => {
-            console.log("Fetching borrow requests...");
+            // console.log("Fetching borrow requests...");
             return fetchAllBorrowRequests();
         },
         staleTime: 1000 * 60 * 5,
@@ -73,7 +76,7 @@ const useGetAllBorrowRequestsPeer = () => {
 
     const othersRequests = requests?.filter(request =>
         request.status === 'OPEN' &&
-        request.returnDate > Date.now() &&
+        request.returnDate > 0 &&
         request.author !== address
     ) || [];
 

@@ -67,7 +67,7 @@ const useGetAllLoanListingsOrderPeer = () => {
 	const { data: listings, isLoading, error } = useQuery({
 		queryKey: ['allLoanListings'],
 		 queryFn: async () => {
-            console.log("Fetching loan requests...");
+            // console.log("Fetching loan requests...");
             return fetchAllLoanListingsPeer();
         },
 		staleTime: 1000 * 60 * 5, // Cache for 5 minutes
