@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { VariantProps } from "../../constants/types";
 import { useNavigate } from "react-router-dom";
 import { formatMoney } from "../../constants/utils/formatMoney";
+import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 
 const Variant: React.FC<VariantProps> = ({ 
   title, 
@@ -15,6 +16,8 @@ const Variant: React.FC<VariantProps> = ({
   assets,
 }) => {
   const navigate = useNavigate();
+  const { isConnected } = useWeb3ModalAccount();
+
    const [tooltip, setTooltip] = useState<{ name: string; vol: string } | null>(null);
   
   return (
@@ -104,10 +107,13 @@ const Variant: React.FC<VariantProps> = ({
                 </span>
               </p>
               {
-                isNaN(healthFactor) || healthFactor > 1 ? 
-                  <p className="text-[20px] font-extrabold mr-4">∞</p> 
-                  : 
+                isNaN(healthFactor) || !isConnected ? (
+                  <p className="text-[20px] font-extrabold mr-4">∞</p>
+                ) : healthFactor >= 1 ? (
+                  <p className="text-[16px] font-extrabold">100%</p>
+                ) : (
                   <p className="text-[16px] font-extrabold">{Math.round(healthFactor * 100)}%</p>
+                )
               }
             </div>
 

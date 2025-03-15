@@ -53,7 +53,7 @@ const PeerOrderHistory = () => {
 		decimal: order.tokenDecimal,
 		amountUSD: `${isLoading ? 0 : amountUSD.toFixed(2)}`,
 		expiry: type === "borrow"
-			? `${Math.ceil((order.expirationDate - Date.now() / 1000) / (60 * 60 * 24))}D`
+			? `${Math.ceil((order.returnDate - Date.now() / 1000) / (60 * 60 * 24))}D`
 			: `${order.returnDate} D`,
 		profitOrInterestValue: `${(order.interest / 100).toFixed(2)}%`,
 		profitOrInterestValueUSD: `${isLoading ? 0 : profitOrInterestValueUSD.toFixed(2)}`,

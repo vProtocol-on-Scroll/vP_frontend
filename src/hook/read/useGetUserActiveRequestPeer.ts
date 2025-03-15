@@ -35,6 +35,9 @@ const fetchUserActiveRequestsPeer = async (address: string | undefined): Promise
 			decimal: 6,
 		};
 
+		// console.log("REQQQ",req[6]);
+		
+
 		return {
 			requestId: Number(req[0]),
 			author: req[1],
