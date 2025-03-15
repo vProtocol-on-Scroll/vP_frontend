@@ -15,7 +15,7 @@ const VariantCarousel = () => {
     const { data } = useGetUtilitiesPeer();
     const { totalSupply, totalCollateral, isLoading, userPosition } = useGetUserPosition()
 
-    // console.log(Number(data?.healthFactor)/ 1e18);
+    // console.log((data?.collateralValue, data?.healthFactor));
     
 
     const netAPY = userPosition

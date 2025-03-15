@@ -16,7 +16,7 @@ const fetchUserUtilities = async (address: string) => {
     // const contract2 = getVProtocolContract(readOnlyProvider, getters);
 
     try {
-        // const collateralValue = await contract.getAccountCollateralValue(address);
+        const collateralValue = await contract.getAccountCollateralValue(address);
         const healthFactor = await contract.healthFactor(address, 0);
         
         // Fetch collateral deposits for different tokens
@@ -57,7 +57,7 @@ const fetchUserUtilities = async (address: string) => {
         // console.log("availableBalances", availableBalances);
         
         return {
-            // collateralValue,
+            collateralValue,
             healthFactor,
             // collateralDeposits: formattedDeposits,
             tokenPrices: formattedPrices,

@@ -81,7 +81,7 @@ const SupplyBorrow = () => {
 		if (totalCollateral) {
 			const totalBalance = totalCollateral
 
-			setAvailableBal(Number(totalBalance));
+			setAvailableBal(Number(totalBalance) * 0.79);
 		}
 
 		if (data?.tokenPrices) {
@@ -132,7 +132,7 @@ const SupplyBorrow = () => {
 		setSelectedPercentage(percent);
 		const maxAmount =
 			id === "borrow"
-				? availableBal * 0.79 * (percent / 100)
+				? availableBal * (percent / 100)
 				: walletBalance * (percent / 100);
 		setAssetValue(maxAmount);
 		updateFiatEquivalent(maxAmount, selectedToken.tokenPrice);
@@ -314,11 +314,11 @@ const SupplyBorrow = () => {
 											{id === "borrow" ? "Monthly Cost" : "Monthly yield"}
 										</h3>
 										<p className="text-xl text-[#0A0A0A]">
-										${id === "borrow"
-											? ((parseFloat(state.borrowApr) * fiatEquivalent) / 12).toFixed(3)
-											: APY !== null && Number(APY) !== 0 
-											? (((Number(APY) / 100000000) * fiatEquivalent) / 12).toFixed(3)
-											: (fiatEquivalent / 12).toFixed(3)} 
+											${id === "borrow"
+												? ((parseFloat(state.borrowApr) * fiatEquivalent) / 12).toFixed(3)
+												:
+												(((Number(APY) / 100000000) * fiatEquivalent) / 12).toFixed(3)
+											}
 										</p>
 									</div>
 								</div>
