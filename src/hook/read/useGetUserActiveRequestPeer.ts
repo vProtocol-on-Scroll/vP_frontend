@@ -43,7 +43,7 @@ const fetchUserActiveRequestsPeer = async (address: string | undefined): Promise
 			author: req[1],
 			amount:  String(ethers.formatUnits(req[2], tokenInfo.decimal)),
 			interest: Number(req[3]), 
-			totalRepayment: String(req[4]), 
+			totalRepayment: String(ethers.formatUnits(req[4], tokenInfo.decimal)), 
 			returnDate: Number(req[5]), 
 			expirationDate: Number(req[6]), 
 			lender: req[7],

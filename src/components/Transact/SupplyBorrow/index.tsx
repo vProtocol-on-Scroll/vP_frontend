@@ -319,10 +319,10 @@ const SupplyBorrow = () => {
 											{id === "borrow" ? "Monthly Cost" : "Monthly yield"}
 										</h3>
 										<p className="text-xl text-[#0A0A0A]">
-										{id === "borrow"
+										${id === "borrow"
 											? ((parseFloat(state.borrowApr) * fiatEquivalent) / 12).toFixed(3)
 											: APY !== null && Number(APY) !== 0 
-											? (((Number(APY) / 100) * fiatEquivalent) / 12).toFixed(3)
+											? (((Number(APY) / 100000000) * fiatEquivalent) / 12).toFixed(3)
 											: (fiatEquivalent / 12).toFixed(3)} 
 										</p>
 									</div>

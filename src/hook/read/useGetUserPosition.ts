@@ -30,6 +30,7 @@ const fetchUserPosition = async (address: string) => {
             totalLoanCollectedUSD: pos[5],  
             lastUpdate: pos[6],  
         }));
+console.log("structuredUserPositions", structuredUserPositions);
 
         return structuredUserPositions;
     

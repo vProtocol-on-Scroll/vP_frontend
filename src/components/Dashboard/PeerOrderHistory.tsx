@@ -40,14 +40,19 @@ const PeerOrderHistory = () => {
 	const mapOrders = (orders: any[], type: "borrow" | "lend"): OrderCardProps[] => {
 	return orders?.map((order) => {
 		const usdv = getTokenUSDV(order.tokenName || "Unknown"); 
-		const amountUSD = parseFloat(order.amount) * usdv;
+		let amountUSD
+		if (type === "borrow") {
+			amountUSD = parseFloat(order.totalRepayment) * usdv;
+		} else {
+			amountUSD = parseFloat(order.amount) * usdv;
+		}
 		const profitOrInterestValueUSD = amountUSD * (order.interest / 100);
 
 		return {
 		type,
 		token: order.tokenName || "Unknown",
 		icon: order.tokenIcon || "/coins/vToken.svg",
-		amount: order.amount,
+		amount: type === "borrow" ? order.totalRepayment : order.amount,
 		id: type === "borrow" ? order.requestId : order.listingId,
   		tokenAddress: order.tokenAddress,
 		decimal: order.tokenDecimal,
