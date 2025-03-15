@@ -12,6 +12,7 @@ import erc20 from "../../abi/erc20.json";
 import { ethers } from "ethers";
 import { ErrorDecoder } from "ethers-decode-error";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 const useCreatePositionPool = (
     
@@ -22,7 +23,8 @@ const useCreatePositionPool = (
 	const { walletProvider } = useWeb3ModalProvider();
 
 	const errorDecoder = ErrorDecoder.create([pool,erc20]);
-	const navigate = useNavigate();
+    const navigate = useNavigate();
+    const queryClient = useQueryClient();
 
 
     return useCallback(async (
@@ -51,7 +53,11 @@ const useCreatePositionPool = (
 			if (receipt.status) {
 				toast.success(`${_amount} ${tokenName} borrowed successfully!`, {
 					id: toastId,
-				});
+                });
+                queryClient.invalidateQueries({ queryKey: ["userUtilities"] });
+                queryClient.invalidateQueries({ queryKey: ["getAPR&APY"] });
+                queryClient.invalidateQueries({ queryKey: ["getTotalSupplyBorrow"] });
+                queryClient.invalidateQueries({ queryKey: ["userPosition"] });
 				navigate("/")
 			}
 		} catch (error: unknown) {
@@ -64,7 +70,7 @@ const useCreatePositionPool = (
 				toast.error("Transaction failed: Unknown error", { id: toastId });
 			}
 		}
-	}, [chainId, walletProvider, navigate, errorDecoder]);
+	}, [chainId, walletProvider, queryClient, navigate, errorDecoder]);
 };
 
 export default useCreatePositionPool;

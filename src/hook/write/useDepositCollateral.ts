@@ -75,6 +75,7 @@ const useDepositCollateral = (
 				toast.success(`${_amount}${tokenName} successfully deposited as collateral!`, {
 					id: toastId,
 				});
+				queryClient.invalidateQueries({ queryKey: ["userUtilities"] });
 				queryClient.invalidateQueries({ queryKey: ["userPosition"] });
 				navigate("/")
 			}

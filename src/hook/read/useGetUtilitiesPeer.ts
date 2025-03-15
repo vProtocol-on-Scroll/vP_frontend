@@ -16,14 +16,14 @@ const fetchUserUtilities = async (address: string) => {
     // const contract2 = getVProtocolContract(readOnlyProvider, getters);
 
     try {
-        const collateralValue = await contract.getAccountCollateralValue(address);
+        // const collateralValue = await contract.getAccountCollateralValue(address);
         const healthFactor = await contract.healthFactor(address, 0);
         
         // Fetch collateral deposits for different tokens
-        const collateralDeposits = await Promise.all(
-            tokenData.map(token => contract.getUserTokenCollateral(address, token.address))
-            // tokenData.map(token => contract.getTotalDeposits(token.address))
-        );
+        // const collateralDeposits = await Promise.all(
+        //     tokenData.map(token => contract.getUserTokenCollateral(address, token.address))
+        //     // tokenData.map(token => contract.getTotalDeposits(token.address))
+        // );
 
         // Fetch USD values for tokens
         const tokenPrices = await Promise.all(
@@ -35,13 +35,13 @@ const fetchUserUtilities = async (address: string) => {
         //     tokenData.map(token => contract.getAddressToAvailableBalance(address, token.address))
         // );
 
-        const totalAvailableBalance = await contract.getAccountAvailableValue(address);
-        const userCollateralTokens = await contract.getUserCollateralTokens(address);
+        // const totalAvailableBalance = await contract.getAccountAvailableValue(address);
+        // const userCollateralTokens = await contract.getUserCollateralTokens(address);
 
         // Process fetched values
-        const formattedDeposits = collateralDeposits.map((deposit, index) =>
-            Number(ethers.formatUnits(deposit, tokenData[index].decimal || 18))
-        );
+        // const formattedDeposits = collateralDeposits.map((deposit, index) =>
+        //     Number(ethers.formatUnits(deposit, tokenData[index].decimal || 18))
+        // );
 
         const formattedPrices = tokenPrices.map((price, index) => Number(ethers.formatUnits(price, tokenData[index].format || 0)));
         // const formattedAvailableBalances = availableBalances.map((balance, index) =>
@@ -49,22 +49,22 @@ const fetchUserUtilities = async (address: string) => {
         // );
 
         // Calculate total collateral value
-        const totalCollateralValue = formattedDeposits.reduce(
-            (sum, deposit, index) => sum + deposit * formattedPrices[index],
-            0
-        );
+        // const totalCollateralValue = formattedDeposits.reduce(
+        //     (sum, deposit, index) => sum + deposit * formattedPrices[index],
+        //     0
+        // );
 
         // console.log("availableBalances", availableBalances);
         
         return {
-            collateralValue,
+            // collateralValue,
             healthFactor,
-            collateralDeposits: formattedDeposits,
+            // collateralDeposits: formattedDeposits,
             tokenPrices: formattedPrices,
             // availableBalances: formattedAvailableBalances,
-            availableBalances : totalAvailableBalance,
-            userCollateralTokens, //array of tokens
-            totalCollateralValue,
+            // availableBalances : totalAvailableBalance,
+            // userCollateralTokens, //array of tokens
+            // totalCollateralValue,
         };
     } catch (error) {
         console.error("Error fetching user utilities:", error);

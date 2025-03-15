@@ -11,13 +11,15 @@ import useGetUserPosition from "../../../hook/read/useGetUserPosition";
 import { TokenType } from "../../../constants/types";
 import useCreatePositionPool from "../../../hook/write/useCreatePositionPool";
 import ConnectPrompt from "../../shared/ConnectPrompt";
+import useGetAPY$APR from "../../../hook/read/useGetAPY$APR";
 
 
 const SupplyBorrow = () => {
 	const { id } = useParams();
 	const { isConnected, chainId, address } = useWeb3ModalAccount();
 	const location = useLocation();
-    const state = location.state || {};
+	const state = location.state || {};
+	const { data: apyAprData } = useGetAPY$APR();
 
 
 	const { data } = useGetUtilitiesPeer();
@@ -37,6 +39,7 @@ const SupplyBorrow = () => {
 	);
 	const [walletBalance, setWalletBalance] = useState(0);
 	const [availableBal, setAvailableBal] = useState(0);
+	const [APY, setAPY] = useState<number | null>(null);
 
 
 	useEffect(() => {
@@ -47,6 +50,21 @@ const SupplyBorrow = () => {
 			}
 		}
 	}, [id, state.tokenName]);
+
+	useEffect(() => {
+		if (id === "supply" && apyAprData) {
+			const supplyTokenIndex = defaultTokenData.findIndex((t) => t.name === selectedToken.name);
+			if (supplyTokenIndex !== -1) {
+				setAPY(apyAprData.supplyAPY[supplyTokenIndex]);
+			}
+		}
+	}, [apyAprData, id, selectedToken]);
+
+	useEffect(() => {
+	  console.log("apyyyy", APY);
+	  
+	}, [APY])
+
 
 	useEffect(() => {
 		const fetchBalance = async () => {
@@ -143,6 +161,10 @@ const SupplyBorrow = () => {
 			</div>
 		)
 	}
+	
+	
+	
+
 
 	return (
 		<div className="flex flex-col justify-center items-center font-kaleko p-2 lg:p-0 h-screen -mt-36 w-full max-w-[1152px]">
@@ -288,7 +310,7 @@ const SupplyBorrow = () => {
 											{id === "borrow" ? "Borrow APR" : "Supply APY"}
 										</h3>
 										<p className="text-xl text-[#0A0A0A]">
-											{id === "borrow" ? state.borrowApr : "5.359%"}
+											{id === "borrow" ? state.borrowApr : APY !== null ? `${(Number(APY) / 100).toFixed(2)}%` : "0.00%"}
 										</p>
 									</div>
 
@@ -296,7 +318,13 @@ const SupplyBorrow = () => {
 										<h3 className="text-[#808080] text-[15.38px] mb-1">
 											{id === "borrow" ? "Monthly Cost" : "Monthly yield"}
 										</h3>
-										<p className="text-xl text-[#0A0A0A]">${id === "borrow" ? ((parseFloat(state.borrowApr) * fiatEquivalent) / 12).toFixed(3) : "50.359%"}</p>
+										<p className="text-xl text-[#0A0A0A]">
+										{id === "borrow"
+											? ((parseFloat(state.borrowApr) * fiatEquivalent) / 12).toFixed(3)
+											: APY !== null && Number(APY) !== 0 
+											? (((Number(APY) / 100) * fiatEquivalent) / 12).toFixed(3)
+											: (fiatEquivalent / 12).toFixed(3)} 
+										</p>
 									</div>
 								</div>
 							</div>

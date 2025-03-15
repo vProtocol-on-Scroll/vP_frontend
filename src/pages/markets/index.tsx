@@ -115,7 +115,7 @@ const Markets = () => {
       </div>
     )
   }
-
+  
 	return (
 		<div className="max-w-[868px] w-full m-auto py-6 px-1">
 			<h3 className="text-left text-[35px] font-kaleko font-extrabold pl-4">

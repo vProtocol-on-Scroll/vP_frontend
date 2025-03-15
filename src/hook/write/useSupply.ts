@@ -70,9 +70,10 @@ const useSupply = (
 				toast.success(`${_amount}${tokenName} successfully supplied, happy earning!`, {
 					id: toastId,
                 });
-                queryClient.invalidateQueries({ queryKey: ["userPosition"] });
-                queryClient.invalidateQueries({ queryKey: ["getTotalSupplyBorrow"] });
+                queryClient.invalidateQueries({ queryKey: ["userUtilities"] });
                 queryClient.invalidateQueries({ queryKey: ["getAPR&APY"] });
+                queryClient.invalidateQueries({ queryKey: ["getTotalSupplyBorrow"] });
+                queryClient.invalidateQueries({ queryKey: ["userPosition"] });
 			}
 		} catch (error: unknown) {
 			try {

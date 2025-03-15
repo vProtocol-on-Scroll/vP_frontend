@@ -11,6 +11,7 @@ import peer from "../../abi/peer.json";
 import erc20 from "../../abi/erc20.json";
 import { ethers } from "ethers";
 import { ErrorDecoder } from "ethers-decode-error";
+import { useQueryClient } from "@tanstack/react-query";
 
 const useRequestLoanFromListing = (
     
@@ -19,6 +20,8 @@ const useRequestLoanFromListing = (
 	const { walletProvider } = useWeb3ModalProvider();
 
 	const errorDecoder = ErrorDecoder.create([peer, erc20]);
+
+	const queryClient = useQueryClient();
 
 	return useCallback(async (
 		_orderId: number,
@@ -45,6 +48,8 @@ const useRequestLoanFromListing = (
 				toast.success(`${_amount} successfully borrowed!`, {
 					id: toastId,
 				});
+				queryClient.invalidateQueries({ queryKey: ["allLoanListings"] });
+				queryClient.invalidateQueries({ queryKey: ["userActiveRequests"] }); 
 			}
 		} catch (error: unknown) {
 			try {
@@ -56,7 +61,7 @@ const useRequestLoanFromListing = (
 				toast.error("Transaction failed: Unknown error", { id: toastId });
 			}
 		}
-	}, [chainId, errorDecoder, walletProvider]);
+	}, [chainId, errorDecoder, queryClient, walletProvider]);
 };
 
 export default useRequestLoanFromListing;

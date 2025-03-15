@@ -8,6 +8,7 @@ import { tokenData } from "../../constants/config/tokenData";
 import { ethers } from "ethers";
 import { Asset } from "../../constants/types";
 import { useWeb3ModalAccount } from "@web3modal/ethers/react";
+import { formatMoney } from "../../constants/utils/formatMoney";
 
 const VariantCarousel = () => {
     const { isConnected } = useWeb3ModalAccount();
@@ -39,7 +40,7 @@ const VariantCarousel = () => {
                 return {
                     src: token.icon,
                     name: token.name,
-                    vol: `${formattedCollateral.toFixed(2)}${token.token}`,
+                    vol: `${formatMoney(formattedCollateral.toFixed(2))}`,
                 };
             })
             .filter((asset): asset is Asset => asset !== null)

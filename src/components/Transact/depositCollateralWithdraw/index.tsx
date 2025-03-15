@@ -108,6 +108,8 @@ const DepositCollateralWithdraw = () => {
 		)
 	}
 
+	const selected = updatedTokenData.find((t) => t.name === selectedToken.name);
+
 	return (
 		<div  className="flex flex-col justify-center items-center font-kaleko p-2 lg:p-0 h-screen 2xl:-mt-36 -mt-16">
 			<div className="font-kaleko w-full m-auto">
@@ -200,7 +202,7 @@ const DepositCollateralWithdraw = () => {
 
 					{/* Price and Fiat Equivalent */}
 					<div className="text-black text-xs flex justify-between">
-						<p>{`1 ${selectedToken.token} = $${selectedToken.tokenPrice}`}</p>
+						<p>{`1 ${selectedToken.token} = $${selected?.tokenPrice ?? selectedToken.tokenPrice}`}</p>
 						<p className="font-bold">≈ ${fiatEquivalent}</p>
 					</div>
         </div>

@@ -9,6 +9,7 @@ import useGetUtilitiesPeer from "../../hook/read/useGetUtilitiesPeer";
 import { toast } from "sonner";
 import useCreateBorrowOrder from "../../hook/write/useCreateBorrowOrder";
 import useGetUserPosition from "../../hook/read/useGetUserPosition";
+import ConnectPrompt from "../../components/shared/ConnectPrompt";
 
 const CreateOrder = () => {
 	const { id } = useParams();
@@ -164,8 +165,22 @@ const CreateOrder = () => {
 	};
 
 	const unixReturnDate = Math.floor(new Date(dateValue).getTime() / 1000);
-	const lendingRequestOrder = useCreateBorrowOrder(String(assetValue), percentage, unixReturnDate,selectedToken.address, selectedToken.decimal, unixReturnDate, selectedToken.name);
+	const lendingRequestOrder = useCreateBorrowOrder(String(assetValue), percentage, unixReturnDate, selectedToken.address, selectedToken.decimal, unixReturnDate, selectedToken.name);
+	
+	
+	const selected = updatedTokenData.find((t) => t.name === selectedToken.name);
 
+
+	if (!isConnected) {
+		return (
+			<div className="font-kaleko py-6 h-screen">
+				<div className="w-full m-auto">
+					<p className="text-base text-white px-2">Create Order</p>
+					<ConnectPrompt />
+				</div>      
+			</div>
+		)
+	}
 
 	return (
 		<div className="flex flex-col justify-center items-center font-kaleko p-2 lg:p-0 h-screen 2xl:-mt-24 -mt-12">
@@ -294,7 +309,7 @@ const CreateOrder = () => {
 
 						{/* Price and Fiat Equivalent */}
 						<div className="text-black text-xs flex justify-between">
-							<p>{`1 ${selectedToken.token} = $${selectedToken.tokenPrice}`}</p>
+							<p>{`1 ${selectedToken.token} = $${selected?.tokenPrice ?? selectedToken.tokenPrice}`}</p>
 							<p className="font-bold">≈ ${fiatEquivalent}</p>
 						</div>
 					</div>

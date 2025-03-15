@@ -47,9 +47,10 @@ const useWithdrawPool = (
 				toast.success(`${_amount} successfully withdrawn!`, {
 					id: toastId,
 				});
-				queryClient.invalidateQueries({ queryKey: ["userPosition"] });
-				queryClient.invalidateQueries({ queryKey: ["getTotalSupplyBorrow"] });
+				queryClient.invalidateQueries({ queryKey: ["userUtilities"] });
                 queryClient.invalidateQueries({ queryKey: ["getAPR&APY"] });
+                queryClient.invalidateQueries({ queryKey: ["getTotalSupplyBorrow"] });
+                queryClient.invalidateQueries({ queryKey: ["userPosition"] });
 				navigate("/")
 			}
 		} catch (error: unknown) {

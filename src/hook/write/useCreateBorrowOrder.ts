@@ -12,6 +12,7 @@ import erc20 from "../../abi/erc20.json";
 import { ethers } from "ethers";
 import { ErrorDecoder } from "ethers-decode-error";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 const useCreateBorrowOrder = (
     _amount: string,
@@ -26,7 +27,7 @@ const useCreateBorrowOrder = (
 ) => {
 	const { chainId } = useWeb3ModalAccount();
 	const { walletProvider } = useWeb3ModalProvider();
-
+	const queryClient = useQueryClient();
 	const errorDecoder = ErrorDecoder.create([peer,erc20]);
 	const navigate = useNavigate();
 
@@ -53,6 +54,7 @@ const useCreateBorrowOrder = (
 				toast.success(`${_amount} ${tokenName} lending request successfully created!`, {
 					id: toastId,
 				});
+				queryClient.invalidateQueries({ queryKey: ["allBorrowRequests"] });
 				navigate("/")
 			}
 		} catch (error: unknown) {
@@ -65,7 +67,7 @@ const useCreateBorrowOrder = (
 				toast.error("Transaction failed: Unknown error", { id: toastId });
 			}
 		}
-	}, [chainId, walletProvider, _amount, tokenDecimal, _interest, _returnDate, expirationDate, tokenTypeAddress, tokenName, navigate, errorDecoder]);
+	}, [chainId, walletProvider, _amount, tokenDecimal, _interest, _returnDate, expirationDate, tokenTypeAddress, tokenName, queryClient, navigate, errorDecoder]);
 };
 
 export default useCreateBorrowOrder;

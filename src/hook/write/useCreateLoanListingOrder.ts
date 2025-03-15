@@ -17,6 +17,7 @@ import { ErrorDecoder } from "ethers-decode-error";
 import { envVars } from "../../constants/config/envVars";
 import useCheckAllowances from "../read/useCheckAllowances";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 const useCreateLoanListingOrder = (
 	_amount: string,
@@ -32,6 +33,7 @@ const useCreateLoanListingOrder = (
 	const { walletProvider } = useWeb3ModalProvider();
 	const { data: allowanceVal = 0, isLoading } = useCheckAllowances(tokenTypeAddress);
 	const navigate = useNavigate();
+	const queryClient = useQueryClient();
 
 	const errorDecoder = ErrorDecoder.create([peer, erc20]);
 
@@ -85,6 +87,7 @@ const useCreateLoanListingOrder = (
 				toast.success(`${_amount}${tokenName} loan listing order successfully created!`, {
 					id: toastId,
 				});
+				queryClient.invalidateQueries({ queryKey: ["allLoanListings"] });
 				navigate("/")
 			}
 		} catch (error: unknown) {
@@ -97,7 +100,7 @@ const useCreateLoanListingOrder = (
 				toast.error("Transaction failed: Unknown error", { id: toastId });
 			}
 		}
-	}, [chainId, isLoading, walletProvider, tokenTypeAddress, _amount, tokenDecimal, _min_amount, _max_amount, allowanceVal, tokenName, _returnDate, _interest, navigate, errorDecoder]);
+	}, [chainId, isLoading, walletProvider, tokenTypeAddress, _amount, tokenDecimal, _min_amount, _max_amount, allowanceVal, tokenName, _returnDate, _interest, queryClient, navigate, errorDecoder]);
 };
 
 export default useCreateLoanListingOrder;
