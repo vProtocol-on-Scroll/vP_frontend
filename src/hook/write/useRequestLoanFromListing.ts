@@ -65,7 +65,7 @@ const useRequestLoanFromListing = (
 				toast.error("Transaction failed: Unknown error", { id: toastId });
 			}
 		}
-	}, [chainId, errorDecoder, queryClient, walletProvider]);
+	}, [chainId, errorDecoder, navigate, queryClient, walletProvider]);
 };
 
 export default useRequestLoanFromListing;
