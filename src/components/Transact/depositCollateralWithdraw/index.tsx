@@ -111,13 +111,12 @@ const DepositCollateralWithdraw = () => {
 	const selected = updatedTokenData.find((t) => t.name === selectedToken.name);
 
 	return (
-		<div  className="flex flex-col justify-center items-center font-kaleko p-2 lg:p-0 h-screen 2xl:-mt-36 -mt-16">
-			<div className="font-kaleko w-full m-auto">
+		<div  className="flex flex-col justify-center items-center font-kaleko p-2 lg:p-0 h-screen 2xl:-mt-36 -mt-16 ">
+			<div className="font-kaleko w-full m-auto bg-[#12151a] noise-3 p-5 rounded-xl">
 				<p className="text-base text-white px-2 mb-2">
 					{id == "withdraw" ? "Withdraw" : "Deposit Collateral"}
 				</p>
-
-				<div className="bg-white rounded-lg p-4 max-w-[456px] w-[456px] m-auto">
+				<div className="bg-white rounded-lg p-4 max-w-[456px] w-[456px] m-auto max470:w-[100%]">
 					<div className="text-black flex justify-between mb-3 items-center">
 						{/* Token Dropdown */}
 						<div
@@ -148,7 +147,8 @@ const DepositCollateralWithdraw = () => {
 							</div>
 
 							{isDropdownOpen && (
-								<div className="absolute top-full left-0 mt-2 w-[100px] bg-gray-200 rounded-md z-20 p-2">
+								<div
+									className="absolute top-full left-0 mt-2 w-[100px] bg-gray-200 rounded-md z-20 p-2">
 									{defaultTokenData.slice(1).map((token) => (
 										<div
 											key={token.token}
@@ -205,31 +205,31 @@ const DepositCollateralWithdraw = () => {
 						<p>{`1 ${selectedToken.token} = $${selected?.tokenPrice ?? selectedToken.tokenPrice}`}</p>
 						<p className="font-bold">≈ ${fiatEquivalent}</p>
 					</div>
-        </div>
-        
-        
-        {id == "withdraw" &&
-          <div
-            className={`w-full rounded-md px-6 py-2 text-center cursor-pointer bg-[#01D396] mt-6 font-bold`}
-			onClick={() => {
-              withdrawal();
-            }}
-          >
-            Withdraw
-         </div>
-        }
+				</div>
 
-        {id == "deposit-collateral" &&
-          <div
-            className={`w-full rounded-md px-6 py-2 text-center cursor-pointer bg-[#01D396] mt-6 font-bold`}
-            onClick={() => {
-              // console.log("COLLATERAL TO DEPOSIT DETAILS", assetValue, selectedToken.address, selectedToken.decimal);
-              deposit();
-            }}
-          >
-          Deposit Collateral
-          </div>
-        }
+
+				{id == "withdraw" &&
+					<div
+						className={`w-full rounded-md px-6 py-2 text-center cursor-pointer bg-[#01D396] mt-6 font-bold`}
+						onClick={() => {
+							withdrawal();
+						}}
+					>
+						Withdraw
+					</div>
+				}
+
+				{id == "deposit-collateral" &&
+					<div
+						className={`w-full rounded-md px-6 py-2 text-center cursor-pointer bg-[#01D396] mt-6 font-bold`}
+						onClick={() => {
+							// console.log("COLLATERAL TO DEPOSIT DETAILS", assetValue, selectedToken.address, selectedToken.decimal);
+							deposit();
+						}}
+					>
+						Deposit Collateral
+					</div>
+				}
 			</div>
 		</div>
 	);

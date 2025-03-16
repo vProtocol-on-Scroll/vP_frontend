@@ -162,7 +162,7 @@ const SupplyBorrow = () => {
 
 
 	return (
-		<div className="flex flex-col justify-center items-center font-kaleko p-2 lg:p-0 h-screen -mt-36 w-full max-w-[1152px]">
+		<div className="flex flex-col justify-center items-center font-kaleko p-2 lg:p-0 h-screen -mt-36 w-full max-w-[1152px] max550:-mt-1">
 			<div className="font-kaleko w-full m-auto">
 				<p className="text-base text-white px-2 mb-2">
 					{id == "supply" ? "Supply" : "Borrow"}

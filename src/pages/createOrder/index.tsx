@@ -185,13 +185,13 @@ const CreateOrder = () => {
 	}
 
 	return (
-		<div className="flex flex-col justify-center items-center font-kaleko p-2 lg:p-0 h-screen 2xl:-mt-24 -mt-12">
-			<div>
+		<div className="flex flex-col justify-center items-center font-kaleko p-2 lg:p-0 h-screen 2xl:-mt-24 -mt-12 max550:-mt-0">
+			<div className="bg-[#12151a] noise-3 rounded-lg p-8">
 				<p className="text-base text-white px-2">Create Order</p>
 
 				<div>
 					<div className="my-4 px-4 sm:px-8">
-						<div className="flex gap-12 w-5/6 m-auto">
+						<div className="flex gap-12 w-5/6 m-auto max550:gap-2  max550:justify-center">
 							<div
 								className={`font-semibold relative w-1/2 rounded-md px-6 py-2 text-center cursor-pointer ${
 									id === "lend" ? "bg-[#01D396]" : "bg-white/60"
@@ -226,7 +226,7 @@ const CreateOrder = () => {
 						</div>
 					</div>
 
-					<div className="bg-white rounded-lg p-4 max-w-[456px] w-[456px] m-auto">
+					<div className="bg-white rounded-lg p-4 max-w-[456px] w-[456px] m-auto max550:w-full">
 						<div className="text-black flex justify-between mb-3 items-center">
 							{/* Token Dropdown */}
 							<div
@@ -317,7 +317,7 @@ const CreateOrder = () => {
 					</div>
 
 					<div className="px-4 sm:px-8">
-						<div className="bg-white mt-4 rounded-[40px] px-4 py-6">
+						<div className="bg-white mt-4 rounded-[40px] px-4 py-6 max550:rounded-[10px]">
 							<div className="flex items-center justify-between">
 								<div className="text-[14.6px] font-medium">
 									<p className="text-[#636363]">
