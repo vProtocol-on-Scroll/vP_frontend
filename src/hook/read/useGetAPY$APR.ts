@@ -44,6 +44,9 @@ const useGetAPY$APR = () => {
         refetchOnWindowFocus: false,
     });
 
+    // console.log("SUPPLYAPY ",data?.supplyAPY);
+    
+
     return { data, isLoading, error };
 }
 

@@ -46,9 +46,9 @@ const PoolOrderHistory = () => {
             icon: token.icon || `/coins/vToken.svg`,
             amount: formattedDeposit.toFixed(2),
             amountUSD: `${isLoading ? formattedDeposit.toFixed(2) : (usdPrice! * formattedDeposit).toFixed(3)}`,
-            stat1Value: (((Number(supplyAPY) / 100000000) * formattedDeposit) / 12).toFixed(2),
-            stat1ValueUSD: `${(((Number(supplyAPY) / 100000000) * (usdPrice! * formattedDeposit)) / 12).toFixed(2)}`,
-            stat2Value: `${(parseFloat(String(supplyAPY)) / 100000000).toFixed(2)}%`,
+            stat1Value: ((Math.pow(1 + (Number(supplyAPY) / 10000), 1/12) - 1) *  (formattedDeposit)).toFixed(2),
+            stat1ValueUSD: `${((Math.pow(1 + (Number(supplyAPY) / 10000), 1/12) - 1) *  (usdPrice! * formattedDeposit)).toFixed(2)}`,
+            stat2Value: `${(parseFloat(String(supplyAPY)) / 10000).toFixed(2)}%`,
           }
         : null;
 
