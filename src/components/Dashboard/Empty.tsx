@@ -30,11 +30,11 @@ const Empty = ({ text1, text2, text3, btn1, btn2, link1, link2 }: any) => {
                     <h3>uh-oh!</h3>
                 </div>
 
-                <div className="text-center text-3xl font-bold">
+                <div className="text-center text-3xl font-bold max550:text-sm">
                     <p>There&apos;s nothing here.</p>
                 </div>
 
-                <div className="text-center text-3xl mt-4">
+                <div className="text-center text-3xl mt-4 max550:text-sm">
                     <p>{text1}<br />{text2}<br />{text3}</p>
                 </div>
 
