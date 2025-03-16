@@ -89,7 +89,7 @@ const VariantCarousel = () => {
                         title="Available to Borrow"
                         amount={`${isLoading || !isConnected ? "0" : (totalCollateral ?? 0) * 0.79}`}
                         buttonText="Borrow"
-                        healthFactor={(Number(data?.healthFactor))/ 1e18}
+                        healthFactor={(Number(data?.healthFactor))/ 1e4}
                         bgColor="#01D396"
                         link="/markets"
                     />
