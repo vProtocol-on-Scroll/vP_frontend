@@ -75,7 +75,7 @@ const Markets = () => {
 		.map((token) => ({
 			asset: token.name,
 			icon: token.icon,
-			supplyApy: `${(Number(token.supplyAPY) / 100000000).toFixed(2)}%`,
+			supplyApy: `${(Number(token.supplyAPY) / 10000).toFixed(2)}%`,
 			borrowApr: `${(Number(token.borrowAPR) / 10000).toFixed(2)}%`,
 			totalSupply: token.totalSupply.toString(),
 			totalSupplyUSD: `${token.supplyValueUSD.toFixed(2)}`,
