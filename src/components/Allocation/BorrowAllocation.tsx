@@ -34,7 +34,7 @@ export default function BorrowAllocation() {
         setMaxAllocation(value);
     };
 
-    const loanListingOrder = useCreateLoanListingOrder(String(state?._amount), String(minAllocation || 0), String(maxAllocation), state?._interest, state?._returnDate, state?.tokenTypeAddress, state?.tokenDecimal, state?.tokenName);
+    const loanListingOrder = useCreateLoanListingOrder(String(state?._amount), String(minAllocation || 0), String(maxAllocation), Number(state?._interest), state?._returnDate, state?.tokenTypeAddress, state?.tokenDecimal, state?.tokenName);
     
 
     const handleOrderCreation = () => {

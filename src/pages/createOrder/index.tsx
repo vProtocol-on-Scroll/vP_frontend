@@ -32,27 +32,29 @@ const CreateOrder = () => {
 	const [availableBal, setAvailableBal] = useState(0);
 	const [fiatEquivalent, setFiatEquivalent] = useState<number>(0);
 
-	const [percentage, setPercentage] = useState<number>(0);
+	const [percentage, setPercentage] = useState<number | string>(0.00);
 	const [dateValue, setDateValue] = useState<string>("");
 
 	const handleDecrement = () => {
-		setPercentage((prev) => Number(Math.max(prev - 0.001, 0).toFixed(3)));
+		setPercentage((prev) => Number(Math.max(Number(prev) - 0.01, 0.00).toFixed(2)));
 	};
 
 	const handleIncrement = () => {
-		setPercentage((prev) => Number(Math.min(prev + 0.001, 100).toFixed(3)));
+		setPercentage((prev) => Number(Math.min(Number(prev) + 0.01, 100).toFixed(2)));
 	};
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value;
+		
 		if (value === "") {
 			setPercentage(0);
 			return;
 		}
 		if (!isNaN(Number(value)) && Number(value) >= 0 && Number(value) <= 100) {
-			setPercentage(Number(value));
+			setPercentage(value);
 		}
 	};
+
 
 	const toggleDropdown = () => {
 		setIsDropdownOpen(!isDropdownOpen);
@@ -154,7 +156,7 @@ const CreateOrder = () => {
 		navigate("/allocation", {
 			state: {
 			_amount: assetValue,
-			_interest: percentage || 0,
+			_interest: Number(percentage) || 0,
 			_returnDate: unixReturnDate,
 			tokenTypeAddress: selectedToken.address,
 			tokenDecimal: selectedToken.decimal,
@@ -165,7 +167,7 @@ const CreateOrder = () => {
 	};
 
 	const unixReturnDate = Math.floor(new Date(dateValue).getTime() / 1000);
-	const lendingRequestOrder = useCreateBorrowOrder(String(assetValue), percentage, unixReturnDate, selectedToken.address, selectedToken.decimal, unixReturnDate, selectedToken.name);
+	const lendingRequestOrder = useCreateBorrowOrder(String(assetValue), Number(percentage), unixReturnDate, selectedToken.address, selectedToken.decimal, unixReturnDate, selectedToken.name);
 	
 	
 	const selected = updatedTokenData.find((t) => t.name === selectedToken.name);
@@ -344,7 +346,7 @@ const CreateOrder = () => {
 								<p className="font-bold text-black text-[40px] sm:text-[51.12px]">
 									${fiatEquivalent} {/* Calculated fiat amount */}
 									<span className="text-[14.6px] ml-2 font-medium text-black/30">
-										+${(fiatEquivalent * (percentage / 100)).toFixed(2)}
+										+${(fiatEquivalent * (Number(percentage) / 100)).toFixed(2)}
 									</span>
 								</p>
 							</div>
@@ -363,9 +365,9 @@ const CreateOrder = () => {
 										value={percentage}
 										onChange={handleInputChange}
 										className="bg-[#01D396]/80 rounded-2xl p-2 sm:p-4 text-[20px] sm:text-[27.5px] font-medium text-black w-[120px] sm:w-[150px] text-center focus:border-[#01D396]/80 border focus:outline-none"
-										min={0}
-										max={100}
-										step={0.001}
+										// min={.00}
+										// max={100}
+										// step={0.01}
 										placeholder="0.00"
 									/>
 									<span className="absolute top-1/2 right-1 transform -translate-y-1/2 text-[20px] sm:text-[27.5px] font-medium text-black">
