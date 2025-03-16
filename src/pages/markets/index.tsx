@@ -133,7 +133,7 @@ const Markets = () => {
 							selectedTab === "vPool" ? "bg-[#01D396]" : "bg-[#A66CFF]"
 						}`}
 					>
-						<div className="p-4 bg-[#FFFFFF33] rounded-2xl flex items-center w-full justify-between gap-4">
+						<div className="p-4 bg-[#FFFFFF33] rounded-2xl flex items-center w-full justify-between gap-4 noise-3 ">
 							<div className="bg-[#FFFFFF] text-[#0D0D0D] font-kaleko w-1/2 p-4 rounded-2xl">
 								<p className="font-normal text-sm">Total Supply</p>
 								<p className="font-extrabold text-[28px]">
@@ -151,16 +151,16 @@ const Markets = () => {
 					</div>
 
 					<div
-						className="mt-14 rounded-2xl px-6 py-8 transition-all duration-500 max550:px-3 max550:py-4 "
-						style={{
-							backgroundImage: `linear-gradient(180deg, #E3E8EA, #F4F5F8), 
-                            linear-gradient(90deg, #00000000 0%, #12151A80 50%), 
-                            url('/noise.svg')`,
-						}}
+						className="mt-14 rounded-2xl px-6 py-8 transition-all duration-500 max550:px-3 max550:py-4 bg-[#12151A] noise-3"
+						// style={{
+						// 	backgroundImage: `linear-gradient(180deg, #E3E8EA, #F4F5F8),
+                        //     linear-gradient(90deg, #00000000 0%, #12151A80 50%),
+                        //     url('/noise.svg')`,
+						// }}
 					>
 						<div className="w-full flex max550:flex-wrap-reverse items-center gap-8">
 							<div className="w-1/2 max550:w-full flex flex-col gap-4">
-								<h5 className="text-xl font-bold text-[#0D0D0D]">
+								<h5 className="text-xl font-bold text-[#ffffff]">
 									Market Overview
 								</h5>
 								<div className="bg-[#FFFFFF33] rounded-3xl p-[2px] flex items-center w-full cursor-pointer">
@@ -214,7 +214,7 @@ const Markets = () => {
 							)}
 
 							{selectedTab === "vPool" && (
-								<div className="bg-[#FFFFFF33] rounded-3xl p-2 flex items-center w-1/2 gap-2">
+								<div className="bg-[#FFFFFF33] rounded-3xl p-2 flex items-center w-1/2 gap-2 max550:w-full">
 									<div className="bg-white rounded-3xl w-full px-4 py-2">
 										<p className="text-[#0D0D0D80] font-medium text-sm">
 											{selectedTab} Total Supply
@@ -227,10 +227,10 @@ const Markets = () => {
 										</p>
 									</div>
 									<div className="bg-transparent rounded-3xl w-full px-4 py-2">
-										<p className="text-[#0D0D0D80] font-medium text-sm">
+										<p className="text-[#ffffff] font-medium text-sm">
 											{selectedTab} Total Borrow
 										</p>
-										<p className="text-[#0D0D0D] font-extrabold text-xl mt-1">
+										<p className="text-[#ffffff] font-extrabold text-xl mt-1">
 											$
 											{formatMoney(
 												parseFloat(String(totalBorrowUSD)).toFixed(2)

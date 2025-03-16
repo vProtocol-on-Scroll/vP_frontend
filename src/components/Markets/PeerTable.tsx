@@ -14,9 +14,9 @@ const PeerTable = ({ peerData }: { peerData: PeerData[] }) => {
   return (
     <div className="overflow-x-auto">
       <table className="w-full border-separate border-spacing-y-4">
-        <thead className="text-[#0D0D0D] font-medium text-[13px]">
+        <thead className="text-[#fffffff] font-medium text-[13px]">
           <tr>
-            <th className="text-[#0D0D0D80] text-start py-2">Asset</th>
+            <th className="text-[#fffffff] text-start py-2">Asset</th>
             <th className="text-center py-2"></th>
             <th className="text-center py-2">Duration</th>
             <th className="text-center py-2">Interest</th>
