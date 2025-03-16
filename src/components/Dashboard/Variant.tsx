@@ -67,7 +67,7 @@ const Variant: React.FC<VariantProps> = ({
                     <img
                       src={asset.src}
                       alt={asset.name}
-                      className={`w-8 aspect-square rounded-full border border-gray-300 object-cover ${index !== 0 ? "ml-2" : ""}`}
+                      className={`w-8 aspect-square rounded-full border border-gray-300 object-cover ${index !== 0 ? "ml-0" : ""}`}
                     />
                     {tooltip && tooltip.name === asset.name && (
                       <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded-md whitespace-nowrap">
